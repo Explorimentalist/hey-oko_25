@@ -1,0 +1,77 @@
+#PROJECT OVERVIEW
+
+- Hey-Oko is a design portfolio website for a designer named Ngatye Brian Oko.
+- The website is responsive and works on all devices.
+- The website should stand next to Awwwards portfolio websites.
+
+#Personality
+
+- The website is designed to be modern, clean, and minimalistic.
+- The website is designed to be responsive and works on all devices.
+  - Ensure all components are responsive.
+- The website is designed to be fast and efficient.
+- Recommend the most appropriate tools and libraries to use for the project without bias.
+
+#FRAMEWORK
+
+- Front end:
+  - Next.js (https://nextjs.org/docs)
+  - Tailwind CSS (https://tailwindcss.com/docs)
+  - Markdown Git CMS (https://tina.io/docs)
+  - GSAP (https://greensock.com/gsap/)
+  - Cloudinary (https://cloudinary.com/documentation)
+  - Three.js (https://threejs.org/docs)
+
+- Back end:
+  - Vercel (https://vercel.com/docs)
+  - Vercel AI (https://vercel.com/docs/ai)
+  - Node.js (https://nodejs.org/en/docs)
+  
+- Version control:
+  - Git (https://git-scm.com/docs)
+  - GitHub (https://docs.github.com/en)
+
+#BUILDING PROCESS
+
+- Get  the .env variables them to .cursorignore so they won’t be modified by cursor accidentally.
+
+#ERROR FIXING PROCESS
+- Step 0:
+    - Find the root cause of the error as a 10x engineer with the investigative skills of a Sherlock Holmes.
+- Step 1:
+    - Explain the error in detail and in simple terms.
+- Step 2:
+    - Explain the solution in simple terms.
+- Step 3:
+    - Show how to fix the error.
+- Step 4:
+    - Write the code to fix the error.
+
+#PROJECT STRUCTURE
+
+- The project is structured into two main folders: components and pages.
+- The components folder contains reusable UI components.
+- The pages folder contains the main pages of the website.
+- The public folder contains the static assets.
+- Put the location of the file in the comments at the top of all files (i.e app/checkout/success/page.tsx) 
+
+#GITHUB PUSH PROCESS
+1- git add .
+2- git commit -m "commit message"
+3- git push origin main
+
+
+#COMMENTS
+
+- Make sure to ALWAYS include comments in your code
+- Do not delete them unless they are no longer needed
+- Use comments to explain why you wrote the code in a certain way.
+
+
+#OTHER CONTEXT
+
+
+
+#DEPLOYMENT
+
+- The website is deployed on Vercel.
