@@ -54,6 +54,14 @@ Core funtionality:
 
 #Documentation
 
+##Fonts
+https://www.fontshare.com/fonts/general-sans
+
+##Lottie & GSAP
+###Scroll animation
+https://gsap.com/docs/v3/HelperFunctions/helpers/LottieScrollTrigger/
+
+
 ##TinaCMS
 ### TinaCMS & Cloudinary
 Install the following packages:
@@ -144,4 +152,165 @@ https://tina.io/docs/reference/media/external/cloudinary
 
 
 
+#Current File Structure
 
+.
+├── .cursorignore
+├── .env
+├── .gitignore
+├── .next
+│   ├── app-build-manifest.json
+│   ├── build-manifest.json
+│   ├── cache
+│   │   ├── .rscinfo
+│   │   ├── swc
+│   │   │   └── plugins
+│   │   └── webpack
+│   │       ├── client-development
+│   │       └── server-development
+│   ├── package.json
+│   ├── react-loadable-manifest.json
+│   ├── server
+│   │   ├── app
+│   │   │   ├── _not-found
+│   │   │   ├── favicon.ico
+│   │   │   ├── page.js
+│   │   │   └── page_client-reference-manifest.js
+│   │   ├── app-paths-manifest.json
+│   │   ├── interception-route-rewrite-manifest.js
+│   │   ├── middleware-build-manifest.js
+│   │   ├── middleware-manifest.json
+│   │   ├── middleware-react-loadable-manifest.js
+│   │   ├── next-font-manifest.js
+│   │   ├── next-font-manifest.json
+│   │   ├── pages-manifest.json
+│   │   ├── server-reference-manifest.js
+│   │   ├── server-reference-manifest.json
+│   │   ├── vendor-chunks
+│   │   │   ├── @swc.js
+│   │   │   ├── gsap.js
+│   │   │   └── next.js
+│   │   └── webpack-runtime.js
+│   ├── static
+│   │   ├── chunks
+│   │   │   ├── app
+│   │   │   ├── app-pages-internals.js
+│   │   │   ├── main-app.js
+│   │   │   ├── polyfills.js
+│   │   │   └── webpack.js
+│   │   ├── css
+│   │   │   └── app
+│   │   ├── development
+│   │   │   ├── _buildManifest.js
+│   │   │   └── _ssgManifest.js
+│   │   ├── media
+│   │   │   ├── 26a46d62cd723877-s.woff2
+│   │   │   ├── 55c55f0601d81cf3-s.woff2
+│   │   │   ├── 581909926a08bbc8-s.woff2
+│   │   │   ├── 6d93bde91c0c2823-s.woff2
+│   │   │   ├── 97e0cb1ae144a2a9-s.woff2
+│   │   │   ├── a34f9d1faa5f3315-s.p.woff2
+│   │   │   └── df0a9ae256c0569c-s.woff2
+│   │   └── webpack
+│   │       ├── 28ee57d89ff5e636.webpack.hot-update.json
+│   │       ├── 2f5d8abced3e6dfb.webpack.hot-update.json
+│   │       ├── 319de72ace69f75d.webpack.hot-update.json
+│   │       ├── 368ef835a38f3dee.webpack.hot-update.json
+│   │       ├── 3f26a000528d69c4.webpack.hot-update.json
+│   │       ├── 52c89d2991d2f969.webpack.hot-update.json
+│   │       ├── 633457081244afec._.hot-update.json
+│   │       ├── app
+│   │       ├── e8403a7eeab1eb51.webpack.hot-update.json
+│   │       ├── webpack.28ee57d89ff5e636.hot-update.js
+│   │       ├── webpack.2f5d8abced3e6dfb.hot-update.js
+│   │       ├── webpack.319de72ace69f75d.hot-update.js
+│   │       ├── webpack.368ef835a38f3dee.hot-update.js
+│   │       ├── webpack.3f26a000528d69c4.hot-update.js
+│   │       ├── webpack.52c89d2991d2f969.hot-update.js
+│   │       └── webpack.e8403a7eeab1eb51.hot-update.js
+│   ├── trace
+│   └── types
+│       ├── app
+│       │   ├── layout.ts
+│       │   └── page.ts
+│       ├── cache-life.d.ts
+│       └── package.json
+├── README.md
+├── content
+│   ├── components
+│   ├── pages
+│   ├── posts
+│   │   └── hello-world.md
+│   └── projects
+├── docs
+│   ├── .cursorrules
+│   └── project.md
+├── eslint.config.mjs
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── public
+│   ├── admin
+│   │   ├── .gitignore
+│   │   └── index.html
+│   ├── file.svg
+│   ├── fonts
+│   ├── globe.svg
+│   ├── images
+│   ├── models
+│   ├── next.svg
+│   ├── uploads
+│   ├── vercel.svg
+│   └── window.svg
+├── src
+│   ├── app
+│   │   ├── about
+│   │   │   └── @modal
+│   │   ├── api
+│   │   │   └── cloudinary
+│   │   ├── favicon.ico
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── projects
+│   │       └── @modal
+│   ├── components
+│   │   ├── animations
+│   │   ├── home
+│   │   │   └── HomeHero.tsx
+│   │   ├── layout
+│   │   ├── projects
+│   │   ├── shared
+│   │   │   ├── CustomCursor.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── LogoLoader.tsx
+│   │   │   ├── Menu.tsx
+│   │   │   └── NavigationProgress.tsx
+│   │   └── ui
+│   ├── lib
+│   │   ├── hooks
+│   │   └── utils
+│   ├── pages
+│   │   └── demo
+│   │       └── blog
+│   └── styles
+│       └── globals.css
+├── tailwind.config.ts
+├── tina
+│   ├── .gitignore
+│   ├── __generated__
+│   │   ├── _graphql.json
+│   │   ├── _lookup.json
+│   │   ├── _schema.json
+│   │   ├── client.ts
+│   │   ├── config.prebuild.jsx
+│   │   ├── frags.gql
+│   │   ├── queries.gql
+│   │   ├── schema.gql
+│   │   ├── static-media.json
+│   │   └── types.ts
+│   ├── config.ts
+│   └── tina-lock.json
+└── tsconfig.json
