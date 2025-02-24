@@ -14,7 +14,7 @@ export default function HomePage() {
       <CustomCursor />
       
       <div className="container mx-auto px-4">
-        <section id="hero" className="h-screen flex items-center justify-center bg-gray-50">
+        <section id="hero">
           <HomeHero />
         </section>
         

@@ -77,15 +77,22 @@ export function NavigationProgress() {
         >
           <div 
             className={`
+              // Base styles for the navigation dot/pill
               relative cursor-pointer rounded-full
               transition-all duration-300 ease-out flex items-center
+
+              // Dynamic height: expands to h-8 when hovered, otherwise stays as a 3px dot
               ${hoveredSection === id ? 'h-8' : 'h-[3px]'}
+
+              // Dynamic width: expands to fit content when hovered, otherwise stays as a fixed w-8
               ${hoveredSection === id ? 'w-fit' : 'w-8'}
+
+              // Background and border color logic with dark mode support:
               ${activeSection === id 
                 ? hoveredSection === id 
-                  ? 'bg-black border border-gray-300' 
-                  : 'bg-black' 
-                : 'bg-gray-300'}
+                  ? 'bg-black dark:bg-white border border-gray-300 dark:border-gray-700' 
+                  : 'bg-black dark:bg-white' 
+                : 'bg-gray-300 dark:bg-gray-700'}
             `}
           >
             <span 
@@ -93,7 +100,9 @@ export function NavigationProgress() {
               className={`
                 text-sm px-4
                 ${hoveredSection === id ? 'block' : 'hidden'}
-                ${activeSection === id && hoveredSection === id ? 'text-white' : 'text-gray-600'}
+                ${activeSection === id && hoveredSection === id 
+                  ? 'text-white dark:text-black' 
+                  : 'text-gray-600 dark:text-gray-400'}
               `}
             >
               {label}

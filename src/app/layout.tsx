@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "@/styles/globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import "@/app/globals.css";
 
 export const metadata: Metadata = {
   title: "Hey-Oko | Design Portfolio",
-  description: "Design portfolio of Ngatye Brian Oko - UI/UX, 3D Design, Motion Graphics, and Branding",
+  description: "The pure unadulterated design portfolio of Ngatye Brian Oko",
 };
 
 export default function RootLayout({
@@ -16,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         {children}
       </body>
     </html>
