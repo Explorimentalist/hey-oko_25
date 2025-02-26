@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ImageSequence } from '../animations/ImageSequence'
@@ -12,6 +12,10 @@ interface HomeSequenceData {
   projectConnection: {
     edges: Array<{
       node: {
+        _sys: {
+          filename: string
+        }
+        title: string
         sequence: string[]
       }
     }>
@@ -22,6 +26,17 @@ export function HomeHero() {
   const heroRef = useRef<HTMLDivElement>(null)
   const textRefs = useRef<(HTMLDivElement | null)[]>([])
   const endSpacerRef = useRef<HTMLDivElement>(null)
+  
+  // Track whether Tina data has been attempted to load
+  const [tinaAttempted, setTinaAttempted] = useState(false)
+
+  // Hardcoded fallback images in case Tina fails
+  const fallbackImages = [
+    'https://res.cloudinary.com/da4fs4oyj/image/upload/v1740430513/image_sequence_00108000_wnbo9p.png',
+    'https://res.cloudinary.com/da4fs4oyj/image/upload/v1740430513/image_sequence_00108001_fibtwh.png',
+    'https://res.cloudinary.com/da4fs4oyj/image/upload/v1740430513/image_sequence_00108003_dwf5ue.png',
+    'https://res.cloudinary.com/da4fs4oyj/image/upload/v1740430513/image_sequence_00108002_uihfhq.png'
+  ]
 
   // Fetch sequence images from TinaCMS
   const { data } = useTina<HomeSequenceData>({
@@ -29,6 +44,10 @@ export function HomeHero() {
       projectConnection {
         edges {
           node {
+            _sys {
+              filename
+            }
+            title
             sequence
           }
         }
@@ -42,8 +61,38 @@ export function HomeHero() {
     },
   })
 
-  // Get the first project's sequence images
-  const sequenceImages = data?.projectConnection?.edges?.[0]?.node?.sequence || []
+  // Set tinaAttempted to true once data is loaded or failed
+  useEffect(() => {
+    setTinaAttempted(true)
+  }, [data])
+
+  // Find the project with filename "home-sequence" or with title "Home Page Sequence"
+  const homeSequenceProject = data?.projectConnection?.edges?.find(edge => 
+    edge?.node?._sys?.filename === 'home-sequence' || 
+    edge?.node?.title === 'Home Page Sequence'
+  );
+  
+  // Get sequence images from the specific project
+  const sequenceImages = homeSequenceProject?.node?.sequence || []
+  
+  // Use Tina images if available, otherwise use fallback
+  const displayImages = sequenceImages.length > 0 ? sequenceImages : fallbackImages
+  
+  // Debug log with more details
+  console.log("ALL Projects Data:", { 
+    dataExists: !!data,
+    tinaAttempted,
+    edgesLength: data?.projectConnection?.edges?.length,
+    projectDetails: data?.projectConnection?.edges?.map(edge => ({
+      filename: edge?.node?._sys?.filename,
+      title: edge?.node?.title,
+      sequenceLength: edge?.node?.sequence?.length || 0
+    })),
+    foundHomeSequence: !!homeSequenceProject,
+    sequenceImagesLength: sequenceImages.length,
+    usingTinaImages: sequenceImages.length > 0,
+    displayImages
+  })
 
   useEffect(() => {
     if (!heroRef.current) return
@@ -86,13 +135,20 @@ export function HomeHero() {
   return (
     <>
       <section ref={heroRef} className="relative min-h-[100vh]">
-        {sequenceImages.length > 0 && (
-          <ImageSequence
-            images={sequenceImages}
-            width={1920}
-            height={1080}
-          />
+        {/* Image sequence component */}
+        <ImageSequence
+          images={displayImages}
+          width={1280}
+          height={720}
+        />
+        
+        {/* Development indicator showing data source (only visible in development) */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="absolute top-4 right-4 z-50 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-xs">
+            Images: {sequenceImages.length > 0 ? 'Tina CMS ✅' : 'Fallback ⚠️'}
+          </div>
         )}
+        
         <div className="space-y-[100vh]">
           <div ref={setTextRef(0)} className="text-display md:text-display font-bold text-center h-[100vh] flex items-center justify-center">
             <div>Design is a hell of a drug.</div>
