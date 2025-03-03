@@ -4,12 +4,17 @@ import { config } from 'process'
 const nextConfig = {
   // Enable Pages Router for API routes
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-  // Cloudinary image domain
+  // Image domains configuration
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
         pathname: '/**',
       },
     ],

@@ -6,18 +6,28 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 
 gsap.registerPlugin(ScrollToPlugin)
 
-const sections = [
-  { id: 'hero', label: 'Hero' },
-  { id: 'about', label: 'About' },
-  { id: 'work', label: 'Work' }
+// Base sections that are always available
+const baseSections = [
+  { id: 'hero-sequence-container', label: 'Hero' },
+  { id: 'about', label: 'About' }
 ]
+
+// Make sections accessible globally for HomeProject component
+if (typeof window !== 'undefined') {
+  // @ts-ignore
+  window.__navigationSections = [...baseSections]
+}
 
 export function NavigationProgress() {
   const [activeSection, setActiveSection] = useState('')
   const [hoveredSection, setHoveredSection] = useState<string | null>(null)
   const labelRefs = useRef<{ [key: string]: HTMLSpanElement | null }>({})
+  
+  // Use state for sections to support dynamic additions
+  const [sections, setSections] = useState(baseSections)
 
   useEffect(() => {
+    // Set up observer to track which section is in view
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -26,16 +36,63 @@ export function NavigationProgress() {
           }
         })
       },
-      { threshold: 0.5 }
+      { threshold: 0.15 } // Lower threshold to make sections activate sooner, especially for hero
     )
-
+    
+    // Create a separate observer with even lower threshold specifically for hero
+    const heroObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id)
+          }
+        })
+      },
+      { threshold: 0.05 } // Much lower threshold for hero section
+    )
+    
+    // Listen for navigation sections updates from HomeProject components
+    const handleSectionsUpdate = (event: CustomEvent) => {
+      const updatedSections = event.detail.sections
+      setSections(updatedSections)
+      
+      // Re-observe all sections
+      observer.disconnect()
+      heroObserver.disconnect()
+      updatedSections.forEach(({ id }: { id: string }) => {
+        const element = document.getElementById(id)
+        if (element) {
+          // Use appropriate observer based on section id
+          if (id === 'hero-sequence-container') {
+            heroObserver.observe(element)
+          } else {
+            observer.observe(element)
+          }
+        }
+      })
+    }
+    
+    // Observe initial sections with appropriate observers
     sections.forEach(({ id }) => {
       const element = document.getElementById(id)
-      if (element) observer.observe(element)
+      if (element) {
+        if (id === 'hero-sequence-container') {
+          heroObserver.observe(element)
+        } else {
+          observer.observe(element)
+        }
+      }
     })
+    
+    // Add event listener for dynamic section updates
+    window.addEventListener('navigationSectionsUpdated', handleSectionsUpdate as EventListener)
 
-    return () => observer.disconnect()
-  }, [])
+    return () => {
+      observer.disconnect()
+      heroObserver.disconnect()
+      window.removeEventListener('navigationSectionsUpdated', handleSectionsUpdate as EventListener)
+    }
+  }, [sections])
 
   const handleHover = (id: string, isEntering: boolean) => {
     setHoveredSection(isEntering ? id : null)
@@ -87,12 +144,10 @@ export function NavigationProgress() {
               // Dynamic width: expands to fit content when hovered, otherwise stays as a fixed w-8
               ${hoveredSection === id ? 'w-fit' : 'w-8'}
 
-              // Background and border color logic with dark mode support:
+              // Background color logic (dark mode only):
               ${activeSection === id 
-                ? hoveredSection === id 
-                  ? 'bg-black dark:bg-white border border-gray-300 dark:border-gray-700' 
-                  : 'bg-black dark:bg-white' 
-                : 'bg-gray-300 dark:bg-gray-700'}
+                ? 'bg-white' 
+                : 'bg-gray-700'}
             `}
           >
             <span 
@@ -101,8 +156,8 @@ export function NavigationProgress() {
                 text-sm px-4
                 ${hoveredSection === id ? 'block' : 'hidden'}
                 ${activeSection === id && hoveredSection === id 
-                  ? 'text-white dark:text-black' 
-                  : 'text-gray-600 dark:text-gray-400'}
+                  ? 'text-black' 
+                  : 'text-gray-400'}
               `}
             >
               {label}

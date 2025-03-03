@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-white text-black cursor-none;
+    @apply bg-black text-white cursor-none;
   }
 }
 

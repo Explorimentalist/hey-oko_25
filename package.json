@@ -13,6 +13,7 @@
     "@tinacms/app": "^2.2.0",
     "@tinacms/auth": "^1.0.11",
     "@types/gsap": "^1.20.2",
+    "cloudinary": "^2.5.1",
     "gsap": "^3.12.7",
     "next": "15.1.7",
     "next-tinacms-cloudinary": "^13.0.0",

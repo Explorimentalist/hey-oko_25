@@ -105,7 +105,7 @@ export function Menu() {
     <nav ref={menuRef} className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40">
       <div
         ref={itemsRef}
-        className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col gap-3 min-w-[200px] px-4 py-3 bg-white/80 backdrop-blur-md rounded-2xl overflow-hidden"
+        className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col gap-3 min-w-[200px] px-4 py-3 bg-black/80 backdrop-blur-md rounded-2xl overflow-hidden"
       >
         {menuItems.map((item, index) => (
           <button
@@ -116,8 +116,8 @@ export function Menu() {
             onClick={() => window.location.href = item.path}
             className={`px-4 py-2 text-sm font-medium rounded-xl transition-colors ${
               pathname === item.path
-                ? 'bg-black text-white'
-                : 'text-gray-500 hover:bg-black/5 hover:text-black'
+                ? 'bg-white text-black'
+                : 'text-gray-300 hover:bg-white/10 hover:text-white'
             }`}
           >
             {item.label}
@@ -126,7 +126,7 @@ export function Menu() {
       </div>
       <button
         onClick={toggleMenu}
-        className="w-20 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white/90 transition-colors"
+        className="w-20 h-10 bg-black/80 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-black/90 transition-colors text-white"
       >
         Menu
       </button>

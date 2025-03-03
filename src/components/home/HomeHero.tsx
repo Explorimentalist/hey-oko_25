@@ -5,6 +5,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ImageSequence } from '../animations/ImageSequence'
 import { useTina } from 'tinacms/dist/react'
+import { fallbackImages, getFallbackImages } from '@/data/fallbackImages'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -30,13 +31,9 @@ export function HomeHero() {
   // Track whether Tina data has been attempted to load
   const [tinaAttempted, setTinaAttempted] = useState(false)
 
-  // Hardcoded fallback images in case Tina fails
-  const fallbackImages = [
-    'https://res.cloudinary.com/da4fs4oyj/image/upload/v1740430513/image_sequence_00108000_wnbo9p.png',
-    'https://res.cloudinary.com/da4fs4oyj/image/upload/v1740430513/image_sequence_00108001_fibtwh.png',
-    'https://res.cloudinary.com/da4fs4oyj/image/upload/v1740430513/image_sequence_00108003_dwf5ue.png',
-    'https://res.cloudinary.com/da4fs4oyj/image/upload/v1740430513/image_sequence_00108002_uihfhq.png'
-  ]
+  // Use optimized subset of fallback images for better performance
+  // You can adjust the count based on your performance needs
+  const optimizedFallbackImages = getFallbackImages(500, 0)
 
   // Fetch sequence images from TinaCMS
   const { data } = useTina<HomeSequenceData>({
@@ -76,7 +73,7 @@ export function HomeHero() {
   const sequenceImages = homeSequenceProject?.node?.sequence || []
   
   // Use Tina images if available, otherwise use fallback
-  const displayImages = sequenceImages.length > 0 ? sequenceImages : fallbackImages
+  const displayImages = sequenceImages.length > 0 ? sequenceImages : optimizedFallbackImages
   
   // Debug log with more details
   console.log("ALL Projects Data:", { 
@@ -91,7 +88,9 @@ export function HomeHero() {
     foundHomeSequence: !!homeSequenceProject,
     sequenceImagesLength: sequenceImages.length,
     usingTinaImages: sequenceImages.length > 0,
-    displayImages
+    fallbackImagesCount: optimizedFallbackImages.length,
+    totalAvailableFallbackImages: fallbackImages.length,
+    displayImagesCount: displayImages.length
   })
 
   useEffect(() => {
@@ -134,7 +133,13 @@ export function HomeHero() {
 
   return (
     <>
-      <section ref={heroRef} className="relative min-h-[100vh]">
+      <section 
+        ref={heroRef} 
+        className="relative min-h-[100vh]"
+        data-sequence-container="true"
+        data-nav-section="hero"
+        id="hero-sequence-container"
+      >
         {/* Image sequence component */}
         <ImageSequence
           images={displayImages}
@@ -143,9 +148,14 @@ export function HomeHero() {
         />
         
         {/* Development indicator showing data source (only visible in development) */}
-        {process.env.NODE_ENV === 'development' && (
+        {false && process.env.NODE_ENV === 'development' && (
           <div className="absolute top-4 right-4 z-50 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-xs">
-            Images: {sequenceImages.length > 0 ? 'Tina CMS ✅' : 'Fallback ⚠️'}
+            <div>Images: {sequenceImages.length > 0 ? 'Tina CMS ✅' : 'Fallback ⚠️'}</div>
+            {sequenceImages.length === 0 && (
+              <div className="text-xs opacity-75">
+                Using {optimizedFallbackImages.length} of {fallbackImages.length} fallback images
+              </div>
+            )}
           </div>
         )}
         
