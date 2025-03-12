@@ -1,13 +1,17 @@
 import { defineConfig } from "tinacms";
 
+// Set isLocal to true for the build process
+const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true" || process.env.NODE_ENV !== "production";
+
 export default defineConfig({
   branch: process.env.NEXT_PUBLIC_TINA_BRANCH || "",
-  clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID || "",
-  token: process.env.TINA_TOKEN || "",
+  clientId: isLocal ? "" : process.env.NEXT_PUBLIC_TINA_CLIENT_ID || "",
+  token: isLocal ? "" : process.env.TINA_TOKEN || "",
 
   build: {
     outputFolder: "admin",
     publicFolder: "public",
+    basePath: "admin",
   },
 
   media: {

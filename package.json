@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:tina": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev\"",
-    "build": "tinacms build && next build",
+    "build": "tinacms build --local && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -17,6 +17,7 @@
     "@tinacms/auth": "^1.0.11",
     "@types/gsap": "^1.20.2",
     "cloudinary": "^2.5.1",
+    "fs-extra": "^11.2.0",
     "gsap": "^3.12.7",
     "next": "15.1.7",
     "next-tinacms-cloudinary": "^13.0.0",
