@@ -20,8 +20,8 @@
     "gsap": "^3.12.7",
     "next": "15.1.7",
     "next-tinacms-cloudinary": "^13.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "shadergradient": "^1.3.5",
     "three": "^0.174.0",
     "tinacms": "^2.7.0"
@@ -30,8 +30,8 @@
     "@eslint/eslintrc": "^3",
     "@tinacms/cli": "^1.9.0",
     "@types/node": "^20.17.19",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "@types/three": "^0.174.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9",
@@ -39,5 +39,23 @@
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@react-spring/three": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@react-spring/animated": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@react-spring/core": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@react-spring/shared": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
   }
 }
