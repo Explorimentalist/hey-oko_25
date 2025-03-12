@@ -1,25 +1,30 @@
 import { defineConfig } from "tinacms";
 
-// Set isLocal to true for the build process
-const isLocal = process.env.TINA_PUBLIC_IS_LOCAL === "true" || process.env.NODE_ENV !== "production";
+// Always use local mode for builds
+const isLocal = true;
+
+// Define local media configuration
+const localMediaConfig = {
+  tina: {
+    mediaRoot: "public/uploads",
+    publicFolder: "public",
+  },
+};
 
 export default defineConfig({
-  branch: process.env.NEXT_PUBLIC_TINA_BRANCH || "",
-  clientId: isLocal ? "" : process.env.NEXT_PUBLIC_TINA_CLIENT_ID || "",
-  token: isLocal ? "" : process.env.TINA_TOKEN || "",
+  // In local mode we don't need remote configuration
+  branch: "",
+  clientId: "",
+  token: "",
 
   build: {
     outputFolder: "admin",
     publicFolder: "public",
     basePath: "admin",
   },
-
-  media: {
-    loadCustomStore: async () => {
-      const pack = await import("next-tinacms-cloudinary");
-      return pack.TinaCloudCloudinaryMediaStore;
-    },
-  },
+  
+  // Use local media configuration
+  media: localMediaConfig,
 
   schema: {
     collections: [

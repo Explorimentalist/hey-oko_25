@@ -1,0 +1,13 @@
+{
+  "env": {
+    "TINA_PUBLIC_IS_LOCAL": "true"
+  },
+  "build": {
+    "env": {
+      "TINA_PUBLIC_IS_LOCAL": "true"
+    }
+  },
+  "github": {
+    "silent": true
+  }
+} 
