@@ -4,20 +4,27 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+
+// Register GSAP plugins
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollToPlugin)
+}
 
 const menuItems = [
-  { label: 'Uniball Pen', path: '/uniball-pen' },
-  { label: 'Cosmos', path: '/cosmos' },
-  { label: 'M·A·C', path: '/mac' },
-  { label: 'Beats by Dre.', path: '/beats' },
-  { label: 'Salesforce', path: '/salesforce' },
-  { label: 'Archive', path: '/archive' },
-  { label: 'tonyzhao1947@gmail.com', path: '/contact' },
+  { label: 'Hero', path: '#hero-sequence-container' },
+  { label: 'About', path: '#about' },
+  { label: 'Maserati', path: '#project-1' },
+  { label: 'Ndowéÿé', path: '#project-2' },
+  { label: 'Pillsure', path: '#project-3' },
+  { label: 'Archive', path: '#project-4' },
+  { label: 'brianoko@gmail.com', path: 'mailto:brianoko@gmail.com' },
 ]
 
 export function Menu() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
+  const [isNearFooter, setIsNearFooter] = useState(false)
   const menuRef = useRef<HTMLElement>(null)
   const itemsRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([])
@@ -54,6 +61,34 @@ export function Menu() {
       }
     }
   }, [])
+
+  // Add effect to check if menu is near footer
+  useEffect(() => {
+    const checkFooterPosition = () => {
+      const footer = document.querySelector('footer')
+      if (!footer || !menuRef.current) return
+      
+      const footerRect = footer.getBoundingClientRect()
+      const menuRect = menuRef.current.getBoundingClientRect()
+      
+      // Check if menu is overlapping or close to footer
+      const isOverlapping = menuRect.bottom >= footerRect.top - 20
+      
+      if (isOverlapping !== isNearFooter) {
+        setIsNearFooter(isOverlapping)
+      }
+    }
+    
+    // Check on initial load and on scroll
+    checkFooterPosition()
+    window.addEventListener('scroll', checkFooterPosition)
+    window.addEventListener('resize', checkFooterPosition)
+    
+    return () => {
+      window.removeEventListener('scroll', checkFooterPosition)
+      window.removeEventListener('resize', checkFooterPosition)
+    }
+  }, [isNearFooter])
 
   const toggleMenu = () => {
     const items = itemsRef.current
@@ -101,23 +136,46 @@ export function Menu() {
     setIsOpen(!isOpen)
   }
 
+  const handleItemClick = (path: string) => {
+    // Close the menu
+    toggleMenu()
+    
+    // Check if it's a hash link for scrolling
+    if (path.startsWith('#')) {
+      // Smooth scroll to the section
+      gsap.to(window, {
+        duration: 1,
+        scrollTo: path,
+        ease: 'power2.inOut'
+      })
+    } else {
+      // Navigate to a different page
+      window.location.href = path
+    }
+  }
+
   return (
-    <nav ref={menuRef} className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40">
+    <nav 
+      ref={menuRef} 
+      className={`fixed left-1/2 -translate-x-1/2 transition-all duration-300 ${
+        isNearFooter ? 'bottom-[calc(100vh-100vh+180px)]' : 'bottom-8'
+      } z-40 md:hidden`}
+    >
       <div
         ref={itemsRef}
-        className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col gap-3 min-w-[200px] px-4 py-3 bg-black/80 backdrop-blur-md rounded-2xl overflow-hidden"
+        className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col gap-3 min-w-[200px] px-4 py-3 bg-zinc/80 backdrop-blur-md rounded-2xl overflow-hidden"
       >
         {menuItems.map((item, index) => (
           <button
             key={item.path}
             ref={(el) => {
               itemRefs.current[index] = el
-            }}
-            onClick={() => window.location.href = item.path}
+            }}  
+            onClick={() => handleItemClick(item.path)}
             className={`px-4 py-2 text-sm font-medium rounded-xl transition-colors ${
               pathname === item.path
                 ? 'bg-white text-black'
-                : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                : 'text-zinc-300 hover:bg-white/10 hover:text-white'
             }`}
           >
             {item.label}

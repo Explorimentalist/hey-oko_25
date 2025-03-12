@@ -4,18 +4,17 @@ import { useEffect, useState, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 
-gsap.registerPlugin(ScrollToPlugin)
-
 // Base sections that are always available
 const baseSections = [
   { id: 'hero-sequence-container', label: 'Hero' },
   { id: 'about', label: 'About' }
 ]
 
-// Make sections accessible globally for HomeProject component
-if (typeof window !== 'undefined') {
-  // @ts-ignore
-  window.__navigationSections = [...baseSections]
+// Register GSAP plugins in a client-side only effect
+const registerPlugins = () => {
+  if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollToPlugin)
+  }
 }
 
 export function NavigationProgress() {
@@ -26,7 +25,23 @@ export function NavigationProgress() {
   // Use state for sections to support dynamic additions
   const [sections, setSections] = useState(baseSections)
 
+  // Register GSAP plugins
   useEffect(() => {
+    registerPlugins()
+  }, [])
+
+  // Initialize window.__navigationSections in a separate effect
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // @ts-ignore
+      window.__navigationSections = [...baseSections]
+    }
+  }, [])
+
+  useEffect(() => {
+    // Only run this effect on the client side
+    if (typeof window === 'undefined') return
+
     // Set up observer to track which section is in view
     const observer = new IntersectionObserver(
       (entries) => {
@@ -115,15 +130,17 @@ export function NavigationProgress() {
   }
 
   const handleClick = (sectionId: string) => {
-    gsap.to(window, {
-      duration: 1,
-      scrollTo: `#${sectionId}`,
-      ease: 'power2.inOut'
-    })
+    if (typeof window !== 'undefined') {
+      gsap.to(window, {
+        duration: 1,
+        scrollTo: `#${sectionId}`,
+        ease: 'power2.inOut'
+      })
+    }
   }
 
   return (
-    <div className="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-40">
+    <div className="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-40 hidden md:flex">
       {sections.map(({ id, label }) => (
         <div
           key={id}
@@ -147,7 +164,7 @@ export function NavigationProgress() {
               // Background color logic (dark mode only):
               ${activeSection === id 
                 ? 'bg-white' 
-                : 'bg-gray-700'}
+                : 'bg-zinc-600'}
             `}
           >
             <span 
@@ -157,7 +174,7 @@ export function NavigationProgress() {
                 ${hoveredSection === id ? 'block' : 'hidden'}
                 ${activeSection === id && hoveredSection === id 
                   ? 'text-black' 
-                  : 'text-gray-400'}
+                  : 'text-zinc-200'}
               `}
             >
               {label}

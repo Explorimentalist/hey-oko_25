@@ -7,7 +7,12 @@ import { ImageSequence } from '../animations/ImageSequence'
 import { useTina } from 'tinacms/dist/react'
 import { fallbackImages, getFallbackImages } from '@/data/fallbackImages'
 
-gsap.registerPlugin(ScrollTrigger)
+// Register GSAP plugins in a client-side only effect
+const registerPlugins = () => {
+  if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger)
+  }
+}
 
 interface HomeSequenceData {
   projectConnection: {
@@ -31,9 +36,14 @@ export function HomeHero() {
   // Track whether Tina data has been attempted to load
   const [tinaAttempted, setTinaAttempted] = useState(false)
 
+  // Register GSAP plugins
+  useEffect(() => {
+    registerPlugins()
+  }, [])
+
   // Use optimized subset of fallback images for better performance
   // You can adjust the count based on your performance needs
-  const optimizedFallbackImages = getFallbackImages(500, 0)
+  const optimizedFallbackImages = getFallbackImages(1800, 0)
 
   // Fetch sequence images from TinaCMS
   const { data } = useTina<HomeSequenceData>({
@@ -75,26 +85,31 @@ export function HomeHero() {
   // Use Tina images if available, otherwise use fallback
   const displayImages = sequenceImages.length > 0 ? sequenceImages : optimizedFallbackImages
   
-  // Debug log with more details
-  console.log("ALL Projects Data:", { 
-    dataExists: !!data,
-    tinaAttempted,
-    edgesLength: data?.projectConnection?.edges?.length,
-    projectDetails: data?.projectConnection?.edges?.map(edge => ({
-      filename: edge?.node?._sys?.filename,
-      title: edge?.node?.title,
-      sequenceLength: edge?.node?.sequence?.length || 0
-    })),
-    foundHomeSequence: !!homeSequenceProject,
-    sequenceImagesLength: sequenceImages.length,
-    usingTinaImages: sequenceImages.length > 0,
-    fallbackImagesCount: optimizedFallbackImages.length,
-    totalAvailableFallbackImages: fallbackImages.length,
-    displayImagesCount: displayImages.length
-  })
+  // Debug log with more details - only on client side
+  useEffect(() => {
+    if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+      console.log("ALL Projects Data:", { 
+        dataExists: !!data,
+        tinaAttempted,
+        edgesLength: data?.projectConnection?.edges?.length,
+        projectDetails: data?.projectConnection?.edges?.map(edge => ({
+          filename: edge?.node?._sys?.filename,
+          title: edge?.node?.title,
+          sequenceLength: edge?.node?.sequence?.length || 0
+        })),
+        foundHomeSequence: !!homeSequenceProject,
+        sequenceImagesLength: sequenceImages.length,
+        usingTinaImages: sequenceImages.length > 0,
+        fallbackImagesCount: optimizedFallbackImages.length,
+        totalAvailableFallbackImages: fallbackImages.length,
+        displayImagesCount: displayImages.length,
+        imageIndexInfo: `Using images 0 to ${displayImages.length - 1} (total: ${displayImages.length})`
+      })
+    }
+  }, [data, tinaAttempted, homeSequenceProject, sequenceImages, optimizedFallbackImages, displayImages])
 
   useEffect(() => {
-    if (!heroRef.current) return
+    if (!heroRef.current || typeof window === 'undefined') return
 
     // Create individual ScrollTriggers for each text element
     textRefs.current.forEach((textRef, index) => {
@@ -109,6 +124,7 @@ export function HomeHero() {
           end: "top top",
           pin: true,
           pinSpacing: false,
+          markers: false, // Ensure markers are disabled
           anticipatePin: 1,
           onUpdate: (self) => {
             const progress = Math.max(0, (self.progress - 0.90) * 50)
@@ -145,6 +161,11 @@ export function HomeHero() {
           images={displayImages}
           width={1280}
           height={720}
+          fadeConfig={{
+            innerRadius: 0.5,    // Inner 50% of the image is fully visible
+            outerRadius: 0.9,    // Fade starts at 50% and completes at 90% of radius
+            fadeOpacity: 1       // Full opacity in the center
+          }}
         />
         
         {/* Development indicator showing data source (only visible in development) */}
@@ -177,7 +198,7 @@ export function HomeHero() {
           </div>
         </div>
         {/* End spacer for the last element's pin */}
-        <div ref={endSpacerRef} className="h-[100vh]" />
+        <div ref={endSpacerRef} className="h-[200vh]" />
       </section>
     </>
   )

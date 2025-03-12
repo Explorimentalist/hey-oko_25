@@ -11,52 +11,147 @@ import { Footer } from '@/components/shared/Footer'
 const projectsData = [
   {
     id: 'project-1',
-    title: 'Design System',
+    title: 'Building a story of legacy that turns heads',
     tagline: 'Creating a cohesive visual language',
-    label: 'UX/UI Design',
-    coverImage: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000',
+    label: ['Campaign', 'UX/UI Design'],
+    coverImage: '/images/projects/maserati/maserati_cover.png',
     images: [
       {
-        src: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?q=80&w=1920',
+        src: '/images/projects/maserati/maserati_1.mp4',
         alt: 'Design System Components',
-        width: 1920,
-        height: 1080
+        // width: 1870,
+        // height: 1250
       },
       {
-        src: 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=1920',
+        src: '/images/projects/maserati/maserati_2.gif',
         alt: 'Color Palette',
-        width: 1920,
-        height: 1080
+        width: 1870,
+        height: 1250
+      },
+      // {
+      //   src: '/images/projects/maserati/maserati_3.png',
+      //   alt: 'Color Palette',
+      //   width: 1870,
+      //   height: 1250
+      // },
+      {
+        src: '/images/projects/maserati/maserati_4.png',
+        alt: 'Color Palette',
+        width: 1870,
+        height: 1250
+      },
+      {
+        src: '/images/projects/maserati/maserati_5.gif',
+        alt: 'Color Palette',
+        width: 1870,
+        height: 1250
       }
     ]
   },
   {
     id: 'project-2',
-    title: 'Brand Identity',
+    title: 'Giving Ndowéÿé a place in the net',
     tagline: 'Crafting memorable experiences',
-    label: 'Branding',
-    coverImage: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2000',
+    label: ['Web Design', 'Illustration', 'App Design'],
+    coverImage: '/images/projects/ndowe/calendario_cover.png',
     images: [
       {
-        src: 'https://images.unsplash.com/photo-1600439614353-c8265d621f96?q=80&w=1920',
-        alt: 'Logo Design',
-        width: 1920,
-        height: 1080
+        src: '/images/projects/ndowe/calendario1.png',
+        alt: 'Ndowe Calendar Likano la bolo nyama edition',
+        // width: 1870,
+        // height: 1250
       },
       {
-        src: 'https://images.unsplash.com/photo-1600439614692-d386a9339608?q=80&w=1920',
-        alt: 'Brand Guidelines',
-        width: 1920,
-        height: 1080
+        src: '/images/projects/ndowe/calendario2.png',
+        alt: 'Calendar',
+        // width: 1200,
+        // height: 1350
       },
+      // {
+      //   src: '/images/projects/ndowe/calendario3.png',
+      //   alt: 'Stationery Design',
+      //   width: 1200,
+      //   height: 1200
+      // },
+      // {
+      //   src: '/images/projects/ndowe/calendario4.png',
+      //   alt: 'Stationery Design',
+      //   width: 1200,
+      //   height: 1200
+      // },
       {
-        src: 'https://images.unsplash.com/photo-1600439615406-45d3a342ce8a?q=80&w=1920',
+        src: '/images/projects/ndowe/sopu1.mp4',
         alt: 'Stationery Design',
-        width: 1920,
-        height: 1080
+        // width: 1200,
+        // height: 1200
+      },
+      {
+        src: '/images/projects/ndowe/sopu2.mp4',
+        alt: 'Stationery Design',
+        // width: 1200,
+        // height: 1200
       }
     ]
+  },
+  {
+    id: 'project-3',
+    title: 'Boosting adherence one pill at the time',
+    tagline: 'Crafting memorable experiences',
+    label: ['User Research', 'Web Design', 'Market Research'],
+    coverImage: '/images/projects/pillsure/pillsure_cover.png',
+    images: [
+      {
+        src: '/images/projects/pillsure/pillsure1.mp4',
+        alt: 'Pillsure Device 3D model',
+      },
+      // {
+      //   src: '/images/projects/pillsure/pillsure2.png',
+      //   alt: 'Brand Guidelines',
+      // },
+      {
+        src: '/images/projects/pillsure/pillsure3.png',
+        alt: 'Pillsure Landing Page',
+      }
+    ]
+  },
+  {
+    id: 'project-4',
+    title: 'Archive',
+    tagline: 'Crafting memorable experiences',
+    label: ['Mobile App design', 'Youtube', 'Animation', 'Illustration'],
+    coverImage: '/images/projects/archive/archive_cover.jpg',
+    images: [
+      {
+        src: '/images/projects/archive/diccionario.png',
+        alt: 'Archive',
+      },
+      {
+        src: '/images/projects/archive/dtb.gif',
+        alt: 'South African Airlines',
+      },
+      {
+        src: '/images/projects/archive/crypto.mp4',
+        alt: 'crypto',
+      },
+      {
+        src: '/images/projects/archive/emoji.mp4',
+        alt: 'emojis you dont have',
+      },
+      {
+        src: '/images/projects/archive/bunge.mp4',
+        alt: 'bunge:agribusiness',
+      },
+      {
+        src: '/images/projects/archive/amplify.png',
+        alt: 'amplify',
+      },
+      {
+        src: '/images/projects/archive/rebel play.mp4',
+        alt: 'amplify',
+      },
+    ]
   }
+
 ]
 
 export default function HomePage() {
@@ -72,7 +167,7 @@ export default function HomePage() {
           <HomeHero />
         </section>
         
-        <section>
+        <section className="mt-10">
           <HomeAbout />
         </section>
         

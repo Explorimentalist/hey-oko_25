@@ -31,9 +31,10 @@ interface HomeProjectProps {
   coverImage: string;
   
   /**
-   * Label for the project category/type
+   * Labels for the project categories/types
+   * Can be a single string or an array of strings
    */
-  label: string;
+  label: string | string[];
   
   /**
    * Array of project images to display
@@ -61,27 +62,28 @@ export function HomeProject({
   // Register this project section with NavigationProgress dynamically
   useEffect(() => {
     // This effect will run client-side only
-    if (typeof window !== 'undefined') {
-      // Try to access the sections array in NavigationProgress
-      // This is a hacky way to dynamically add sections without modifying NavigationProgress
-      try {
-        // @ts-ignore - We're accessing a private variable
-        const sectionsArray = window.__navigationSections || []
-        const sectionExists = sectionsArray.some((section: any) => section.id === id)
+    if (typeof window === 'undefined') return
+    
+    // Try to access the sections array in NavigationProgress
+    // This is a hacky way to dynamically add sections without modifying NavigationProgress
+    try {
+      // @ts-ignore - We're accessing a private variable
+      const sectionsArray = window.__navigationSections || []
+      const sectionExists = sectionsArray.some((section: any) => section.id === id)
+      
+      if (!sectionExists) {
+        // Use the original title for navigation
+        sectionsArray.push({ id, label: title })
+        // @ts-ignore
+        window.__navigationSections = sectionsArray
         
-        if (!sectionExists) {
-          sectionsArray.push({ id, label: title })
-          // @ts-ignore
-          window.__navigationSections = sectionsArray
-          
-          // Dispatch an event to notify NavigationProgress of the change
-          window.dispatchEvent(new CustomEvent('navigationSectionsUpdated', {
-            detail: { sections: sectionsArray }
-          }))
-        }
-      } catch (error) {
-        console.error('Failed to register section with NavigationProgress:', error)
+        // Dispatch an event to notify NavigationProgress of the change
+        window.dispatchEvent(new CustomEvent('navigationSectionsUpdated', {
+          detail: { sections: sectionsArray }
+        }))
       }
+    } catch (error) {
+      console.error('Failed to register section with NavigationProgress:', error)
     }
   }, [id, title])
 
@@ -89,30 +91,92 @@ export function HomeProject({
   useEffect(() => {
     if (!sectionRef.current || !coverRef.current) return
     
+    // Get all elements that need to be animated
+    const coverImage = coverRef.current.querySelector('.project-cover-image')
+    const projectTitle = coverRef.current.querySelector('.project-title')
+    const projectLabel = coverRef.current.querySelector('.project-label')
+    const textElements = [projectTitle, projectLabel]
+    
     // Create the sticky header effect
     const coverTl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "top top",
         endTrigger: sectionRef.current,
-        end: "bottom bottom",
+        end: "bottom-=10% bottom",
         pin: coverRef.current,
         pinSpacing: false,
-        scrub: true,
+        scrub: 0.8,
       }
     })
     
-    // Scale down the cover when reaching the first image
-    coverTl.to(coverRef.current, {
-      scale: 0.8,
-      y: "-10vh",
-      opacity: 0.3,
+    // Set initial states
+    gsap.set(coverImage, {
+      scale: 0.85,
+      opacity: 0.9,
+    })
+    
+    gsap.set(textElements, {
+      opacity: 0.9,
+    })
+    
+    // Create timeline for entrance animation
+    const entranceTl = gsap.timeline({
       scrollTrigger: {
-        trigger: imagesRef.current[0] || sectionRef.current,
-        start: "top center",
-        scrub: true
+        trigger: sectionRef.current,
+        start: "top bottom-=20%",
+        end: "top center+=15%",
+        scrub: 0.8,
       }
     })
+    
+    // Add animations to entrance timeline
+    entranceTl
+      .to(coverImage, {
+        scale: 1,
+        opacity: 1,
+        duration: 1.2,
+        ease: "power1.inOut",
+      }, 0)
+      .to(textElements, {
+        opacity: 1,
+        duration: 1.2,
+        ease: "power1.inOut",
+      }, 0) // Start at the same time as the cover image animation
+    
+    // Create timeline for exit animation
+    const exitTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: imagesRef.current[0] || sectionRef.current,
+        start: "top bottom",
+        end: "top center-=10%",
+        scrub: 0.8,
+        onUpdate: (self) => {
+          if (self.progress > 0.5) {
+            if (coverRef.current && coverRef.current.style.visibility !== 'hidden') {
+              coverRef.current.style.visibility = 'hidden';
+            }
+          } else {
+            if (coverRef.current && coverRef.current.style.visibility !== 'visible') {
+              coverRef.current.style.visibility = 'visible';
+            }
+          }
+        }
+      }
+    })
+    
+    // Add animations to exit timeline
+    exitTl
+      .to(coverImage, {
+        scale: 0.85,
+        y: "-15vh", 
+        opacity: 0,
+        ease: "power2.inOut",
+      }, 0)
+      .to(textElements, {
+        opacity: 0,
+        ease: "power2.inOut",
+      }, 0) // Start at the same time as the cover image animation
     
     // Animate each image when it comes into view
     imagesRef.current.forEach((imageRef, index) => {
@@ -156,7 +220,7 @@ export function HomeProject({
     <section 
       ref={sectionRef}
       id={id} 
-      className="min-h-screen relative overflow-hidden mb-32"
+      className="min-h-screen relative overflow-hidden mb-[50vh]"
     >
       {/* Sticky project cover */}
       <div 
@@ -164,7 +228,7 @@ export function HomeProject({
         className="w-full h-screen flex flex-col justify-center items-start relative px-8"
       >
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-auto h-[90vh] relative aspect-[16/9]">
+          <div className="w-auto h-[90vh] relative aspect-[16/9] project-cover-image transition-all duration-1000 ease-out">
             <Image
               src={coverImage}
               alt={`${title} cover`}
@@ -172,40 +236,73 @@ export function HomeProject({
               className="object-cover"
               priority
             />
+            
+            {/* Project labels - positioned bottom right inside the cover image */}
+            <div className="absolute bottom-6 right-6 flex flex-wrap gap-2 justify-end z-10 project-label transition-all duration-1000 ease-out">
+              {Array.isArray(label) ? (
+                label.map((labelText, index) => (
+                  <div 
+                    key={index} 
+                    className="bg-black/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-small uppercase tracking-wider"
+                  >
+                    {labelText}
+                  </div>
+                ))
+              ) : (
+                <div className="bg-black/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-small uppercase tracking-wider">
+                  {label}
+                </div>
+              )}
+            </div>
           </div>
         </div>
         
-        {/* Project label */}
-        <div className="absolute top-8 left-8 bg-black text-white px-4 py-2 z-10">
-          {label}
-        </div>
-        
-        {/* Project content - left aligned with no background */}
-        <div className="relative z-10 text-left text-white max-w-xl mt-auto mb-24">
-          <h2 className="text-5xl font-bold mb-6">{title}</h2>
-          <p className="text-2xl">{tagline}</p>
+        {/* Project title - positioned on the left */}
+        <div className="absolute inset-0 flex items-center justify-start pl-12 z-10 project-title transition-all duration-1000 ease-out">
+          <h2 className="text-5xl md:text-display text-white max-w-2xl text-shadow-md ">{title}</h2>
         </div>
       </div>
       
       {/* Project images */}
-      <div className="container mx-auto px-4 py-24 space-y-32">
-        {images.map((image, index) => (
-          <div 
-            key={index}
-            ref={setImageRef(index)}
-            className="w-full flex justify-center"
-          >
-            <div className="relative max-w-5xl w-full">
-              <Image
-                src={image.src}
-                alt={image.alt || `${title} image ${index + 1}`}
-                width={image.width || 1920}
-                height={image.height || 1080}
-                className="w-full h-auto"
-              />
+      <div className="container mx-auto px-4 py-24 space-y-48">
+        {images.map((image, index) => {
+          const isVideo = image.src.endsWith('.mp4') || image.src.endsWith('.webm');
+          
+          return (
+            <div 
+              key={index}
+              ref={setImageRef(index)}
+              className="w-full flex justify-center"
+            >
+              <div className="relative max-w-5xl flex justify-center">
+                {isVideo ? (
+                  <video
+                    src={image.src}
+                    autoPlay={true}
+                    loop
+                    muted
+                    playsInline
+                    className="max-w-full h-auto"
+                    style={{ width: 'auto' }}
+                  />
+                ) : (
+                  <Image
+                    src={image.src}
+                    alt={image.alt || `${title} image ${index + 1}`}
+                    width={image.width || 1920}
+                    height={image.height || 1080}
+                    className="object-contain"
+                    style={{ 
+                      maxWidth: '100%', 
+                      width: 'auto',
+                      height: 'auto'
+                    }}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   )

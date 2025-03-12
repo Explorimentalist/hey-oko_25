@@ -54,21 +54,25 @@ export function HomeAbout() {
   // Split text into words with spans
   const createWordSpans = (text: string) => {
     return text.split(' ').map((word, index) => (
-      <span key={index} className="word text-gray-500 inline-block mr-[0.25em]">
+      <span key={index} className="word text-zinc-500 inline-block mr-[0.25em] leading-[1.225]">
         {word}
       </span>
     ));
   };
 
   // Combine all paragraphs into a single text block
-  const fullText = "I'm Ngatye Brian Oko. A branch of the African tree, born in the land of tapas, growing in the city of Big Ben. I have over a decade experience shaping digital products with curiosity and a holistic edge. I work at the intersection of UX/UI, Futures Thinking, and technology, helping businesses become more human, more profitable, and hard to ignore.";
+  const fullText = "I'm Ngatye Brian Oko, a branch of the African tree, born in the land of tapas, living in the city of Big Ben. I have over a decade experience shaping digital products with curiosity and a holistic edge. I work at the intersection of UX/UI, Futures Thinking, and technology, helping businesses become more human, more profitable, and hard to ignore.";
 
   return (
-    <div ref={containerRef} id="about" className="py-32 md:py-40 bg-black min-h-screen flex items-center">
+    <div 
+      ref={containerRef} 
+      id="about" 
+      className="py-32 md:py-40 min-h-screen flex items-center relative z-10"
+    >
       <div className="max-w-5xl mx-auto px-4">
         <div 
           ref={textRef}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight"
+          className="text-4xl md:text-5xl lg:text-6xl font-[200] tracking-normal [line-height:1.8]"
         >
           {createWordSpans(fullText)}
         </div>
@@ -78,7 +82,7 @@ export function HomeAbout() {
             href="/Ngatye%20Brian%20Oko_CV_01%3A25.pdf" 
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block px-8 py-4 bg-white text-black font-medium rounded-md hover:bg-gray-200 transition-colors"
+            className="inline-block px-8 py-4 bg-white text-black font-medium rounded-md hover:bg-zinc-200 transition-colors"
           >
             Download my CV
           </a>

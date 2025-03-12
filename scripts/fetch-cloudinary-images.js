@@ -23,7 +23,7 @@ cloudinary.config({
 });
 
 // Configuration
-const FOLDER_PATH = 'hey-oko25/image sequence test';
+const FOLDER_PATH = 'hey-oko25/home hero sequence';
 const OUTPUT_FILE = path.join(process.cwd(), 'content/projects/home-sequence.md');
 const MAX_RESULTS_PER_PAGE = 500; // Maximum allowed by Cloudinary API
 

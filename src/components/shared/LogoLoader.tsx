@@ -66,23 +66,24 @@ export function LogoLoader() {
           })
           // Pause to show the final logo
           .to({}, { duration: 1 })
-          // Hide the regular logo display
-          .set(logo, { opacity: 0 })
-          // Show the SVG mask for the reveal effect
-          .set(svgMaskRef.current, { opacity: 1 })
-        }
-      }
-    })
-
-    // Create the reveal animation - scale the SVG logo mask to reveal content
-    tl.to(svgMaskRef.current, {
-      scale: 100, // Scale up even more dramatically to ensure full screen reveal
-      duration: 1.5,
-      ease: "power2.out",
-      onComplete: () => {
-        // Remove the loader from the DOM when animation completes
-        if (containerRef.current) {
-          containerRef.current.style.display = 'none';
+          // Add blur, fade out, and scale down to the logo
+          .to(logo, { 
+            opacity: 0,
+            filter: "blur(10px)",
+            scale: 0.8,
+            duration: 0.75,
+            ease: "power2.out"
+          })
+          // Fade out and scale down the background at the same time
+          .to(overlayRef.current, {
+            opacity: 0,
+            scale: 0.9,
+            duration: 0.75,
+            ease: "power2.out"
+          }, '<')
+          .set(containerRef.current, { 
+            display: 'none'
+          })
         }
       }
     })
@@ -103,7 +104,7 @@ export function LogoLoader() {
         className="absolute inset-0 bg-black"
       />
       
-      {/* SVG Mask for the reveal effect */}
+      {/* We'll keep the SVG mask in the DOM but we won't use it for the animation */}
       <svg 
         ref={svgMaskRef}
         className="absolute inset-0 opacity-0 pointer-events-none"
@@ -117,7 +118,6 @@ export function LogoLoader() {
         <defs>
           <mask id="logo-mask">
             <rect width="100%" height="100%" fill="black" />
-            {/* Use an image element that references the Hey-Oko logo SVG file */}
             <image
               href="/images/logos/hey-oko_logo.svg"
               width="200"
@@ -130,7 +130,6 @@ export function LogoLoader() {
           </mask>
         </defs>
         
-        {/* Apply the mask to reveal the content */}
         <rect 
           width="100%" 
           height="100%" 

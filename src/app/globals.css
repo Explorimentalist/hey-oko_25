@@ -21,12 +21,14 @@
 }
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: theme('colors.zinc.950'); /* Equivalent to #09090b - very dark zinc */
+  --foreground: theme('colors.zinc.100'); /* Equivalent to #f4f4f5 - very light zinc */
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'General Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Fluid typography formula */
+  font-size: calc(15px + 0.390625vw);
 }
