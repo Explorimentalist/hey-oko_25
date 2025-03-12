@@ -1,5 +1,5 @@
 // THIS FILE HAS BEEN GENERATED WITH THE TINA CLI.
-// @ts-nocheck
+// @ts-expect-error - This is a generated demo file with types that may not match our project
 // This is a demo file once you have tina setup feel free to delete this file
 
 import Head from 'next/head'

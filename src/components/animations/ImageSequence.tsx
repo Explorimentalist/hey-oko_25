@@ -175,7 +175,7 @@ export function ImageSequence({ images, width, height, fadeConfig = {} }: ImageS
       
       const loadedImages = await Promise.all(
         images.map((src, index) => {
-          return new Promise<HTMLImageElement>((resolve, reject) => {
+          return new Promise<HTMLImageElement>((resolve) => {
             const img = new Image()
             img.onload = () => {
               if (process.env.NODE_ENV === 'development') {

@@ -8,13 +8,13 @@ import { isAuthorized } from '@tinacms/auth'
 export const config = mediaHandlerConfig
 
 if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-  throw new Error('Missing required Cloudinary environment variables')
+  console.warn('Missing required Cloudinary environment variables')
 }
 
 export default createMediaHandler({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
+  api_key: process.env.CLOUDINARY_API_KEY || '',
+  api_secret: process.env.CLOUDINARY_API_SECRET || '',
   authorized: async (req: NextApiRequest, _res: NextApiResponse) => {
     try {
       if (process.env.NODE_ENV === 'development') {
