@@ -1,11 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import {
-  mediaHandlerConfig,
   createMediaHandler,
 } from 'next-tinacms-cloudinary/dist/handlers'
 import { isAuthorized } from '@tinacms/auth'
 
-export const config = mediaHandlerConfig
+// Define a static API config instead of importing from the package
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '4mb',
+    },
+  },
+}
 
 if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
   console.warn('Missing required Cloudinary environment variables')
