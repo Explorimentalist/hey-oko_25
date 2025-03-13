@@ -14,6 +14,24 @@ const registerPlugins = () => {
   }
 }
 
+// Helper function to determine optimal image subset based on device
+const getOptimalImageSubset = (images: string[], deviceWidth: number): string[] => {
+  // Skip every N frames based on screen size to reduce total images
+  // This significantly reduces the number of images to load on smaller devices
+  let skipFrames = 1; // Default: use all frames
+  
+  if (deviceWidth < 768) {
+    // Mobile: Use 1/3 of the frames
+    skipFrames = 3;
+  } else if (deviceWidth < 1024) {
+    // Tablet: Use 1/2 of the frames
+    skipFrames = 2;
+  }
+  
+  // Filter images to include only every Nth frame
+  return images.filter((_, index) => index % skipFrames === 0);
+}
+
 interface HomeSequenceData {
   projectConnection: {
     edges: Array<{
@@ -35,6 +53,19 @@ export function HomeHero() {
   
   // Track whether Tina data has been attempted to load
   const [tinaAttempted, setTinaAttempted] = useState(false)
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
+
+  // Register window resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth)
+    }
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   // Register GSAP plugins
   useEffect(() => {
@@ -42,8 +73,9 @@ export function HomeHero() {
   }, [])
 
   // Use optimized subset of fallback images for better performance
-  // You can adjust the count based on your performance needs
-  const optimizedFallbackImages = getFallbackImages(1800, 0)
+  // For performance reasons, use fewer images on mobile/tablet
+  const optimizedFallbackCount = windowWidth < 768 ? 600 : (windowWidth < 1024 ? 1200 : 1800)
+  const optimizedFallbackImages = getFallbackImages(optimizedFallbackCount, 0)
 
   // Fetch sequence images from TinaCMS
   const { data } = useTina<HomeSequenceData>({
@@ -83,7 +115,10 @@ export function HomeHero() {
   const sequenceImages = homeSequenceProject?.node?.sequence || []
   
   // Use Tina images if available, otherwise use fallback
-  const displayImages = sequenceImages.length > 0 ? sequenceImages : optimizedFallbackImages
+  const allImages = sequenceImages.length > 0 ? sequenceImages : optimizedFallbackImages
+  
+  // Get optimized subset of images based on device width
+  const displayImages = getOptimalImageSubset(allImages, windowWidth)
   
   // Debug log with more details - only on client side
   useEffect(() => {
@@ -156,16 +191,18 @@ export function HomeHero() {
         data-nav-section="hero"
         id="hero-sequence-container"
       >
-        {/* Image sequence component */}
+        {/* Image sequence component with added optimization props */}
         <ImageSequence
           images={displayImages}
           width={1280}
           height={720}
           fadeConfig={{
-            innerRadius: 0.5,    // Inner 50% of the image is fully visible
-            outerRadius: 0.9,    // Fade starts at 50% and completes at 90% of radius
-            fadeOpacity: 1       // Full opacity in the center
+            innerRadius: 0.5,
+            outerRadius: 0.9,
+            fadeOpacity: 1
           }}
+          batchSize={windowWidth < 768 ? 5 : 10}  // Smaller batches on mobile
+          preloadCount={windowWidth < 768 ? 3 : 5} // Fewer preloaded images on mobile
         />
         
         {/* Development indicator showing data source (only visible in development) */}

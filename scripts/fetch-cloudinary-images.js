@@ -27,6 +27,50 @@ const FOLDER_PATH = 'hey-oko25/home hero sequence';
 const OUTPUT_FILE = path.join(process.cwd(), 'content/projects/home-sequence.md');
 const MAX_RESULTS_PER_PAGE = 500; // Maximum allowed by Cloudinary API
 
+// Add optimization configurations
+const OPTIMIZATION_CONFIGS = {
+  // Base configuration for all images
+  base: {
+    quality: 'auto',            // Auto-select optimal quality
+    fetch_format: 'auto',       // Auto-select best format (WebP, AVIF)
+    dpr: 'auto',                // Auto device pixel ratio
+  },
+  // Large screens
+  desktop: {
+    width: 1280,
+    crop: 'fill',
+  },
+  // Medium screens (tablets)
+  tablet: {
+    width: 800,
+    crop: 'fill',
+  },
+  // Small screens (mobile)
+  mobile: {
+    width: 480,
+    crop: 'fill',
+  }
+};
+
+// Helper function to build optimized Cloudinary URLs
+function getOptimizedImageUrl(publicId, config = {}) {
+  // Combine base optimization with specific config
+  const transformations = {
+    ...OPTIMIZATION_CONFIGS.base,
+    ...config
+  };
+  
+  // Convert transformations object to URL parameters
+  const transformationString = Object.entries(transformations)
+    .map(([key, value]) => `${key}_${value}`)
+    .join(',');
+  
+  return cloudinary.url(publicId, {
+    transformation: transformationString,
+    secure: true
+  });
+}
+
 async function fetchAllImagesFromCloudinary() {
   console.log(`Fetching all images from Cloudinary folder: ${FOLDER_PATH}...`);
   
@@ -65,7 +109,6 @@ async function generateMarkdownContent(images) {
   // Extract the URLs and sort them by the sequence number in the filename
   const sortedImages = images
     .map(image => ({
-      url: image.secure_url,
       id: image.public_id,
       // Extract sequence number from filename
       sequenceNum: parseInt((image.public_id.match(/(\d+)(?=_[^_]*$)/) || ['0'])[0])
@@ -80,12 +123,16 @@ title: Home Page Sequence
 sequence:
 `;
 
-  // Add each image URL to the sequence
+  // Add each image URL to the sequence with optimizations
   sortedImages.forEach((image, index) => {
     if (index % 100 === 0) {
       console.log(`Processing image ${index + 1}/${sortedImages.length}...`);
     }
-    markdownContent += `  - >-\n    ${image.url}\n`;
+    
+    // Get optimized URL for responsive delivery
+    const optimizedUrl = getOptimizedImageUrl(image.id, OPTIMIZATION_CONFIGS.desktop);
+    
+    markdownContent += `  - >-\n    ${optimizedUrl}\n`;
   });
 
   // Close the front matter and add description
@@ -97,10 +144,17 @@ This sequence provides the scrolling background animation for the home page hero
 
 ## Image Specifications
 
-* Width: 1280px
-* Height: 720px
-* Format: PNG
+* Format: Auto-optimized (WebP/AVIF based on browser support)
+* Quality: Auto-optimized
 * Total Frames: ${sortedImages.length}
+
+## Optimization Notes
+
+Images are automatically optimized with:
+- Responsive sizing based on device
+- Automatic format selection (WebP/AVIF)
+- Automatic quality optimization
+- Automatic DPR (device pixel ratio) adjustment
 `;
 
   return markdownContent;

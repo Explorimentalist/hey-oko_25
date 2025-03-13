@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { loadImageControlled, preloadPriorityImages, getAdaptiveBatchSize } from '@/utils/imageLoader'
 
 // Register GSAP plugins in a client-side only effect
 const registerPlugins = () => {
@@ -20,14 +21,24 @@ interface ImageSequenceProps {
     outerRadius?: number // Value between 0-1, default 0.95
     fadeOpacity?: number // Value between 0-1, default 1
   }
+  batchSize?: number     // Number of images to load in each batch
+  preloadCount?: number  // Number of images to preload initially
 }
 
-export function ImageSequence({ images, width, height, fadeConfig = {} }: ImageSequenceProps) {
+export function ImageSequence({ 
+  images, 
+  width, 
+  height, 
+  fadeConfig = {},
+  batchSize = 10,        // Default batch size
+  preloadCount = 5       // Default preload count
+}: ImageSequenceProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const sequenceRef = useRef({
     frame: 0,
     images: [] as HTMLImageElement[],
+    loadedIndexes: new Set<number>(),  // Track which images are already loaded
   })
   
   // Default fade configuration
@@ -37,9 +48,14 @@ export function ImageSequence({ images, width, height, fadeConfig = {} }: ImageS
     fadeOpacity = 1 
   } = fadeConfig
 
-  // Add state for frame debug display
+  // Add state for frame debug display and loading tracking
   const [currentFrame, setCurrentFrame] = useState(0)
   const [totalFrames, setTotalFrames] = useState(images.length)
+  const [loadingProgress, setLoadingProgress] = useState(0)
+
+  // Add state to track loaded image batches
+  const [loadedBatches, setLoadedBatches] = useState(0)
+  const [isLoadingBatch, setIsLoadingBatch] = useState(false)
 
   // Register GSAP plugins
   useEffect(() => {
@@ -65,6 +81,10 @@ export function ImageSequence({ images, width, height, fadeConfig = {} }: ImageS
     if (process.env.NODE_ENV === 'development') {
       console.log("ImageSequence effect running with images:", images.length);
     }
+    
+    // Reset the image array when images array changes
+    sequenceRef.current.images = new Array(images.length).fill(null)
+    sequenceRef.current.loadedIndexes = new Set()
     
     const canvas = canvasRef.current
     const context = canvas?.getContext('2d')
@@ -167,114 +187,184 @@ export function ImageSequence({ images, width, height, fadeConfig = {} }: ImageS
     // Update on resize
     window.addEventListener('resize', updateCanvasDimensions)
     
-    // Load all images
-    const loadImages = async () => {
+    // Determine adaptive batch size based on device capabilities and network
+    const adaptiveBatchSize = getAdaptiveBatchSize(batchSize)
+    
+    // Progressive loading strategy with intelligent batching
+    const loadImageBatch = async (startIndex: number, count: number) => {
+      if (startIndex >= images.length) return
+      
+      setIsLoadingBatch(true)
+      
+      const endIndex = Math.min(startIndex + count, images.length)
+      
       if (process.env.NODE_ENV === 'development') {
-        console.log("Starting to load images...")
+        console.log(`Loading image batch ${startIndex} to ${endIndex - 1}...`)
       }
       
-      const loadedImages = await Promise.all(
-        images.map((src, index) => {
-          return new Promise<HTMLImageElement>((resolve) => {
-            const img = new Image()
-            img.onload = () => {
-              if (process.env.NODE_ENV === 'development') {
-                console.log(`Image ${index} loaded:`, src)
-              }
-              resolve(img)
-            }
-            img.onerror = (err) => {
-              console.error(`Failed to load image ${index}:`, src, err)
-              // Try with cors attribute
-              if (process.env.NODE_ENV === 'development') {
-                console.log(`Trying with CORS attribute for image ${index}`)
-              }
-              img.crossOrigin = "anonymous"
-              img.onload = () => {
-                if (process.env.NODE_ENV === 'development') {
-                  console.log(`Image ${index} loaded with CORS attribute:`, src)
-                }
-                resolve(img)
-              }
-              img.onerror = () => {
-                console.error(`Failed to load image ${index} even with CORS attribute:`, src)
-                // Resolve with a dummy image to prevent the entire process from failing
-                resolve(img)
-              }
-            }
-            img.src = src
-          })
+      // Only load images that haven't been loaded yet
+      const imagesToLoad = []
+      for (let i = startIndex; i < endIndex; i++) {
+        if (!sequenceRef.current.loadedIndexes.has(i)) {
+          imagesToLoad.push({ src: images[i], index: i })
+        }
+      }
+      
+      if (imagesToLoad.length === 0) {
+        setIsLoadingBatch(false)
+        return
+      }
+      
+      // Load images with controlled concurrency
+      const loadPromises = imagesToLoad.map(({ src, index }) => {
+        return loadImageControlled(src).then(img => {
+          // Store the loaded image
+          sequenceRef.current.images[index] = img
+          sequenceRef.current.loadedIndexes.add(index)
+          
+          // Update loading progress
+          const newProgress = Math.round((sequenceRef.current.loadedIndexes.size / images.length) * 100)
+          setLoadingProgress(newProgress)
+          
+          return img
         })
-      )
+      })
       
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`Loaded ${loadedImages.length} images`)
+      await Promise.all(loadPromises)
+      
+      // Draw the first frame if it's the first batch
+      if (startIndex === 0 && sequenceRef.current.images[0]) {
+        const canvasWidth = canvas.width
+        const canvasHeight = canvas.height
+        drawImage(sequenceRef.current.images[0], canvasWidth, canvasHeight)
+        
+        if (process.env.NODE_ENV === 'development') {
+          console.log("First frame drawn")
+        }
       }
       
-      sequenceRef.current.images = loadedImages
-
+      setLoadedBatches(Math.ceil(endIndex / adaptiveBatchSize))
+      setIsLoadingBatch(false)
+      
+      // Load next batch if needed with intelligent throttling
+      if (endIndex < images.length) {
+        // Add some delay to prevent blocking the main thread
+        // Use longer delay on slower connections or if user isn't currently viewing this frame area
+        const currentFrameIndex = Math.round(sequenceRef.current.frame)
+        const isNearCurrentView = Math.abs(endIndex - currentFrameIndex) < adaptiveBatchSize * 2
+        
+        setTimeout(() => {
+          loadImageBatch(endIndex, adaptiveBatchSize)
+        }, isNearCurrentView ? 50 : 200)
+      }
+    }
+    
+    // Start by preloading priority images (first few frames)
+    const startPreload = async () => {
+      const priorityCount = Math.min(preloadCount, images.length)
+      if (priorityCount === 0) return
+      
+      const priorityImages = images.slice(0, priorityCount)
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`Preloading ${priorityCount} priority images...`)
+      }
+      
+      const loadedImages = await preloadPriorityImages(priorityImages)
+      
+      // Store preloaded images
+      loadedImages.forEach((img, index) => {
+        sequenceRef.current.images[index] = img
+        sequenceRef.current.loadedIndexes.add(index)
+      })
+      
       // Draw first frame
       if (loadedImages[0]) {
         const canvasWidth = canvas.width
         const canvasHeight = canvas.height
         drawImage(loadedImages[0], canvasWidth, canvasHeight)
-        
-        if (process.env.NODE_ENV === 'development') {
-          console.log("First frame drawn")
-        }
-      } else {
-        console.error("No images were loaded successfully")
       }
+      
+      // Start loading the rest of the images
+      loadImageBatch(priorityCount, adaptiveBatchSize)
     }
-
-    loadImages()
-
-    // Create GSAP animation
+    
+    // Start preloading
+    startPreload()
+    
+    // Create GSAP animation with intelligent frame prediction
     const tl = gsap.to(sequenceRef.current, {
       frame: images.length - 1,
       snap: 'frame',
       ease: 'none',
       scrollTrigger: {
-        trigger: "[data-sequence-container]", // Use the section with data-sequence-container attribute
+        trigger: "[data-sequence-container]",
         start: "top top",
         end: () => {
-          // Calculate a dynamic end based on number of images
-          // The formula creates a proportional relationship between sequence length and scroll distance
-          const baseDistance = 3000; // Base scroll distance
-          const multiplier = 10; // Multiplier for each image
-          const calculatedDistance = Math.max(baseDistance, images.length * multiplier);
+          const baseDistance = 3000
+          const multiplier = 10
+          const calculatedDistance = Math.max(baseDistance, images.length * multiplier)
           
           if (process.env.NODE_ENV === 'development') {
-            console.log(`Dynamic scroll distance: ${calculatedDistance}px for ${images.length} images`);
+            console.log(`Dynamic scroll distance: ${calculatedDistance}px for ${images.length} images`)
           }
           
-          return `+=${calculatedDistance}`;
+          return `+=${calculatedDistance}`
         },
         scrub: 0.5,
-        markers: false, // Hide markers in all environments
+        markers: false,
         onUpdate: (self) => {
-          // Only log in development to reduce console noise
+          const currentFrame = Math.round(self.progress * (images.length - 1))
+          
+          // Load images ahead in the direction of scrolling
+          // This creates a more intelligent preloading that predicts scroll direction
+          const previousFrame = Math.round(sequenceRef.current.frame)
+          const scrollingForward = currentFrame >= previousFrame
+          
+          // Calculate which batch we need based on current frame and scroll direction
+          let requiredBatch
+          if (scrollingForward) {
+            // When scrolling forward, load ahead of current position
+            requiredBatch = Math.ceil((currentFrame + preloadCount) / adaptiveBatchSize)
+          } else {
+            // When scrolling backward, load before current position
+            requiredBatch = Math.floor((currentFrame - preloadCount) / adaptiveBatchSize)
+          }
+          
+          // Ensure we have the required batch loaded
+          if (requiredBatch >= 0 && requiredBatch > loadedBatches && !isLoadingBatch) {
+            const startIndex = loadedBatches * adaptiveBatchSize
+            loadImageBatch(startIndex, adaptiveBatchSize)
+          }
+          
           if (process.env.NODE_ENV === 'development') {
-            console.log(`ScrollTrigger progress: ${self.progress.toFixed(3)}, Frame: ${Math.round(self.progress * (images.length - 1))}/${images.length - 1}`);
+            console.log(`ScrollTrigger progress: ${self.progress.toFixed(3)}, Frame: ${currentFrame}/${images.length - 1}, Required batch: ${requiredBatch}, Loaded batches: ${loadedBatches}`)
           }
         }
       },
       onUpdate: () => {
-        const frameIndex = Math.round(sequenceRef.current.frame);
-        const image = sequenceRef.current.images[frameIndex];
-        // Update current frame for debug display
-        setCurrentFrame(frameIndex);
+        const frameIndex = Math.round(sequenceRef.current.frame)
+        const image = sequenceRef.current.images[frameIndex]
+        setCurrentFrame(frameIndex)
         
-        // Only log in development to reduce console noise
         if (process.env.NODE_ENV === 'development' && frameIndex % 10 === 0) {
-          console.log(`Rendering frame ${frameIndex}/${images.length-1}`);
+          console.log(`Rendering frame ${frameIndex}/${images.length-1}`)
         }
+        
         if (image) {
-          const canvasWidth = canvas.width;
-          const canvasHeight = canvas.height;
-          drawImage(image, canvasWidth, canvasHeight);
-        } else {
-          console.error(`No image available for frame ${frameIndex}`);
+          const canvasWidth = canvas.width
+          const canvasHeight = canvas.height
+          drawImage(image, canvasWidth, canvasHeight)
+        } else if (!isLoadingBatch) {
+          // If we don't have the image yet and we're not already loading, try to load it
+          const batchIndex = Math.floor(frameIndex / adaptiveBatchSize)
+          const startIndex = batchIndex * adaptiveBatchSize
+          
+          if (startIndex >= loadedBatches * adaptiveBatchSize) {
+            loadImageBatch(startIndex, adaptiveBatchSize)
+          }
+          
+          console.log(`No image available for frame ${frameIndex}, attempting to load batch ${batchIndex}`)
         }
       },
     })
@@ -321,7 +411,7 @@ export function ImageSequence({ images, width, height, fadeConfig = {} }: ImageS
       window.removeEventListener('resize', updateCanvasDimensions)
       tl.kill()
     }
-  }, [images, width, height])
+  }, [images, width, height, batchSize, preloadCount])
 
   return (
     <div 
@@ -336,11 +426,22 @@ export function ImageSequence({ images, width, height, fadeConfig = {} }: ImageS
         }}
       />
       
+      {/* Loading indicator - only visible during initial loading */}
+      {loadingProgress > 0 && loadingProgress < 100 && (
+        <div className="absolute bottom-8 left-0 right-0 mx-auto w-48 bg-black bg-opacity-50 rounded-full h-2 overflow-hidden">
+          <div 
+            className="h-full bg-white" 
+            style={{ width: `${loadingProgress}%` }}
+          />
+        </div>
+      )}
+      
       {/* Debug info - only visible in explicit development debug mode */}
       {false && process.env.NODE_ENV === 'development' && (
         <div className="absolute top-4 left-4 z-50 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-xs">
           <div>Frame: {currentFrame + 1}/{totalFrames}</div>
           <div>Progress: {Math.round((currentFrame / (totalFrames - 1)) * 100)}%</div>
+          <div>Loaded: {loadingProgress}%</div>
           <div>Fade: {Math.round(innerRadius * 100)}% - {Math.round(outerRadius * 100)}%</div>
         </div>
       )}
