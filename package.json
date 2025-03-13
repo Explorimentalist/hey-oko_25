@@ -29,17 +29,21 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@eslint/js": "^9.22.0",
     "@tinacms/cli": "^1.9.0",
     "@types/node": "^20.17.19",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/three": "^0.174.0",
     "autoprefixer": "^10.4.20",
-    "eslint": "^9",
+    "eslint": "^9.22.0",
     "eslint-config-next": "15.1.7",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^16.0.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.26.1"
   },
   "overrides": {
     "@react-spring/three": {
