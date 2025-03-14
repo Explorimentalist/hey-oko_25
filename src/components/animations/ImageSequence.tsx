@@ -427,6 +427,7 @@ export function ImageSequence({
       />
       
       {/* Loading indicator - only visible during initial loading */}
+      {/* Removed loading indicator to improve user experience
       {loadingProgress > 0 && loadingProgress < 100 && (
         <div className="absolute bottom-8 left-0 right-0 mx-auto w-48 bg-black bg-opacity-50 rounded-full h-2 overflow-hidden">
           <div 
@@ -435,6 +436,7 @@ export function ImageSequence({
           />
         </div>
       )}
+      */}
       
       {/* Debug info - only visible in explicit development debug mode */}
       {false && process.env.NODE_ENV === 'development' && (

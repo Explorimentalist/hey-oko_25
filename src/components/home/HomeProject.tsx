@@ -58,6 +58,7 @@ export function HomeProject({
   const sectionRef = useRef<HTMLElement>(null)
   const coverRef = useRef<HTMLDivElement>(null)
   const imagesRef = useRef<(HTMLDivElement | null)[]>([])
+  const [isActive, setIsActive] = useState(false)
   
   // Register this project section with NavigationProgress dynamically
   useEffect(() => {
@@ -97,16 +98,22 @@ export function HomeProject({
     const projectLabel = coverRef.current.querySelector('.project-label')
     const textElements = [projectTitle, projectLabel]
     
-    // Create the sticky header effect
+    // Create the sticky header effect with improved end point
     const coverTl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "top top",
         endTrigger: sectionRef.current,
-        end: "bottom-=10% bottom",
+        end: "bottom-=30% bottom", // End earlier to prevent overlap
         pin: coverRef.current,
         pinSpacing: false,
         scrub: 0.8,
+        onEnter: () => {
+          setIsActive(true)
+        },
+        onLeaveBack: () => {
+          setIsActive(false)
+        }
       }
     })
     
@@ -144,15 +151,16 @@ export function HomeProject({
         ease: "power1.inOut",
       }, 0) // Start at the same time as the cover image animation
     
-    // Create timeline for exit animation
+    // Create timeline for exit animation with improved visibility handling
     const exitTl = gsap.timeline({
       scrollTrigger: {
         trigger: imagesRef.current[0] || sectionRef.current,
-        start: "top bottom",
-        end: "top center-=10%",
+        start: "top bottom-=30%", // Start exit animation earlier
+        end: "top center-=20%", // End exit animation earlier
         scrub: 0.8,
         onUpdate: (self) => {
-          if (self.progress > 0.5) {
+          // Hide cover at a lower progress threshold for smoother transitions
+          if (self.progress > 0.3) { // Changed from 0.5 to 0.3
             if (coverRef.current && coverRef.current.style.visibility !== 'hidden') {
               coverRef.current.style.visibility = 'hidden';
             }
@@ -165,16 +173,18 @@ export function HomeProject({
       }
     })
     
-    // Add animations to exit timeline
+    // Add animations to exit timeline with faster fade-out
     exitTl
       .to(coverImage, {
         scale: 0.85,
         y: "-15vh", 
         opacity: 0,
+        duration: 0.8, // Faster fade-out
         ease: "power2.inOut",
       }, 0)
       .to(textElements, {
         opacity: 0,
+        duration: 0.8, // Faster fade-out
         ease: "power2.inOut",
       }, 0) // Start at the same time as the cover image animation
     
@@ -209,7 +219,7 @@ export function HomeProject({
         }
       })
     }
-  }, [])
+  }, [id, isActive]) // Added id and isActive to dependencies
   
   // Set refs for images
   const setImageRef = (index: number) => (el: HTMLDivElement | null) => {
@@ -220,7 +230,7 @@ export function HomeProject({
     <section 
       ref={sectionRef}
       id={id} 
-      className="min-h-screen relative overflow-hidden mb-[50vh]"
+      className="min-h-screen relative overflow-hidden mb-[70vh]" // Increased bottom margin
     >
       {/* Sticky project cover */}
       <div 
