@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
+import { ScrollRestoration } from "@/components/shared/ScrollRestoration";
 
 export const metadata: Metadata = {
   title: "Hey-Oko | Design Portfolio",
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body suppressHydrationWarning>
+        <ScrollRestoration />
         {children}
       </body>
     </html>

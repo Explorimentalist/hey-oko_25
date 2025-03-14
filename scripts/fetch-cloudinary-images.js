@@ -60,13 +60,10 @@ function getOptimizedImageUrl(publicId, config = {}) {
     ...config
   };
   
-  // Convert transformations object to URL parameters
-  const transformationString = Object.entries(transformations)
-    .map(([key, value]) => `${key}_${value}`)
-    .join(',');
-  
+  // Use the transformations object directly with the cloudinary.url method
+  // instead of converting it to a string with t_ prefix
   return cloudinary.url(publicId, {
-    transformation: transformationString,
+    transformation: transformations,
     secure: true
   });
 }
