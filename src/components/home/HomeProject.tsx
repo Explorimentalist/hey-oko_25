@@ -119,8 +119,10 @@ export function HomeProject({
     
     // Set initial states
     gsap.set(coverImage, {
-      scale: 0.85,
+      scale: 0.9,
       opacity: 0.9,
+      force3D: true, // Enable hardware acceleration
+      transformOrigin: "center center"
     })
     
     gsap.set(textElements, {
@@ -133,7 +135,7 @@ export function HomeProject({
         trigger: sectionRef.current,
         start: "top bottom-=20%",
         end: "top center+=15%",
-        scrub: 0.8,
+        scrub: 1,
       }
     })
     
@@ -142,50 +144,40 @@ export function HomeProject({
       .to(coverImage, {
         scale: 1,
         opacity: 1,
-        duration: 1.2,
-        ease: "power1.inOut",
+        duration: 1.5,
+        ease: "power2.out",
+        force3D: true, // Enable hardware acceleration
       }, 0)
       .to(textElements, {
         opacity: 1,
-        duration: 1.2,
-        ease: "power1.inOut",
+        duration: 1.5,
+        ease: "power2.out",
       }, 0) // Start at the same time as the cover image animation
     
     // Create timeline for exit animation with improved visibility handling
     const exitTl = gsap.timeline({
       scrollTrigger: {
         trigger: imagesRef.current[0] || sectionRef.current,
-        start: "top bottom-=30%", // Start exit animation earlier
-        end: "top center-=20%", // End exit animation earlier
-        scrub: 0.8,
-        onUpdate: (self) => {
-          // Hide cover at a lower progress threshold for smoother transitions
-          if (self.progress > 0.3) { // Changed from 0.5 to 0.3
-            if (coverRef.current && coverRef.current.style.visibility !== 'hidden') {
-              coverRef.current.style.visibility = 'hidden';
-            }
-          } else {
-            if (coverRef.current && coverRef.current.style.visibility !== 'visible') {
-              coverRef.current.style.visibility = 'visible';
-            }
-          }
-        }
+        start: "top bottom-=25%", // Start exit animation earlier
+        end: "top center+=15%", // Extended end point for smoother transition
+        scrub: 1.5, // Increase scrub for smoother animation
       }
     })
     
-    // Add animations to exit timeline with faster fade-out
+    // Add animations to exit timeline with smoother transitions
     exitTl
       .to(coverImage, {
-        scale: 0.85,
-        y: "-15vh", 
+        scale: 0.9, // More consistent with entrance scale
+        y: "-10vh", // Less extreme movement
         opacity: 0,
-        duration: 0.8, // Faster fade-out
-        ease: "power2.inOut",
+        duration: 1.8, // Longer, smoother fade-out
+        ease: "power3.inOut", // Better easing function for size changes
+        force3D: true, // Enable hardware acceleration
       }, 0)
       .to(textElements, {
         opacity: 0,
-        duration: 0.8, // Faster fade-out
-        ease: "power2.inOut",
+        duration: 1.5, // Longer fade-out for text
+        ease: "power3.inOut",
       }, 0) // Start at the same time as the cover image animation
     
     // Animate each image when it comes into view
@@ -195,7 +187,7 @@ export function HomeProject({
       // Initial state - scaled down and transparent
       gsap.set(imageRef, { scale: 0.8, opacity: 0 })
       
-      // Animation for each image
+      // Animation for each image with smoother transitions
       gsap.to(imageRef, {
         scale: 1,
         opacity: 1,
@@ -203,9 +195,11 @@ export function HomeProject({
           trigger: imageRef,
           start: "top bottom",
           end: "center center",
-          scrub: 1,
+          scrub: 1.5, // Increased for smoother scrolling
           toggleActions: "play none none reverse"
-        }
+        },
+        ease: "power1.inOut", // Added ease parameter
+        duration: 1.2 // Added explicit duration
       })
     })
     
@@ -238,12 +232,13 @@ export function HomeProject({
         className="w-full h-screen flex flex-col justify-center items-start relative px-8"
       >
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-auto h-[90vh] relative aspect-[16/9] project-cover-image transition-all duration-1000 ease-out">
+          <div className="w-[80vw] h-auto max-h-[80vh] relative project-cover-image">
             <Image
               src={coverImage}
               alt={`${title} cover`}
-              fill
-              className="object-cover"
+              width={1920}
+              height={1080}
+              className="object-contain w-full h-auto"
               priority
             />
             
@@ -268,7 +263,7 @@ export function HomeProject({
         </div>
         
         {/* Project title - positioned on the left */}
-        <div className="absolute inset-0 flex items-center justify-start pl-12 z-10 project-title transition-all duration-1000 ease-out">
+        <div className="absolute inset-0 flex items-center justify-start pl-24 md:pl-32 z-10 project-title transition-all duration-1000 ease-out">
           <h2 className="text-5xl md:text-display text-white max-w-2xl text-shadow-md ">{title}</h2>
         </div>
       </div>
