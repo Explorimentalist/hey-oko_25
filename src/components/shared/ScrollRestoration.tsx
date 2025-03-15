@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
-export function ScrollRestoration() {
+// Inner component that uses useSearchParams
+function ScrollRestorationContent() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -93,4 +94,13 @@ export function ScrollRestoration() {
   }, [pathname, searchParams])
 
   return null // This component doesn't render anything
+}
+
+// Main component that wraps the content in a Suspense boundary
+export function ScrollRestoration() {
+  return (
+    <Suspense fallback={null}>
+      <ScrollRestorationContent />
+    </Suspense>
+  )
 } 
