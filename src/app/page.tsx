@@ -14,16 +14,16 @@ const projectsData = [
     title: 'Building a story of legacy that turns heads',
     tagline: 'Creating a cohesive visual language',
     label: ['Campaign', 'UX/UI Design'],
-    coverImage: '/images/projects/maserati/maserati_cover.png',
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/fevp6vacedvcujrvzbcu.png',
     images: [
       {
-        src: '/images/projects/maserati/maserati_1.mp4',
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710564/hey-oko25/xjvmy3xvpyabuxe8zwcs.mp4',
         alt: 'Design System Components',
         // width: 1870,
         // height: 1250
       },
       {
-        src: '/images/projects/maserati/maserati_2.gif',
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/ojbor4ojjzqoearv2bws.gif',
         alt: 'Color Palette',
         width: 1870,
         height: 1250
@@ -35,13 +35,13 @@ const projectsData = [
       //   height: 1250
       // },
       {
-        src: '/images/projects/maserati/maserati_4.png',
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/ivjmizltxj0umvmg9adm.png',
         alt: 'Color Palette',
         width: 1870,
         height: 1250
       },
       {
-        src: '/images/projects/maserati/maserati_5.gif',
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710564/hey-oko25/oa7bxx9v6ln7vomkzcgb.mp4',
         alt: 'Color Palette',
         width: 1870,
         height: 1250
@@ -53,40 +53,40 @@ const projectsData = [
     title: 'Giving Ndowéÿé a place in the net',
     tagline: 'Crafting memorable experiences',
     label: ['Web Design', 'Illustration', 'App Design'],
-    coverImage: '/images/projects/ndowe/calendario_cover.png',
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario_cover_ubvlur.png',
     images: [
       {
-        src: '/images/projects/ndowe/calendario1.png',
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario1_eo3cxh.png',
         alt: 'Ndowe Calendar Likano la bolo nyama edition',
         // width: 1870,
         // height: 1250
       },
       {
-        src: '/images/projects/ndowe/calendario2.png',
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario2_pxxy2o.png',
         alt: 'Calendar',
         // width: 1200,
         // height: 1350
       },
       // {
-      //   src: '/images/projects/ndowe/calendario3.png',
+      //   src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario3_lqscul.png',
       //   alt: 'Stationery Design',
       //   width: 1200,
       //   height: 1200
       // },
       // {
-      //   src: '/images/projects/ndowe/calendario4.png',
+      //   src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario4_gsyb2o.png',
       //   alt: 'Stationery Design',
       //   width: 1200,
       //   height: 1200
       // },
       {
-        src: '/images/projects/ndowe/sopu1.mp4',
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710641/sopu1_re3uoz.mp4',
         alt: 'Stationery Design',
         // width: 1200,
         // height: 1200
       },
       {
-        src: '/images/projects/ndowe/sopu2.mp4',
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710641/sopu2_gjm3ip.mp4',
         alt: 'Stationery Design',
         // width: 1200,
         // height: 1200
@@ -98,18 +98,18 @@ const projectsData = [
     title: 'Boosting adherence one pill at the time',
     tagline: 'Crafting memorable experiences',
     label: ['User Research', 'Web Design', 'Market Research'],
-    coverImage: '/images/projects/pillsure/pillsure_cover.png',
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure_cover_tfjjac.png',
     images: [
       {
-        src: '/images/projects/pillsure/pillsure1.mp4',
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710686/pillsure1_fm8ahw.mp4',
         alt: 'Pillsure Device 3D model',
       },
       // {
-      //   src: '/images/projects/pillsure/pillsure2.png',
+      //   src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure2.png',
       //   alt: 'Brand Guidelines',
       // },
       {
-        src: '/images/projects/pillsure/pillsure3.png',
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure3_fclpsk.png',
         alt: 'Pillsure Landing Page',
       }
     ]
@@ -122,31 +122,31 @@ const projectsData = [
     coverImage: '/images/projects/archive/archive_cover.jpg',
     images: [
       {
-        src: '/images/projects/archive/diccionario.png',
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741607472/diccionario_gpxysb.png',
         alt: 'Archive',
       },
       {
-        src: '/images/projects/archive/dtb.gif',
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741607472/dtb_hzreqc.gif',
         alt: 'South African Airlines',
       },
       {
-        src: '/images/projects/archive/crypto.mp4',
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741607472/crypto_qvsnvp.mp4',
         alt: 'crypto',
       },
       {
-        src: '/images/projects/archive/emoji.mp4',
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741607472/Emoji_oxmelp.mp4',
         alt: 'emojis you dont have',
       },
       {
-        src: '/images/projects/archive/bunge.mp4',
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741607472/Bunge_ofygjn.mp4',
         alt: 'bunge:agribusiness',
       },
       {
-        src: '/images/projects/archive/amplify.png',
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741607472/Amplify_g1lq1q.png',
         alt: 'amplify',
       },
       {
-        src: '/images/projects/archive/rebel play.mp4',
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741607472/Rebel_play_kx602e.mp4',
         alt: 'amplify',
       },
     ]

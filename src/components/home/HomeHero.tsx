@@ -199,7 +199,7 @@ export function HomeHero() {
           fadeConfig={{
             innerRadius: 0.5,
             outerRadius: 0.9,
-            fadeOpacity: 1
+            fadeOpacity: 0.3
           }}
           batchSize={windowWidth < 768 ? 5 : 10}  // Smaller batches on mobile
           preloadCount={windowWidth < 768 ? 3 : 5} // Fewer preloaded images on mobile
