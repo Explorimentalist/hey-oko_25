@@ -224,37 +224,37 @@ export function HomeProject({
     <section 
       ref={sectionRef}
       id={id} 
-      className="min-h-screen relative overflow-hidden mb-[70vh]" // Increased bottom margin
+      className="min-h-screen relative overflow-hidden mb-[40vh] md:mb-[50vh] lg:mb-[70vh]" // Responsive bottom margin
     >
       {/* Sticky project cover */}
       <div 
         ref={coverRef} 
-        className="w-full h-screen flex flex-col justify-center items-start relative px-8"
+        className="w-full h-screen flex flex-col justify-center items-start relative px-4 sm:px-6 md:px-8"
       >
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[80vw] h-auto max-h-[80vh] relative project-cover-image">
+          <div className="w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] min-h-[80vh] sm:min-h-[70vh] md:min-h-[65vh] aspect-[4/5] sm:aspect-[4/3] md:aspect-[16/9] relative project-cover-image">
             <Image
               src={coverImage}
               alt={`${title} cover`}
-              width={1920}
-              height={1080}
-              className="object-contain w-full h-auto"
+              fill
+              sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1024px) 85vw, 80vw"
+              className="object-cover object-center"
               priority
             />
             
             {/* Project labels - positioned bottom right inside the cover image */}
-            <div className="absolute bottom-6 right-6 flex flex-wrap gap-2 justify-end z-10 project-label transition-all duration-1000 ease-out">
+            <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 md:bottom-6 md:right-6 flex flex-wrap gap-1 sm:gap-2 justify-end z-10 project-label transition-all duration-1000 ease-out">
               {Array.isArray(label) ? (
                 label.map((labelText, index) => (
                   <div 
                     key={index} 
-                    className="bg-black/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-small uppercase tracking-wider"
+                    className="bg-black/30 backdrop-blur-sm text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-small uppercase tracking-wider"
                   >
                     {labelText}
                   </div>
                 ))
               ) : (
-                <div className="bg-black/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-small uppercase tracking-wider">
+                <div className="bg-black/30 backdrop-blur-sm text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-small uppercase tracking-wider">
                   {label}
                 </div>
               )}
@@ -263,13 +263,13 @@ export function HomeProject({
         </div>
         
         {/* Project title - positioned on the left */}
-        <div className="absolute inset-0 flex items-center justify-start pl-24 md:pl-32 z-10 project-title transition-all duration-1000 ease-out">
-          <h2 className="text-5xl md:text-display text-white max-w-2xl text-shadow-md ">{title}</h2>
+        <div className="absolute inset-0 flex items-center justify-start pl-6 sm:pl-12 md:pl-24 lg:pl-32 z-10 project-title transition-all duration-1000 ease-out">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-display text-white max-w-2xl text-shadow-md">{title}</h2>
         </div>
       </div>
       
       {/* Project images */}
-      <div className="container mx-auto px-4 py-24 space-y-48">
+      <div className="container mx-auto px-4 py-12 md:py-18 lg:py-24 space-y-24 md:space-y-36 lg:space-y-48">
         {images.map((image, index) => {
           const isVideo = image.src.endsWith('.mp4') || image.src.endsWith('.webm');
           
