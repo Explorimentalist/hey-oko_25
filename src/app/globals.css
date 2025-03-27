@@ -32,3 +32,30 @@ body {
   /* Fluid typography formula */
   font-size: calc(15px + 0.390625vw);
 }
+
+/* Fluid line-height utilities */
+.leading-fluid-about {
+  /* Scale from 1.3 on mobile (320px viewport) to 1.8 on desktop (1920px viewport) */
+  /* Formula: min + (max - min) * ((100vw - min-viewport) / (max-viewport - min-viewport)) */
+  line-height: calc(1.3 + (1.8 - 1.3) * ((100vw - 320px) / (1920 - 320)));
+}
+
+/* Add a fallback for browsers that don't support calc() */
+@supports not (line-height: calc(1.3 + (1.8 - 1.3) * ((100vw - 320px) / (1920 - 320)))) {
+  .leading-fluid-about {
+    line-height: 1.5;
+  }
+}
+
+/* Ensure line-height is capped properly at viewport extremes */
+@media screen and (max-width: 320px) {
+  .leading-fluid-about {
+    line-height: 1.3;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .leading-fluid-about {
+    line-height: 1.8;
+  }
+}

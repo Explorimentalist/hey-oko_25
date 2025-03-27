@@ -54,14 +54,14 @@ export function HomeAbout() {
   // Split text into words with spans
   const createWordSpans = (text: string) => {
     return text.split(' ').map((word, index) => (
-      <span key={index} className="word text-zinc-500 inline-block mr-[0.25em] leading-[1.225]">
+      <span key={index} className="word text-zinc-500 inline-block mr-[0.25em] leading-snug">
         {word}
       </span>
     ));
   };
 
   // Combine all paragraphs into a single text block
-  const fullText = "I'm Ngatye Brian Oko, a branch of the African tree, born in the land of tapas, living in the city of Big Ben. I have over a decade experience shaping digital products with curiosity and a holistic edge. I work at the intersection of UX/UI, Futures Thinking, and technology, helping businesses become more human, more profitable, and hard to ignore.";
+  const fullText = "I'm Ngatye Brian Oko, a branch of the African tree, born in the land of tapas, living in the city of Big Ben. I have over a decade experience shaping digital products with curiosity and a holistic edge. I work at the intersection of UX/UI, Futures Thinking, and AI technology, helping businesses become more human, more profitable, and hard to ignore.";
 
   return (
     <div 
@@ -72,7 +72,7 @@ export function HomeAbout() {
       <div className="max-w-5xl mx-auto px-4">
         <div 
           ref={textRef}
-          className="text-4xl md:text-5xl lg:text-6xl font-[200] tracking-normal [line-height:1.8]"
+          className="text-4xl md:text-5xl lg:text-6xl font-[200] tracking-normal leading-fluid-about"
         >
           {createWordSpans(fullText)}
         </div>

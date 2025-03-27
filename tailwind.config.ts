@@ -42,6 +42,16 @@ export default {
         'small': ['calc(10px + 0.078125vw)', { lineHeight: '1.5' }], // 12px at desktop
         'xs': ['calc(6px + 0.078125vw)', { lineHeight: '1.5' }],    // 8px at desktop
       },
+      lineHeight: {
+        // Responsive line heights that scale with viewport width
+        'fluid-tight': 'calc(1.1 + (1.3 - 1.1) * ((100vw - 320px) / (1920 - 320)))',
+        'fluid-snug': 'calc(1.2 + (1.4 - 1.2) * ((100vw - 320px) / (1920 - 320)))',
+        'fluid-normal': 'calc(1.4 + (1.5 - 1.4) * ((100vw - 320px) / (1920 - 320)))',
+        'fluid-relaxed': 'calc(1.6 + (1.7 - 1.6) * ((100vw - 320px) / (1920 - 320)))',
+        'fluid-loose': 'calc(1.7 + (1.8 - 1.7) * ((100vw - 320px) / (1920 - 320)))',
+        // Special class for about section
+        'fluid-about': 'calc(1.3 + (1.8 - 1.3) * ((100vw - 320px) / (1920 - 320)))',
+      },
     },
   },
   plugins: [],

@@ -264,7 +264,7 @@ export function HomeProject({
         
         {/* Project title - positioned on the left */}
         <div className="absolute inset-0 flex items-center justify-start pl-6 sm:pl-12 md:pl-24 lg:pl-32 z-10 project-title transition-all duration-1000 ease-out">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-display text-white max-w-2xl text-shadow-md">{title}</h2>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-display text-white max-w-2xl relative isolate [text-shadow:_2px_4px_16px_rgb(0_0_0_/_20%)] before:absolute before:inset-0 before:backdrop-blur-[2px] before:-z-10">{title}</h2>
         </div>
       </div>
       

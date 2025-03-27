@@ -222,16 +222,16 @@ export function HomeHero() {
             <div>Design is a hell of a drug.</div>
           </div>
           <div ref={setTextRef(1)} className="text-display md:text-display font-bold text-center h-[100vh] flex items-center justify-center">
-            <div>I craft it,...</div>
+            <div>I craft it</div>
           </div>
           <div ref={setTextRef(2)} className="text-display md:text-display font-bold text-center h-[100vh] flex items-center justify-center">
-            <div>package it,...</div>
+            <div>package it</div>
           </div>
           <div ref={setTextRef(3)} className="text-display md:text-display font-bold text-center h-[100vh] flex items-center justify-center">
-            <div>and distribute it,...</div>
+            <div>and distribute it</div>
           </div>
           <div ref={setTextRef(4)} className="text-display md:text-display font-bold text-center h-[100vh] flex items-center justify-center">
-            <div>Systematically and at scale.</div>
+            <div>systematically and at scale.</div>
           </div>
         </div>
         {/* End spacer for the last element's pin */}

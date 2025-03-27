@@ -10,6 +10,23 @@ import { Footer } from '@/components/shared/Footer'
 // Example project data
 const projectsData = [
   {
+    id: 'project-3',
+    title: 'Boosting adherence one pill at the time',
+    tagline: 'Crafting memorable experiences',
+    label: ['User Research', 'Web Design', 'Market Research'],
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure_cover_tfjjac.png',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710686/pillsure1_fm8ahw.mp4',
+        alt: 'Pillsure Device 3D model',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure3_fclpsk.png',
+        alt: 'Pillsure Landing Page',
+      }
+    ]
+  },
+  {
     id: 'project-1',
     title: 'Building a story of legacy that turns heads',
     tagline: 'Creating a cohesive visual language',
@@ -19,8 +36,6 @@ const projectsData = [
       {
         src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710564/hey-oko25/xjvmy3xvpyabuxe8zwcs.mp4',
         alt: 'Design System Components',
-        // width: 1870,
-        // height: 1250
       },
       {
         src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/ojbor4ojjzqoearv2bws.gif',
@@ -28,12 +43,6 @@ const projectsData = [
         width: 1870,
         height: 1250
       },
-      // {
-      //   src: '/images/projects/maserati/maserati_3.png',
-      //   alt: 'Color Palette',
-      //   width: 1870,
-      //   height: 1250
-      // },
       {
         src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/ivjmizltxj0umvmg9adm.png',
         alt: 'Color Palette',
@@ -56,61 +65,16 @@ const projectsData = [
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario_cover_ubvlur.png',
     images: [
       {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario1_eo3cxh.png',
-        alt: 'Ndowe Calendar Likano la bolo nyama edition',
-        // width: 1870,
-        // height: 1250
-      },
-      {
         src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario2_pxxy2o.png',
         alt: 'Calendar',
-        // width: 1200,
-        // height: 1350
       },
-      // {
-      //   src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario3_lqscul.png',
-      //   alt: 'Stationery Design',
-      //   width: 1200,
-      //   height: 1200
-      // },
-      // {
-      //   src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario4_gsyb2o.png',
-      //   alt: 'Stationery Design',
-      //   width: 1200,
-      //   height: 1200
-      // },
       {
         src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710641/sopu1_re3uoz.mp4',
         alt: 'Stationery Design',
-        // width: 1200,
-        // height: 1200
       },
       {
         src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710641/sopu2_gjm3ip.mp4',
         alt: 'Stationery Design',
-        // width: 1200,
-        // height: 1200
-      }
-    ]
-  },
-  {
-    id: 'project-3',
-    title: 'Boosting adherence one pill at the time',
-    tagline: 'Crafting memorable experiences',
-    label: ['User Research', 'Web Design', 'Market Research'],
-    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure_cover_tfjjac.png',
-    images: [
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710686/pillsure1_fm8ahw.mp4',
-        alt: 'Pillsure Device 3D model',
-      },
-      // {
-      //   src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure2.png',
-      //   alt: 'Brand Guidelines',
-      // },
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure3_fclpsk.png',
-        alt: 'Pillsure Landing Page',
       }
     ]
   },
@@ -151,7 +115,6 @@ const projectsData = [
       },
     ]
   }
-
 ]
 
 export default function HomePage() {
