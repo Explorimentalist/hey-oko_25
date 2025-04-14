@@ -1,3 +1,7 @@
+
+Always check the folder structure before implementing any changes and update it in the project.md file
+Ask to push to Github everytime there is a change in the codebase
+
 #PROJECT OVERVIEW
 
 - Hey-Oko is a design portfolio website for a designer named Ngatye Brian Oko.
@@ -56,9 +60,11 @@
 - Put the location of the file in the comments at the top of all files (i.e app/checkout/success/page.tsx) 
 
 #GITHUB PUSH PROCESS
+
 1- git add .
 2- git commit -m "commit message"
 3- git push origin main
+
 
 This is the repo: https://github.com/Explorimentalist/hey-oko_25
 

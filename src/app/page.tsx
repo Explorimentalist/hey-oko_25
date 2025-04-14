@@ -10,6 +10,39 @@ import { Footer } from '@/components/shared/Footer'
 // Example project data
 const projectsData = [
   {
+    id: 'project-aa',
+    title: 'Streamlining the AA app from sign up to breakdown reporting',
+    tagline: 'From ideation to implementation',
+    label: ['Heuristic Evaluation', 'Prototyping', 'Workshop Facilitation'],
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_cover_kwdihs.png',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_workshop_results-large_pzl7a6.png',
+        alt: 'Workshop Results',
+        width: 1200,
+        height: 720
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_sketches-large_xsyk2v.png',
+        alt: 'Design Sketches',
+        width: 1200,
+        height: 900
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_before-after_tt5vzr.gif',
+        alt: 'Before and After Comparison',
+        width: 911,
+        height: 512
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_outcome1_seg1zx.gif',
+        alt: 'Final Outcome',
+        width: 840,
+        height: 1491
+      }
+    ]
+  },
+  {
     id: 'project-3',
     title: 'Boosting adherence one pill at the time',
     tagline: 'Crafting memorable experiences',
