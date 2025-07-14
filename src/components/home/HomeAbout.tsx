@@ -79,7 +79,7 @@ export function HomeAbout() {
         
         <div className="mt-16">
           <a 
-            href="/Ngatye%20Brian%20Oko%2CV.pdf" 
+            href="/Ngatye Brian Oko CV.pdf" 
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-8 py-4 bg-white text-black font-medium rounded-md hover:bg-zinc-200 transition-colors"
