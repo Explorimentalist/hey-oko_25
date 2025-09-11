@@ -59,3 +59,8 @@ body {
     line-height: 1.8;
   }
 }
+
+/* Reset font size for pill elements to use Tailwind's xs size exactly */
+.pill-text-xs {
+  font-size: 0.75rem !important;
+}

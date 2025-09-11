@@ -12,11 +12,12 @@ if (typeof window !== 'undefined') {
 }
 
 const menuItems = [
-  { label: 'Hero', path: '#hero-sequence-container' },
+  { label: 'Hero', path: '#hero' },
   { label: 'About', path: '#about' },
-  { label: 'Maserati', path: '#project-1' },
-  { label: 'Ndowéÿé', path: '#project-2' },
+  { label: 'AA (The Automobile Association)', path: '#project-aa' },
   { label: 'Pillsure', path: '#project-3' },
+  { label: 'Maserati', path: '#project-1' },
+  { label: 'Sópu & Elanji-Minnya', path: '#project-2' },
   { label: 'Archive', path: '#project-4' },
   { label: 'brianoko@gmail.com', path: 'mailto:brianoko@gmail.com' },
 ]
@@ -163,7 +164,7 @@ export function Menu() {
     >
       <div
         ref={itemsRef}
-        className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col gap-3 min-w-[200px] px-4 py-3 bg-zinc/80 backdrop-blur-md rounded-2xl overflow-hidden"
+        className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col gap-4 w-[min(400px,calc(100vw-2rem))] px-5 py-4 bg-zinc/80 backdrop-blur-md rounded-2xl overflow-hidden"
       >
         {menuItems.map((item, index) => (
           <button
@@ -172,7 +173,7 @@ export function Menu() {
               itemRefs.current[index] = el
             }}  
             onClick={() => handleItemClick(item.path)}
-            className={`px-4 py-2 text-sm font-medium rounded-xl transition-colors ${
+            className={`px-5 py-3 text-xl font-normal rounded-xl transition-colors ${
               pathname === item.path
                 ? 'bg-white text-black'
                 : 'text-zinc-300 hover:bg-white/10 hover:text-white'

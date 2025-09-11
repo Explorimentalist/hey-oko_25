@@ -11,8 +11,10 @@ import { Footer } from '@/components/shared/Footer'
 const projectsData = [
   {
     id: 'project-aa',
-    title: 'Streamlining the AA app from sign up to breakdown reporting',
+    title: 'AA (The Automobile Association)',
     tagline: 'From ideation to implementation',
+    description: 'Streamlining the AA app from sign up to breakdown reporting',
+    pillsLabel: '2018',
     label: ['Heuristic Evaluation', 'Prototyping', 'Workshop Facilitation'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_cover_kwdihs.png',
     images: [
@@ -44,8 +46,10 @@ const projectsData = [
   },
   {
     id: 'project-3',
-    title: 'Boosting adherence one pill at the time',
-    tagline: 'Crafting memorable experiences',
+    title: 'Pillsure',
+    tagline: 'Boosting adherence one pill at the time',
+    description: 'Boosting adherence one pill at the time',
+    pillsLabel: '2023- present',
     label: ['User Research', 'Web Design', 'Market Research'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure_cover_tfjjac.png',
     images: [
@@ -61,8 +65,10 @@ const projectsData = [
   },
   {
     id: 'project-1',
-    title: 'Building a story of legacy that turns heads',
+    title: 'Maserati',
     tagline: 'Creating a cohesive visual language',
+    description: 'Building a story of legacy that turns heads',
+    pillsLabel: '2018',
     label: ['Campaign', 'UX/UI Design'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/fevp6vacedvcujrvzbcu.png',
     images: [
@@ -92,8 +98,10 @@ const projectsData = [
   },
   {
     id: 'project-2',
-    title: 'Giving Ndowéÿé a place in the net',
+    title: 'Sópu & Elanji-Minnya',
     tagline: 'Crafting memorable experiences',
+    description: 'Making the first illustrated Ndowéÿé calendar and first online store for Ndowéÿé people',
+    pillsLabel: '2024',
     label: ['Web Design', 'Illustration', 'App Design'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario_cover_ubvlur.png',
     images: [
@@ -115,6 +123,8 @@ const projectsData = [
     id: 'project-4',
     title: 'Archive',
     tagline: 'Crafting memorable experiences',
+    description: 'Projects worth mentioning',
+    pillsLabel: '2012-present',
     label: ['Mobile App design', 'Youtube', 'Animation', 'Illustration'],
     coverImage: '/images/projects/archive/archive_cover.jpg',
     images: [
@@ -174,6 +184,8 @@ export default function HomePage() {
             id={project.id}
             title={project.title}
             tagline={project.tagline}
+            description={project.description}
+            pillsLabel={project.pillsLabel}
             label={project.label}
             coverImage={project.coverImage}
             images={project.images}

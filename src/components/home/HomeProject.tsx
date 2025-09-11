@@ -26,6 +26,16 @@ interface HomeProjectProps {
   tagline: string;
   
   /**
+   * Project description displayed below the title
+   */
+  description?: string;
+  
+  /**
+   * Label text displayed above the pills
+   */
+  pillsLabel?: string;
+  
+  /**
    * Cover image URL
    */
   coverImage: string;
@@ -51,6 +61,8 @@ export function HomeProject({
   id,
   title,
   tagline,
+  description,
+  pillsLabel,
   coverImage,
   label,
   images
@@ -98,16 +110,20 @@ export function HomeProject({
     const projectLabel = coverRef.current.querySelector('.project-label')
     const textElements = [projectTitle, projectLabel]
     
-    // Create the sticky header effect with improved end point
-    const coverTl = gsap.timeline({
+    // Set initial states for entrance animation
+    gsap.set([coverImage, ...textElements], {
+      opacity: 0,
+      y: 30,
+      force3D: true,
+    })
+    
+    // Create timeline for entrance animation
+    const entranceTl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: "top top",
-        endTrigger: sectionRef.current,
-        end: "bottom-=30% bottom", // End earlier to prevent overlap
-        pin: coverRef.current,
-        pinSpacing: false,
-        scrub: 0.8,
+        start: "top bottom-=20%",
+        end: "top center",
+        scrub: 1,
         onEnter: () => {
           setIsActive(true)
         },
@@ -117,68 +133,27 @@ export function HomeProject({
       }
     })
     
-    // Set initial states
-    gsap.set(coverImage, {
-      scale: 0.9,
-      opacity: 0.9,
-      force3D: true, // Enable hardware acceleration
-      transformOrigin: "center center"
-    })
-    
-    gsap.set(textElements, {
-      opacity: 0.9,
-    })
-    
-    // Create timeline for entrance animation
-    const entranceTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top bottom-=20%",
-        end: "top center+=15%",
-        scrub: 1,
-      }
-    })
-    
-    // Add animations to entrance timeline
+    // Add animations to entrance timeline - staggered entrance
     entranceTl
-      .to(coverImage, {
-        scale: 1,
+      .to(projectTitle, {
         opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: "power2.out",
+      }, 0)
+      .to(projectLabel, {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: "power2.out",
+      }, 0.1) // Slight stagger
+      .to(coverImage, {
+        opacity: 1,
+        y: 0,
         duration: 1.5,
         ease: "power2.out",
-        force3D: true, // Enable hardware acceleration
-      }, 0)
-      .to(textElements, {
-        opacity: 1,
-        duration: 1.5,
-        ease: "power2.out",
-      }, 0) // Start at the same time as the cover image animation
-    
-    // Create timeline for exit animation with improved visibility handling
-    const exitTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: imagesRef.current[0] || sectionRef.current,
-        start: "top bottom-=25%", // Start exit animation earlier
-        end: "top center+=15%", // Extended end point for smoother transition
-        scrub: 1.5, // Increase scrub for smoother animation
-      }
-    })
-    
-    // Add animations to exit timeline with smoother transitions
-    exitTl
-      .to(coverImage, {
-        scale: 0.9, // More consistent with entrance scale
-        y: "-10vh", // Less extreme movement
-        opacity: 0,
-        duration: 1.8, // Longer, smoother fade-out
-        ease: "power3.inOut", // Better easing function for size changes
-        force3D: true, // Enable hardware acceleration
-      }, 0)
-      .to(textElements, {
-        opacity: 0,
-        duration: 1.5, // Longer fade-out for text
-        ease: "power3.inOut",
-      }, 0) // Start at the same time as the cover image animation
+        force3D: true,
+      }, 0.2) // Cover image comes in last
     
     // Animate each image when it comes into view
     imagesRef.current.forEach((imageRef, index) => {
@@ -226,13 +201,56 @@ export function HomeProject({
       id={id} 
       className="min-h-screen relative overflow-hidden mb-[40vh] md:mb-[50vh] lg:mb-[70vh]" // Responsive bottom margin
     >
-      {/* Sticky project cover */}
+      {/* Project content above cover */}
       <div 
         ref={coverRef} 
-        className="w-full h-screen flex flex-col justify-center items-start relative px-4 sm:px-6 md:px-8"
+        className="w-full min-h-screen flex flex-col justify-start relative px-4 sm:px-6 md:px-8 py-8 md:py-12"
       >
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] min-h-[80vh] sm:min-h-[70vh] md:min-h-[65vh] aspect-[4/5] sm:aspect-[4/3] md:aspect-[16/9] relative project-cover-image">
+        {/* Text content section */}
+        <div className="w-full max-w-7xl mx-auto mb-8 md:mb-12 lg:mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 md:items-end">
+            {/* Project title and description - half width on desktop/tablet, full width on mobile */}
+            <div className="project-title">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-display text-white max-w-2xl mb-4">
+                {title}
+              </h2>
+              {description && (
+                <p className="text-white/80 text-base md:text-lg max-w-2xl leading-relaxed">
+                  {description}
+                </p>
+              )}
+            </div>
+            
+            {/* Project labels - half width on desktop/tablet, full width on mobile */}
+            <div className="project-label flex flex-col justify-end">
+              {pillsLabel && (
+                <p className="text-white/60 text-sm md:text-base mb-3">
+                  {pillsLabel}
+                </p>
+              )}
+              <div className="flex flex-wrap gap-2 md:gap-3">
+                {Array.isArray(label) ? (
+                  label.map((labelText, index) => (
+                    <div 
+                      key={index} 
+                      className="bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full pill-text-xs"
+                    >
+                      {labelText}
+                    </div>
+                  ))
+                ) : (
+                  <div className="bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full pill-text-xs">
+                    {label}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Cover image section */}
+        <div className="w-full flex justify-center">
+          <div className="w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] min-h-[60vh] sm:min-h-[70vh] md:min-h-[65vh] aspect-[4/5] sm:aspect-[4/3] md:aspect-[16/9] relative project-cover-image">
             <Image
               src={coverImage}
               alt={`${title} cover`}
@@ -241,30 +259,7 @@ export function HomeProject({
               className="object-cover object-center"
               priority
             />
-            
-            {/* Project labels - positioned bottom right inside the cover image */}
-            <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 md:bottom-6 md:right-6 flex flex-wrap gap-1 sm:gap-2 justify-end z-10 project-label transition-all duration-1000 ease-out">
-              {Array.isArray(label) ? (
-                label.map((labelText, index) => (
-                  <div 
-                    key={index} 
-                    className="bg-black/30 backdrop-blur-sm text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-small uppercase tracking-wider"
-                  >
-                    {labelText}
-                  </div>
-                ))
-              ) : (
-                <div className="bg-black/30 backdrop-blur-sm text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-small uppercase tracking-wider">
-                  {label}
-                </div>
-              )}
-            </div>
           </div>
-        </div>
-        
-        {/* Project title - positioned on the left */}
-        <div className="absolute inset-0 flex items-center justify-start pl-6 sm:pl-12 md:pl-24 lg:pl-32 z-10 project-title transition-all duration-1000 ease-out">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-display text-white max-w-2xl relative isolate [text-shadow:_2px_4px_16px_rgb(0_0_0_/_20%)] before:absolute before:inset-0 before:backdrop-blur-[2px] before:-z-10">{title}</h2>
         </div>
       </div>
       
