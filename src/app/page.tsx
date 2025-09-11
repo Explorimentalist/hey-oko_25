@@ -124,7 +124,7 @@ const projectsData = [
     title: 'Archive',
     tagline: 'Crafting memorable experiences',
     description: 'Projects worth mentioning',
-    pillsLabel: '2012-present',
+    pillsLabel: '2012 - present',
     label: ['Mobile App design', 'Youtube', 'Animation', 'Illustration'],
     coverImage: '/images/projects/archive/archive_cover.jpg',
     images: [

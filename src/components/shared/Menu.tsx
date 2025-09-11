@@ -12,7 +12,7 @@ if (typeof window !== 'undefined') {
 }
 
 const menuItems = [
-  { label: 'Hero', path: '#hero' },
+  { label: 'Hero', path: '#hero-sequence-container' },
   { label: 'About', path: '#about' },
   { label: 'AA (The Automobile Association)', path: '#project-aa' },
   { label: 'Pillsure', path: '#project-3' },
@@ -140,17 +140,36 @@ export function Menu() {
   const handleItemClick = (path: string) => {
     // Close the menu
     toggleMenu()
-    
-    // Check if it's a hash link for scrolling
+
+    // Hash links: scroll precisely to visual content
     if (path.startsWith('#')) {
-      // Smooth scroll to the section
+      const id = path.slice(1)
+
+      // Default to the element by id
+      let target: string | Element = path
+      let offsetY = 0
+
+      // For project sections, aim at the cover/image block for better alignment
+      if (id.startsWith('project')) {
+        const section = document.getElementById(id)
+        const cover = section?.querySelector('.project-cover-image') as Element | null
+        if (cover) {
+          target = cover
+        } else if (section) {
+          target = section
+          // Slight nudge to account for internal padding if cover not found
+          offsetY =  -16
+        }
+      }
+
+      // Smooth scroll
       gsap.to(window, {
         duration: 1,
-        scrollTo: path,
+        scrollTo: { y: target, offsetY },
         ease: 'power2.inOut'
       })
     } else {
-      // Navigate to a different page
+      // Navigate to a different page or mailto
       window.location.href = path
     }
   }
