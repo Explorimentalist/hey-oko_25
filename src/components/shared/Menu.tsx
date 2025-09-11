@@ -25,7 +25,8 @@ const menuItems = [
 export function Menu() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
-  const [isNearFooter, setIsNearFooter] = useState(false)
+  // Dynamic bottom offset to avoid footer overlap on mobile
+  const [bottomOffset, setBottomOffset] = useState(32) // px, matches tailwind bottom-8
   const menuRef = useRef<HTMLElement>(null)
   const itemsRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([])
@@ -63,33 +64,33 @@ export function Menu() {
     }
   }, [])
 
-  // Add effect to check if menu is near footer
+  // Smoothly adjust bottom to stay above footer
   useEffect(() => {
-    const checkFooterPosition = () => {
+    const updateBottomOffset = () => {
       const footer = document.querySelector('footer')
-      if (!footer || !menuRef.current) return
-      
-      const footerRect = footer.getBoundingClientRect()
-      const menuRect = menuRef.current.getBoundingClientRect()
-      
-      // Check if menu is overlapping or close to footer
-      const isOverlapping = menuRect.bottom >= footerRect.top - 20
-      
-      if (isOverlapping !== isNearFooter) {
-        setIsNearFooter(isOverlapping)
+      if (!footer) {
+        setBottomOffset(32)
+        return
       }
+
+      const footerRect = footer.getBoundingClientRect()
+      const viewportHeight = window.innerHeight
+      const safeGap = 16 // px gap above footer
+
+      // Keep menu bottom at least 32px; increase as footer enters viewport
+      const dynamic = Math.max(32, viewportHeight - (footerRect.top - safeGap))
+      setBottomOffset(dynamic)
     }
-    
-    // Check on initial load and on scroll
-    checkFooterPosition()
-    window.addEventListener('scroll', checkFooterPosition)
-    window.addEventListener('resize', checkFooterPosition)
-    
+
+    updateBottomOffset()
+    window.addEventListener('scroll', updateBottomOffset, { passive: true })
+    window.addEventListener('resize', updateBottomOffset)
+
     return () => {
-      window.removeEventListener('scroll', checkFooterPosition)
-      window.removeEventListener('resize', checkFooterPosition)
+      window.removeEventListener('scroll', updateBottomOffset)
+      window.removeEventListener('resize', updateBottomOffset)
     }
-  }, [isNearFooter])
+  }, [])
 
   const toggleMenu = () => {
     const items = itemsRef.current
@@ -177,9 +178,8 @@ export function Menu() {
   return (
     <nav 
       ref={menuRef} 
-      className={`fixed left-1/2 -translate-x-1/2 transition-all duration-300 ${
-        isNearFooter ? 'bottom-[calc(100vh-100vh+180px)]' : 'bottom-8'
-      } z-40 md:hidden`}
+      className={"fixed left-1/2 -translate-x-1/2 transition-all duration-300 z-40 md:hidden"}
+      style={{ bottom: bottomOffset }}
     >
       <div
         ref={itemsRef}

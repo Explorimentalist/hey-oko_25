@@ -19,7 +19,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-sm text-zinc-600 hover:text-white transition-colors"
             >
-              My LinkedIn
+              LinkedIn
             </a>
           </div>
         </div>

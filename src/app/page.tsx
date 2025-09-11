@@ -174,11 +174,14 @@ export default function HomePage() {
         </section>
         
         <section className="mt-10">
+          <h5>About</h5>
           <HomeAbout />
         </section>
         
-        {/* Dynamic project components */}
-        {projectsData.map((project) => (
+        <section>
+          <h5>Projects</h5>
+          {/* Dynamic project components */}
+          {projectsData.map((project) => (
           <HomeProject
             key={project.id}
             id={project.id}
@@ -190,7 +193,8 @@ export default function HomePage() {
             coverImage={project.coverImage}
             images={project.images}
           />
-        ))}
+          ))}
+        </section>
       </div>
 
       <Footer />
