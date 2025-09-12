@@ -12,7 +12,7 @@ if (typeof window !== 'undefined') {
 }
 
 const menuItems = [
-  { label: 'Hero', path: '#hero-sequence-container' },
+  { label: 'Welcome', path: '#hero-sequence-container' },
   { label: 'About', path: '#about' },
   { label: 'AA (The Automobile Association)', path: '#project-aa' },
   { label: 'Pillsure', path: '#project-3' },

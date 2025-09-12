@@ -188,7 +188,7 @@ export function HomeHero() {
         ref={heroRef} 
         className="relative min-h-[100vh]"
         data-sequence-container="true"
-        data-nav-section="hero"
+        data-nav-section="Welcome"
         id="hero-sequence-container"
       >
         {/* Image sequence component with added optimization props */}
