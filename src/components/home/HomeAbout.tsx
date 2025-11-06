@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Eye } from 'lucide-react';
 
 // Make sure ScrollTrigger is available on the client side only
 if (typeof window !== 'undefined') {
@@ -79,12 +80,14 @@ export function HomeAbout() {
         
         <div className="mt-16">
           <a 
-            href="/Ngatye Brian Oko CV.pdf" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-8 py-4 bg-white text-black font-medium rounded-md hover:bg-zinc-200 transition-colors"
+            href="/cv"
+            className="group inline-flex items-center px-8 group-hover:pr-6 py-4 bg-white text-black font-medium rounded-md hover:bg-zinc-200 transition-all duration-300"
           >
-            Download my CV
+            <span>View my CV</span>
+            <Eye 
+              size={16} 
+              className="opacity-0 group-hover:opacity-100 ml-0 group-hover:ml-2 transition-all duration-300" 
+            />
           </a>
         </div>
       </div>

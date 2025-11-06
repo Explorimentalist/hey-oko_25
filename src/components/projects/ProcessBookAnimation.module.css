@@ -1,0 +1,287 @@
+.wrapper {
+  --page-count: 20;
+  --page-scroll: 25;
+  --underline: rgba(64, 64, 64, 0.4);
+  --dot-size: 1.4px;
+  --dot-spacing: 14px;
+  --dot-margin: 0.9rem;
+  --spine: #000;
+  --cover: #3a3a41;
+  --bg: #09090b;
+  --insert: #d9d9d9;
+  --page: #e6e6e6;
+  position: relative;
+  width: 100%;
+  min-height: calc(((var(--page-count) + 2) * var(--page-scroll)) * 1vh);
+  background: var(--bg);
+  overflow: visible;
+}
+
+.processHeading {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  margin: 0;
+  font-family: 'General Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: calc(15px + 0.390625vw);
+  font-weight: normal;
+  color: var(--foreground, #f4f4f5);
+  z-index: 10;
+}
+
+.bookViewport {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.bookFrame {
+  position: relative;
+  height: 60vmin;
+  width: 45vmin;
+  min-width: 220px;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.title {
+  position: sticky;
+  top: calc(100vh - 4rem);
+  display: block;
+  margin: 0;
+  padding: 0 1rem 1rem;
+  font-size: 2rem;
+  color: #808080;
+  text-align: right;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.book {
+  height: 40vmin;
+  width: 30vmin;
+  min-width: 150px;
+  min-height: 200px;
+  position: relative;
+  transform: scale(0.95);
+  transform-style: preserve-3d;
+  transform-origin: center;
+  perspective: 1200px;
+  will-change: transform;
+}
+
+.bookSpine {
+  height: 100%;
+  left: 0;
+  top: 0;
+  position: absolute;
+  background: var(--spine);
+  transform-origin: 0 50%;
+  width: 12px;
+  transform: translate3d(0, 0, -13px) scaleX(1) rotateY(0deg);
+}
+
+.page {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.pageNumber {
+  position: absolute;
+  color: #808080;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1vmin;
+}
+
+.pageHalf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: rotateY(calc(var(--rotation) * 1deg)) translate3d(0, 0, calc((0.5 * var(--coefficient)) * 1px));
+  -webkit-clip-path: inset(0 0% 0 0%);
+  clip-path: inset(0 0% 0 0%);
+  border-radius: 0 5% 5% 0;
+  overflow: hidden;
+}
+
+.pageHalfFront {
+  --rotation: 0;
+  --coefficient: 0;
+  backface-visibility: hidden;
+}
+
+.pageHalfBack {
+  --rotation: 180;
+  --coefficient: 2;
+  border-radius: 5% 0 0 5%;
+}
+
+.bookPage {
+  position: absolute;
+  left: 2%;
+  top: 50%;
+  border-radius: 0 5% 5% 0;
+  transform: translate(0, -50%);
+  height: 94%;
+  width: 94%;
+  transform-origin: 0% 50%;
+  z-index: calc(((var(--page-count) + 2) - var(--page-index)) * 2);
+}
+
+.bookCover {
+  border-radius: 0 5% 5% 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  background: 
+    /* Real leather texture overlay */
+    url('/images/leather-texture.png'),
+    var(--cover);
+  background-size: cover, 100% 100%;
+  background-repeat: no-repeat, no-repeat;
+  background-blend-mode: multiply;
+  background-position: 0 0, center;
+}
+
+.bookCoverFront {
+  transform-origin: 0 50%;
+}
+
+.bookCoverFront .pageHalfBack {
+  border-right: 1rem solid var(--spine);
+}
+
+.bookCoverBack {
+  transform-origin: 0% 50%;
+}
+
+.bookCoverBack .pageHalfFront {
+  border-left: 1rem solid var(--spine);
+}
+
+.bookCoverBack .bookInsert {
+  left: 0;
+  border-radius: 0 5% 5% 0;
+}
+
+.bookPage:not(.bookCover) .pageHalf {
+  background: var(--page);
+  z-index: 0;
+}
+
+.bookPage:not(.bookCover) .pageHalf::before {
+  content: '';
+  position: absolute;
+  top: var(--dot-margin);
+  right: var(--dot-margin);
+  bottom: var(--dot-margin);
+  left: var(--dot-margin);
+  background:
+    radial-gradient(
+      circle,
+      var(--underline) 0 calc(var(--dot-size) / 2),
+      transparent calc(var(--dot-size) / 2 + 0.1px)
+    ) 0 0 / var(--dot-spacing) var(--dot-spacing) repeat;
+  border-radius: 0 5% 5% 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bookPage:not(.bookCover) .pageHalf > * {
+  position: relative;
+  z-index: 1;
+}
+
+.bookInsert {
+  content: '';
+  position: absolute;
+  height: 94%;
+  width: 94%;
+  background: var(--insert);
+  top: 50%;
+  right: -1rem;
+  transform: translate(0, -50%);
+  border-radius: 5% 0 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sticker {
+  height: 15%;
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+  transform: rotate(-25deg);
+}
+
+.code {
+  line-height: 1.2;
+  font-family: monospace;
+  white-space: pre-line;
+  max-width: 100%;
+  max-height: 100%;
+  font-weight: bold;
+  color: #0f0f0f;
+  text-shadow: 2px 2px 0 #1c1c1c;
+  border-radius: 5%;
+  display: block;
+  overflow: hidden;
+  padding: 1.5rem;
+}
+
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  height: 25%;
+}
+
+.pageImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.pageLink {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .book {
+    width: 60vmin;
+    height: 80vmin;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}

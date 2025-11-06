@@ -1,9 +1,14 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import {
+  ProcessBookAnimation,
+  type ProcessBookInsert,
+  type ProcessBookPage,
+} from '@/components/projects/ProcessBookAnimation'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -55,6 +60,12 @@ interface HomeProjectProps {
     width?: number;
     height?: number;
   }[];
+  process?: {
+    heading?: string;
+    pages?: ProcessBookPage[];
+    insert?: ProcessBookInsert;
+    style?: CSSProperties;
+  };
 }
 
 export function HomeProject({
@@ -65,7 +76,8 @@ export function HomeProject({
   pillsLabel,
   coverImage,
   label,
-  images
+  images,
+  process,
 }: HomeProjectProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const coverRef = useRef<HTMLDivElement>(null)
@@ -263,6 +275,19 @@ export function HomeProject({
         </div>
       </div>
       
+      {/* Process section */}
+      {process ? (
+        <div className="container mx-auto px-4 py-12 md:py-18 lg:py-24">
+          {/* Process animation */}
+          <ProcessBookAnimation
+            heading={process.heading}
+            pages={process.pages}
+            insert={process.insert}
+            style={process.style}
+          />
+        </div>
+      ) : null}
+
       {/* Project images */}
       <div className="container mx-auto px-4 py-12 md:py-18 lg:py-24 space-y-24 md:space-y-36 lg:space-y-48">
         {images.map((image, index) => {
