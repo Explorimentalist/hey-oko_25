@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Eye } from 'lucide-react';
+import { Button } from '@/components/shared/Button';
 
 // Make sure ScrollTrigger is available on the client side only
 if (typeof window !== 'undefined') {
@@ -79,16 +79,35 @@ export function HomeAbout() {
         </div>
         
         <div className="mt-16">
-          <a 
+          <Button
+            asLink
             href="/cv"
-            className="group inline-flex items-center px-8 group-hover:pr-6 py-4 bg-white text-black font-medium rounded-md hover:bg-zinc-200 transition-all duration-300"
+            variant="primary-icon"
+            size="md"
+            icon={
+              <svg 
+                className="w-5 h-5" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" 
+                />
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" 
+                />
+              </svg>
+            }
           >
-            <span>View my CV</span>
-            <Eye 
-              size={16} 
-              className="opacity-0 group-hover:opacity-100 ml-0 group-hover:ml-2 transition-all duration-300" 
-            />
-          </a>
+            View my CV
+          </Button>
         </div>
       </div>
     </div>

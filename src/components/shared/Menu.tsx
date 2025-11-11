@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+import { Button } from './Button'
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -25,11 +26,9 @@ const menuItems = [
 export function Menu() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
-  // Dynamic bottom offset to avoid footer overlap on mobile
-  const [bottomOffset, setBottomOffset] = useState(32) // px, matches tailwind bottom-8
   const menuRef = useRef<HTMLElement>(null)
   const itemsRef = useRef<HTMLDivElement>(null)
-  const itemRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const itemRefs = useRef<(HTMLButtonElement | HTMLAnchorElement | null)[]>([])
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -64,33 +63,6 @@ export function Menu() {
     }
   }, [])
 
-  // Smoothly adjust bottom to stay above footer
-  useEffect(() => {
-    const updateBottomOffset = () => {
-      const footer = document.querySelector('footer')
-      if (!footer) {
-        setBottomOffset(32)
-        return
-      }
-
-      const footerRect = footer.getBoundingClientRect()
-      const viewportHeight = window.innerHeight
-      const safeGap = 16 // px gap above footer
-
-      // Keep menu bottom at least 32px; increase as footer enters viewport
-      const dynamic = Math.max(32, viewportHeight - (footerRect.top - safeGap))
-      setBottomOffset(dynamic)
-    }
-
-    updateBottomOffset()
-    window.addEventListener('scroll', updateBottomOffset, { passive: true })
-    window.addEventListener('resize', updateBottomOffset)
-
-    return () => {
-      window.removeEventListener('scroll', updateBottomOffset)
-      window.removeEventListener('resize', updateBottomOffset)
-    }
-  }, [])
 
   const toggleMenu = () => {
     const items = itemsRef.current
@@ -178,36 +150,35 @@ export function Menu() {
   return (
     <nav 
       ref={menuRef} 
-      className={"fixed left-1/2 -translate-x-1/2 transition-all duration-300 z-40 md:hidden"}
-      style={{ bottom: bottomOffset }}
+      className={"fixed left-1/2 -translate-x-1/2 bottom-8 z-40 md:hidden"}
     >
       <div
         ref={itemsRef}
         className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col gap-4 w-[min(400px,calc(100vw-2rem))] px-5 py-4 bg-zinc/80 backdrop-blur-md rounded-2xl overflow-hidden"
       >
         {menuItems.map((item, index) => (
-          <button
+          <Button
             key={item.path}
             ref={(el) => {
               itemRefs.current[index] = el
             }}  
             onClick={() => handleItemClick(item.path)}
-            className={`px-5 py-3 text-xl font-normal rounded-xl transition-colors ${
-              pathname === item.path
-                ? 'bg-white text-black'
-                : 'text-zinc-300 hover:bg-white/10 hover:text-white'
-            }`}
+            variant={pathname === item.path ? 'primary' : 'tertiary'}
+            size="md"
+            className={pathname === item.path ? 'bg-white text-black' : ''}
           >
             {item.label}
-          </button>
+          </Button>
         ))}
       </div>
-      <button
+      <Button
         onClick={toggleMenu}
-        className="w-20 h-10 bg-black/80 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-black/90 transition-colors text-white"
+        variant="secondary"
+        size="md"
+        className="w-20 h-10"
       >
         Menu
-      </button>
+      </Button>
     </nav>
   )
 } 

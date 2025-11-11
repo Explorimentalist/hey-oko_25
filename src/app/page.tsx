@@ -1,108 +1,203 @@
-import { HomeHero } from "@/components/home/HomeHero"
-import { HomeAbout } from "@/components/home/HomeAbout"
-import { HomeProject } from "@/components/home/HomeProject"
-import { Footer } from "@/components/shared/Footer"
-import { CustomCursor } from "@/components/shared/CustomCursor"
-import { Menu } from "@/components/shared/Menu"
-import { NavigationProgress } from "@/components/shared/NavigationProgress"
+import { HomeHero } from '@/components/home/HomeHero'
+import { HomeProject } from '@/components/home/HomeProject'
+import { HomeAbout } from '@/components/home/HomeAbout'
+import { LogoLoader } from '@/components/shared/LogoLoader'
+import { Menu } from '@/components/shared/Menu'
+import { NavigationProgress } from '@/components/shared/NavigationProgress'
+import { CustomCursor } from '@/components/shared/CustomCursor'
+import { Footer } from '@/components/shared/Footer'
 
-export default function Page() {
+// Example project data
+const projectsData = [
+  {
+    id: 'project-aa',
+    title: 'AA (The Automobile Association)',
+    tagline: 'From ideation to implementation',
+    description: 'Streamlining the AA app from sign up to breakdown reporting',
+    pillsLabel: '2018',
+    label: ['Heuristic Evaluation', 'Prototyping', 'Workshop Facilitation'],
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_cover_kwdihs.png',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_workshop_results-large_pzl7a6.png',
+        alt: 'Workshop Results',
+        width: 1200,
+        height: 720
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_sketches-large_xsyk2v.png',
+        alt: 'Design Sketches',
+        width: 1200,
+        height: 900
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_before-after_tt5vzr.gif',
+        alt: 'Before and After Comparison',
+        width: 911,
+        height: 512
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_outcome1_seg1zx.gif',
+        alt: 'Final Outcome',
+        width: 840,
+        height: 1491
+      }
+    ]
+  },
+  {
+    id: 'project-3',
+    title: 'Pillsure',
+    tagline: 'Boosting adherence one pill at the time',
+    description: 'Boosting adherence one pill at the time',
+    pillsLabel: '2023- present',
+    label: ['User Research', 'Web Design', 'Market Research'],
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure_cover_tfjjac.png',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710686/pillsure1_fm8ahw.mp4',
+        alt: 'Pillsure Device 3D model',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure3_fclpsk.png',
+        alt: 'Pillsure Landing Page',
+      }
+    ]
+  },
+  {
+    id: 'project-1',
+    title: 'Maserati',
+    tagline: 'Creating a cohesive visual language',
+    description: 'Building a story of legacy that turns heads',
+    pillsLabel: '2018',
+    label: ['Campaign', 'UX/UI Design'],
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/fevp6vacedvcujrvzbcu.png',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710564/hey-oko25/xjvmy3xvpyabuxe8zwcs.mp4',
+        alt: 'Design System Components',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/ojbor4ojjzqoearv2bws.gif',
+        alt: 'Color Palette',
+        width: 1870,
+        height: 1250
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/ivjmizltxj0umvmg9adm.png',
+        alt: 'Color Palette',
+        width: 1870,
+        height: 1250
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710564/hey-oko25/oa7bxx9v6ln7vomkzcgb.mp4',
+        alt: 'Color Palette',
+        width: 1870,
+        height: 1250
+      }
+    ]
+  },
+  {
+    id: 'project-2',
+    title: 'Sópu & Elanji-Minnya',
+    tagline: 'Crafting memorable experiences',
+    description: 'Making the first illustrated Ndowéÿé calendar and first online store for Ndowéÿé people',
+    pillsLabel: '2024',
+    label: ['Web Design', 'Illustration', 'App Design'],
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario_cover_ubvlur.png',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario2_pxxy2o.png',
+        alt: 'Calendar',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710641/sopu1_re3uoz.mp4',
+        alt: 'Stationery Design',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710641/sopu2_gjm3ip.mp4',
+        alt: 'Stationery Design',
+      }
+    ]
+  },
+  {
+    id: 'project-4',
+    title: 'Archive',
+    tagline: 'Crafting memorable experiences',
+    description: 'Projects worth mentioning',
+    pillsLabel: '2012 - present',
+    label: ['Mobile App design', 'Youtube', 'Animation', 'Illustration'],
+    coverImage: '/images/projects/archive/archive_cover.jpg',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741607472/diccionario_gpxysb.png',
+        alt: 'Archive',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741607472/dtb_hzreqc.gif',
+        alt: 'South African Airlines',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741607472/crypto_qvsnvp.mp4',
+        alt: 'crypto',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741607472/Emoji_oxmelp.mp4',
+        alt: 'emojis you dont have',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741607472/Bunge_ofygjn.mp4',
+        alt: 'bunge:agribusiness',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741607472/Amplify_g1lq1q.png',
+        alt: 'amplify',
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741607472/Rebel_play_kx602e.mp4',
+        alt: 'amplify',
+      },
+    ]
+  }
+]
+
+export default function HomePage() {
   return (
-    <>
-      <CustomCursor />
+    <main className="relative min-h-screen">
+      <LogoLoader />
       <Menu />
       <NavigationProgress />
-      <main>
-        <HomeHero />
-        <HomeAbout />
+      <CustomCursor />
+      
+      <div className="container mx-auto px-4">
+        <section id="hero">
+          <HomeHero />
+        </section>
         
-        {/* AA Project */}
-        <HomeProject
-          id="project-aa"
-          title="AA (The Automobile Association)"
-          tagline="Streamlining the AA app from sign up to breakdown reporting"
-          description="Redesigning the AA mobile app to improve user experience from sign-up through breakdown reporting, focusing on clarity and efficiency."
-          pillsLabel="2018"
-          label={["Heuristic Evaluation", "Prototyping", "Workshop Facilitation"]}
-          coverImage="/images/projects/aa/AA_Hero_Video.mp4"
-          images={[
-            { src: "/images/projects/aa/AA_Hero_Video.mp4", alt: "AA App redesign video" }
-          ]}
-        />
+        <section className="mt-10">
+          <h5>About</h5>
+          <HomeAbout />
+        </section>
+        
+        <section>
+          <h5>Projects</h5>
+          {/* Dynamic project components */}
+          {projectsData.map((project) => (
+          <HomeProject
+            key={project.id}
+            id={project.id}
+            title={project.title}
+            tagline={project.tagline}
+            description={project.description}
+            pillsLabel={project.pillsLabel}
+            label={project.label}
+            coverImage={project.coverImage}
+            images={project.images}
+          />
+          ))}
+        </section>
+      </div>
 
-        {/* Pillsure Project */}
-        <HomeProject
-          id="project-3"
-          title="Pillsure"
-          tagline="Boosting adherence one pill at the time"
-          description="Designing a comprehensive pill adherence platform that helps users manage their medication schedules and improve health outcomes."
-          pillsLabel="2023 - present"
-          label={["User Research", "Web Design", "Market Research"]}
-          coverImage="/images/projects/pillsure/pillsure_cover.png"
-          images={[
-            { src: "/images/projects/pillsure/pillsure1.mp4", alt: "Pillsure app interface" },
-            { src: "/images/projects/pillsure/pillsure3.png", alt: "Pillsure dashboard" }
-          ]}
-        />
-
-        {/* Maserati Project */}
-        <HomeProject
-          id="project-1"
-          title="Maserati"
-          tagline="Building a story of legacy that turns heads"
-          description="Creating a digital experience that captures Maserati's heritage of luxury and performance through compelling visual storytelling."
-          pillsLabel="2018"
-          label={["Campaign", "UX/UI Design"]}
-          coverImage="/images/projects/maserati/maserati_cover.png"
-          images={[
-            { src: "/images/projects/maserati/maserati_1.mp4", alt: "Maserati campaign video" },
-            { src: "/images/projects/maserati/maserati_2.gif", alt: "Maserati interface animation" },
-            { src: "/images/projects/maserati/maserati_3.png", alt: "Maserati design system" },
-            { src: "/images/projects/maserati/maserati_4.png", alt: "Maserati mobile interface" },
-            { src: "/images/projects/maserati/maserati_5.gif", alt: "Maserati interaction" }
-          ]}
-        />
-
-        {/* Sópu & Elanji-Minnya Project */}
-        <HomeProject
-          id="project-2"
-          title="Sópu & Elanji-Minnya"
-          tagline="Making the first illustrated Ndowéÿé calendar and first online store for Ndowéÿé people"
-          description="Creating the first digital platform for the Ndowéÿé community, featuring an illustrated calendar and e-commerce store celebrating cultural heritage."
-          pillsLabel="2024"
-          label={["Web Design", "Illustration", "App Design"]}
-          coverImage="/images/projects/ndowe/calendario_cover.png"
-          images={[
-            { src: "/images/projects/ndowe/sopu1.mp4", alt: "Sópu platform video" },
-            { src: "/images/projects/ndowe/sopu2.mp4", alt: "Elanji-Minnya interface" },
-            { src: "/images/projects/ndowe/calendario1.png", alt: "Ndowéÿé calendar design" },
-            { src: "/images/projects/ndowe/calendario2.png", alt: "Calendar illustration" },
-            { src: "/images/projects/ndowe/calendario3.png", alt: "Calendar layout" },
-            { src: "/images/projects/ndowe/calendario4.png", alt: "Calendar mobile view" }
-          ]}
-        />
-
-        {/* Archive Project */}
-        <HomeProject
-          id="project-4"
-          title="Archive"
-          tagline="Projects worth mentioning"
-          description="A collection of notable projects spanning mobile app design, YouTube content, animation, and illustration work across various industries and clients."
-          pillsLabel="2012 - present"
-          label={["Mobile App design", "Youtube", "Animation", "Illustration"]}
-          coverImage="/images/projects/archive/archive_cover.jpg"
-          images={[
-            { src: "/images/projects/archive/Bunge.mp4", alt: "Bunge project" },
-            { src: "/images/projects/archive/Emoji.mp4", alt: "Emoji animation" },
-            { src: "/images/projects/archive/Rebel play.mp4", alt: "Rebel play project" },
-            { src: "/images/projects/archive/crypto.mp4", alt: "Crypto project" },
-            { src: "/images/projects/archive/Amplify.png", alt: "Amplify design" },
-            { src: "/images/projects/archive/diccionario.png", alt: "Dictionary app" },
-            { src: "/images/projects/archive/dtb.gif", alt: "DTB animation" }
-          ]}
-        />
-      </main>
       <Footer />
-    </>
+    </main>
   )
 }
