@@ -29,8 +29,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'General Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  /* Fluid typography formula */
-  font-size: calc(15px + 0.390625vw);
+  @apply text-body;
 }
 
 /* Fluid line-height utilities */

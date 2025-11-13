@@ -81,7 +81,7 @@ export function Footer() {
       <div className="w-full mb-8 py-12">
         <div 
           ref={marqueeRef}
-          className="relative h-48"
+          className="relative h-48 text-body"
           style={{
             WebkitTextSizeAdjust: '100%',
             tabSize: 4,
@@ -92,7 +92,6 @@ export function Footer() {
             lineHeight: 'inherit',
             color: 'var(--foreground)',
             fontFamily: "'General Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
-            fontSize: 'calc(15px + 0.390625vw)',
             boxSizing: 'border-box',
             borderWidth: 0,
             borderStyle: 'solid',

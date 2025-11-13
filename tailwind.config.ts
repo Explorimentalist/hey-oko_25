@@ -1,5 +1,14 @@
 import type { Config } from "tailwindcss";
 
+const MIN_VIEWPORT = 320;
+const MAX_VIEWPORT = 1920;
+
+const fluidSize = (minPx: number, maxPx: number): string => {
+  const viewportRange = MAX_VIEWPORT - MIN_VIEWPORT;
+  const slope = (maxPx - minPx) / viewportRange;
+  return `clamp(${minPx.toFixed(4)}px, calc(${minPx.toFixed(4)}px + ${slope.toFixed(8)} * (100vw - ${MIN_VIEWPORT}px)), ${maxPx.toFixed(4)}px)`;
+};
+
 export default {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -27,20 +36,20 @@ export default {
         },
       },
       fontSize: {
-        // Fluid responsive typography
-        // Using calc() formula: base size + fluid scaling based on viewport width
+        // Fluid responsive typography clamped between 320px and 1920px viewports
         // Display & Headings
-        'display': ['calc(40px + 1.5625vw)', { lineHeight: '1.1' }], // 80px at desktop
-        'h1': ['calc(32px + 1.25vw)', { lineHeight: '1.1' }],       // 64px at desktop
-        'h2': ['calc(24px + 0.9375vw)', { lineHeight: '1.2' }],     // 48px at desktop
-        'h3': ['calc(20px + 0.78125vw)', { lineHeight: '1.2' }],    // 40px at desktop
-        'h4': ['calc(16px + 0.625vw)', { lineHeight: '1.2' }],      // 32px at desktop
-        'h5': ['calc(12px + 0.46875vw)', { lineHeight: '1.3' }],    // 24px at desktop
-        'h6': ['calc(10px + 0.390625vw)', { lineHeight: '1.3' }],   // 20px at desktop
+        'display': [fluidSize(46.6667, 80), { lineHeight: '1.1' }], // 46.67px → 80px
+        'hero': [fluidSize(45, 70), { lineHeight: '1.1' }],         // 45px → 70px (Home hero)
+        'h1': [fluidSize(37.3333, 64), { lineHeight: '1.1' }],      // 37.33px → 64px
+        'h2': [fluidSize(28, 48), { lineHeight: '1.2' }],           // 28px → 48px
+        'h3': [fluidSize(23.3333, 40), { lineHeight: '1.2' }],      // 23.33px → 40px
+        'h4': [fluidSize(18.6667, 32), { lineHeight: '1.2' }],      // 18.67px → 32px
+        'h5': [fluidSize(14, 24), { lineHeight: '1.3' }],           // 14px → 24px
+        'h6': [fluidSize(11.6667, 20), { lineHeight: '1.3' }],      // 11.67px → 20px
         // Body
-        'body': ['calc(15px + 0.390625vw)', { lineHeight: '1.5' }], // 16px at desktop
-        'small': ['calc(10px + 0.078125vw)', { lineHeight: '1.5' }], // 12px at desktop
-        'xs': ['calc(6px + 0.078125vw)', { lineHeight: '1.5' }],    // 8px at desktop
+        'body': [fluidSize(15.8333, 20), { lineHeight: '1.5' }],    // 15.83px → 20px
+        'small': [fluidSize(10.3333, 12), { lineHeight: '1.5' }],   // 10.33px → 12px
+        'xs': [fluidSize(6.3333, 8), { lineHeight: '1.5' }],        // 6.33px → 8px
       },
       lineHeight: {
         // Responsive line heights that scale with viewport width
