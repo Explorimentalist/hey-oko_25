@@ -51,7 +51,10 @@ export function NavigationProgress() {
           }
         })
       },
-      { threshold: 0.15 } // Lower threshold to make sections activate sooner, especially for hero
+      { 
+        threshold: 0.02, // Very low threshold for tall project sections
+        rootMargin: "-20% 0px -20% 0px" // Trigger when section is in the middle 60% of viewport
+      }
     )
     
     // Create a separate observer with even lower threshold specifically for hero
@@ -63,7 +66,10 @@ export function NavigationProgress() {
           }
         })
       },
-      { threshold: 0.05 } // Much lower threshold for hero section
+      { 
+        threshold: 0.01,
+        rootMargin: "-10% 0px -10% 0px" // More lenient for hero
+      }
     )
     
     // Listen for navigation sections updates from HomeProject components

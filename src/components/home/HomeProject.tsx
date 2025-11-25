@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import ProjectProcess from '../ProjectProcess'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -34,11 +35,31 @@ interface HomeProjectProps {
    * Label text displayed above the pills
    */
   pillsLabel?: string;
+
+  /**
+   * Year or timeframe shown in the metadata section
+   */
+  year?: string;
+  
+  /**
+   * Role or responsibility summary
+   */
+  role?: string;
+  
+  /**
+   * Impact or outcome statement
+   */
+  impact?: string;
   
   /**
    * Cover image URL
    */
-  coverImage: string;
+  coverImage?: string;
+  
+  /**
+   * Cover video embed URL (Loom/YouTube/etc)
+   */
+  coverVideo?: string;
   
   /**
    * Labels for the project categories/types
@@ -63,7 +84,11 @@ export function HomeProject({
   tagline,
   description,
   pillsLabel,
+  year,
+  role,
+  impact,
   coverImage,
+  coverVideo,
   label,
   images
 }: HomeProjectProps) {
@@ -194,6 +219,7 @@ export function HomeProject({
   const setImageRef = (index: number) => (el: HTMLDivElement | null) => {
     imagesRef.current[index] = el
   }
+  const projectYear = year || pillsLabel
 
   return (
     <section 
@@ -222,46 +248,200 @@ export function HomeProject({
             </div>
             
             {/* Project labels - half width on desktop/tablet, full width on mobile */}
-            <div className="project-label flex flex-col justify-end">
-              {pillsLabel && (
-                <p className="text-white/60 text-sm md:text-base mb-3">
-                  {pillsLabel}
-                </p>
-              )}
-              <div className="flex flex-wrap gap-2 md:gap-3">
-                {Array.isArray(label) ? (
-                  label.map((labelText, index) => (
-                    <div 
-                      key={index} 
-                      className="bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full pill-text-xs"
-                    >
-                      {labelText}
+            <div className="project-label flex flex-col justify-end gap-5 text-base text-white/80">
+              {(projectYear || role) && (
+                <div className="flex flex-col gap-2 text-white/80">
+                  {projectYear && (
+                    <div className="flex flex-wrap items-baseline gap-2">
+                      <span className="text-white">Year:</span>
+                      <span>{projectYear}</span>
                     </div>
-                  ))
-                ) : (
-                  <div className="bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full pill-text-xs">
-                    {label}
-                  </div>
-                )}
+                  )}
+                  {role && (
+                    <div className="flex flex-wrap items-baseline gap-2">
+                      <span className="text-white">Role:</span>
+                      <span>{role}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-white">
+                <span>Contribution:</span>
+                <div className="flex flex-wrap gap-2 md:gap-3">
+                  {Array.isArray(label) ? (
+                    label.map((labelText, index) => (
+                      <div 
+                        key={index} 
+                        className="bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full pill-text-xs"
+                      >
+                        {labelText}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full pill-text-xs">
+                      {label}
+                    </div>
+                  )}
+                </div>
               </div>
+              {impact && (
+                <div className="flex flex-wrap items-baseline gap-2 text-white">
+                  <span>Impact / Outcome:</span>
+                  <p className="text-white/80 leading-relaxed flex-1 min-w-0">
+                    {impact}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
         
         {/* Cover image section */}
         <div className="w-full flex justify-center">
-          <div className="w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] min-h-[60vh] sm:min-h-[70vh] md:min-h-[65vh] aspect-[4/5] sm:aspect-[4/3] md:aspect-[16/9] relative project-cover-image">
-            <Image
-              src={coverImage}
-              alt={`${title} cover`}
-              fill
-              sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1024px) 85vw, 80vw"
-              className="object-cover object-center"
-              priority
-            />
+          <div className={`w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] min-h-[60vh] sm:min-h-[70vh] md:min-h-[65vh] relative overflow-hidden bg-black project-cover-image ${
+            id === 'project-epalwi-rebbo' 
+              ? 'aspect-[1912/932]' 
+              : 'aspect-[4/5] sm:aspect-[4/3] md:aspect-[16/9]'
+          }`}>
+            {coverVideo ? (
+              coverVideo.endsWith('.mp4') || coverVideo.endsWith('.webm') ? (
+                <video
+                  src={coverVideo}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 h-full w-full object-contain"
+                />
+              ) : (
+                <iframe
+                  src={coverVideo}
+                  title={`${title} cover video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full rounded-none border-0"
+                />
+              )
+            ) : (
+              coverImage && (
+                <Image
+                  src={coverImage}
+                  alt={`${title} cover`}
+                  fill
+                  sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1024px) 85vw, 80vw"
+                  className="object-cover object-center"
+                  priority
+                />
+              )
+            )}
           </div>
         </div>
       </div>
+      
+      {/* Project Process Section */}
+      {id !== 'project-3' && id !== 'project-4' && (
+        <ProjectProcess 
+          steps={
+            id === 'project-epalwi-rebbo'
+              ? [
+                  {
+                    id: 'step-epalwi-1',
+                    title: 'Dictionary source review',
+                    description: 'Validating the Spanish-Ndowe corpus and scanning the PDF dictionary to set the baseline.',
+                    imageUrl: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763414326/epalwi-rebbo_diccionario-pdf_sup7ld.png',
+                  },
+                  {
+                    id: 'step-epalwi-2',
+                    title: 'Data cleaning criteria',
+                    description: 'Defining extraction rules, cleaning criteria, and schema alignment for structured entries.',
+                    imageUrl: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763392640/epalwi-rebbo_data-cleaning-criteria-gpt_mifn0i.png',
+                  },
+                  {
+                    id: 'step-epalwi-3',
+                    title: 'Component exploration',
+                    description: 'Documenting interface components with motion tests to validate interactions for launch.',
+                    imageUrl: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763466884/epalwi-rebbo_components-video_ehnyhh.mp4',
+                    imageWidth: 1920,
+                    imageHeight: 1080,
+                  },
+                ]
+              : id === 'project-aa'
+                ? [
+                    {
+                      id: "step-1",
+                      title: "Heuristic Evaluation & Workshop",
+                      description: "We pointed the UI/UX flaws and Requirements in the sign up, perks and booking flows.",
+                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_workshop_results-large_pzl7a6.png"
+                    },
+                    {
+                      id: "step-2",
+                      title: "Ideation", 
+                      description: "Sketching flows for guided sign up, visible AA perks and quicker breakdown booking.",
+                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_sketches-large_xsyk2v.png"
+                    },
+                    {
+                      id: "step-3",
+                      title: "Testing",
+                      description: "We selected the concepts winning concepts through A/B testing",
+                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1763478892/aa-test-large_hhyhst.png"
+                    },
+                    {
+                      id: "step-5",
+                      title: "Solution",
+                      description: "1. Designed an onboarding and added tooltips\n\n2. Incorporates a list of perks on the map view\n\n3. Transformed a tree selection into a max of 2 selection",
+                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_before-after_tt5vzr.gif"
+                    }
+                  ]
+              : id === 'project-1'
+                ? [
+                    {
+                      id: "step-2",
+                      title: "Ideation & Conceptualization", 
+                      description: "Brainstorming solutions, sketching ideas, and developing the core concept through collaborative workshops.",
+                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1763485407/maserati_mapping-process_hfzqnq.png"
+                    },
+                    {
+                      id: "step-3",
+                      title: "Design & Prototyping",
+                      description: "Creating wireframes, high-fidelity designs, and interactive prototypes to validate the user experience.",
+                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/ivjmizltxj0umvmg9adm.png"
+                    }
+                  ]
+              : [
+                  {
+                    id: "step-1",
+                    title: "Research & Discovery",
+                    description: "Deep diving into user needs, market research, and competitive analysis to understand the problem space.",
+                    imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_workshop_results-large_pzl7a6.png"
+                  },
+                  {
+                    id: "step-2",
+                    title: "Ideation & Conceptualization", 
+                    description: "Brainstorming solutions, sketching ideas, and developing the core concept through collaborative workshops.",
+                    imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_sketches-large_xsyk2v.png"
+                  },
+                  {
+                    id: "step-3",
+                    title: "Design & Prototyping",
+                    description: "Creating wireframes, high-fidelity designs, and interactive prototypes to validate the user experience.",
+                    imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/ivjmizltxj0umvmg9adm.png"
+                  },
+                  {
+                    id: "step-4", 
+                    title: "Development & Implementation",
+                    description: "Building the solution with attention to detail, performance optimization, and accessibility standards.",
+                    imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741607472/Amplify_g1lq1q.png"
+                  },
+                  {
+                    id: "step-5",
+                    title: "Testing & Refinement",
+                    description: "User testing, gathering feedback, and iterating on the design to ensure optimal user experience.",
+                    imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_before-after_tt5vzr.gif"
+                  }
+                ]
+          }
+        />
+      )}
       
       {/* Project images */}
       <div className="container mx-auto px-4 py-12 md:py-18 lg:py-24 space-y-24 md:space-y-36 lg:space-y-48">

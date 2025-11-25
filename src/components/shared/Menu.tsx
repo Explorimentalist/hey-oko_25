@@ -15,11 +15,8 @@ if (typeof window !== 'undefined') {
 const menuItems = [
   { label: 'Welcome', path: '#hero-sequence-container' },
   { label: 'About', path: '#about' },
+  { label: 'Epàlwi-Rebbó', path: '#project-epalwi-rebbo' },
   { label: 'AA (The Automobile Association)', path: '#project-aa' },
-  { label: 'Pillsure', path: '#project-3' },
-  { label: 'Maserati', path: '#project-1' },
-  { label: 'Sópu & Elanji-Minnya', path: '#project-2' },
-  { label: 'Archive', path: '#project-4' },
   { label: 'brianoko@gmail.com', path: 'mailto:brianoko@gmail.com' },
 ]
 

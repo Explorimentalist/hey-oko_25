@@ -10,37 +10,58 @@ import { Footer } from '@/components/shared/Footer'
 // Example project data
 const projectsData = [
   {
+    id: 'project-epalwi-rebbo',
+    title: 'Epàlwi-Rebbó',
+    tagline: 'Learning for a resilient tomorrow',
+    description: 'Designing the first digital Spanish-Ndowe diccionary.',
+    pillsLabel: '2025',
+    year: '2025',
+    role: 'Design Lead & Researcher',
+    impact: 'Published the first digital Spanish-Ndowe lexicon prototype and unlocked a clean pipeline for future entries.',
+    label: ['Data extraction', 'Schema Design', 'Data Validation', 'Web App design'],
+    coverVideo: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763383184/epalwi-video-homepage_pynpjb.mp4',
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763380529/epalwi-rebbo_cover_w1selc.webp',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763380529/epalwi-rebbo_cover_w1selc.webp',
+        alt: 'Epàlwi-Rebbó hero cover',
+      }
+      ,
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763391549/epalwi-rebbo_iPhoneXR1_etagfi.webp',
+        alt: 'Epàlwi-Rebbó mobile view',
+      }
+    ]
+  },
+  {
     id: 'project-aa',
     title: 'AA (The Automobile Association)',
     tagline: 'From ideation to implementation',
     description: 'Streamlining the AA app from sign up to breakdown reporting',
     pillsLabel: '2018',
-    label: ['Heuristic Evaluation', 'Prototyping', 'Workshop Facilitation'],
-    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_cover_kwdihs.png',
+    year: '2018',
+    role: 'Project Lead',
+    impact: '66% booking time reduction and 10% conversion rate increase after usability fixes and onboarding optimizations.',
+    label: ['Heuristic Evaluation', 'Workshop Facilitation', 'UX Design', 'Testing'],
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763477798/aa_cover_kwdihs.webp',
     images: [
       {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_workshop_results-large_pzl7a6.png',
-        alt: 'Workshop Results',
-        width: 1200,
-        height: 720
-      },
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_sketches-large_xsyk2v.png',
-        alt: 'Design Sketches',
-        width: 1200,
-        height: 900
-      },
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_before-after_tt5vzr.gif',
-        alt: 'Before and After Comparison',
-        width: 911,
-        height: 512
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763482378/aa_final-screens_v2bxqg.png',
+        alt: 'AA final screens',
+        width: 1920,
+        height: 1080
       },
       {
         src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_outcome1_seg1zx.gif',
         alt: 'Final Outcome',
-        width: 840,
-        height: 1491
+        width: 420,
+        height: 746
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763498154/aa_final-design_tr2f0r.webp',
+        alt: 'AA final design',
+        width: 1920,
+        height: 1080
       }
     ]
   },
@@ -50,6 +71,9 @@ const projectsData = [
     tagline: 'Boosting adherence one pill at the time',
     description: 'Boosting adherence one pill at the time',
     pillsLabel: '2023- present',
+    year: '2023 - present',
+    role: 'Product Designer & Co-founder',
+    impact: 'Piloting an adherence coach that nudges patients and caregivers, improving routine completion during ongoing trials.',
     label: ['User Research', 'Web Design', 'Market Research'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/pillsure_cover_tfjjac.png',
     images: [
@@ -69,7 +93,11 @@ const projectsData = [
     tagline: 'Creating a cohesive visual language',
     description: 'Building a story of legacy that turns heads',
     pillsLabel: '2018',
+    year: '2018',
+    role: 'Visual Design Lead',
+    impact: 'Delivered a flexible campaign system that unified print, experiential, and digital touchpoints for global launches.',
     label: ['Campaign', 'UX/UI Design'],
+    coverVideo: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763484799/maserati_cover-video_tg1wxr.mp4',
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/fevp6vacedvcujrvzbcu.png',
     images: [
       {
@@ -97,34 +125,14 @@ const projectsData = [
     ]
   },
   {
-    id: 'project-2',
-    title: 'Sópu & Elanji-Minnya',
-    tagline: 'Crafting memorable experiences',
-    description: 'Making the first illustrated Ndowéÿé calendar and first online store for Ndowéÿé people',
-    pillsLabel: '2024',
-    label: ['Web Design', 'Illustration', 'App Design'],
-    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario_cover_ubvlur.png',
-    images: [
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710641/calendario2_pxxy2o.png',
-        alt: 'Calendar',
-      },
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710641/sopu1_re3uoz.mp4',
-        alt: 'Stationery Design',
-      },
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741710641/sopu2_gjm3ip.mp4',
-        alt: 'Stationery Design',
-      }
-    ]
-  },
-  {
     id: 'project-4',
     title: 'Archive',
     tagline: 'Crafting memorable experiences',
     description: 'Projects worth mentioning',
     pillsLabel: '2012 - present',
+    year: '2012 - present',
+    role: 'Independent Designer & Animator',
+    impact: 'Collection of client and personal highlights that span app design, animation, illustration, and emerging tech experiments.',
     label: ['Mobile App design', 'Youtube', 'Animation', 'Illustration'],
     coverImage: '/images/projects/archive/archive_cover.jpg',
     images: [
@@ -181,18 +189,22 @@ export default function HomePage() {
         <section>
           <h5>Projects</h5>
           {/* Dynamic project components */}
-          {projectsData.map((project) => (
-          <HomeProject
-            key={project.id}
-            id={project.id}
-            title={project.title}
-            tagline={project.tagline}
-            description={project.description}
-            pillsLabel={project.pillsLabel}
-            label={project.label}
-            coverImage={project.coverImage}
-            images={project.images}
-          />
+          {projectsData.filter(project => !['project-1', 'project-3', 'project-4'].includes(project.id)).map((project) => (
+            <HomeProject
+              key={project.id}
+              id={project.id}
+              title={project.title}
+              tagline={project.tagline}
+              description={project.description}
+              pillsLabel={project.pillsLabel}
+              year={project.year}
+              role={project.role}
+              impact={project.impact}
+              label={project.label}
+              coverImage={project.coverImage}
+              coverVideo={project.coverVideo}
+              images={project.images}
+            />
           ))}
         </section>
       </div>

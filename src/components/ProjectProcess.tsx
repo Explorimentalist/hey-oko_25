@@ -22,6 +22,8 @@ type StepDimensions = {
   height: number;
 };
 
+const isVideoUrl = (url: string) => url.endsWith('.mp4') || url.endsWith('.webm');
+
 const DEFAULT_DIMENSIONS: StepDimensions = {
   width: 480,
   height: 640,
@@ -34,6 +36,7 @@ const centeredPosition: React.CSSProperties = {
 };
 
 export default function ProjectProcess({ steps }: ProjectProcessProps) {
+  const stepsKey = useMemo(() => JSON.stringify(steps), [steps]);
   const containerRef = useRef<HTMLDivElement>(null);
   const stepsWrapperRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
@@ -43,14 +46,18 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const requestedDimensionsRef = useRef<Set<string>>(new Set());
   const [dynamicDimensions, setDynamicDimensions] = useState<Record<string, StepDimensions>>({});
-  const [viewportHeight, setViewportHeight] = useState(() => (typeof window === 'undefined' ? 0 : window.innerHeight));
-  const [viewportWidth, setViewportWidth] = useState(() => (typeof window === 'undefined' ? 0 : window.innerWidth));
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
     const preloadImages: HTMLImageElement[] = [];
 
     steps.forEach(step => {
+      if (isVideoUrl(step.imageUrl)) {
+        // Skip image preloading/dimension measurement for videos; they use provided/default dimensions
+        return;
+      }
       const needsDimensions = step.imageWidth == null || step.imageHeight == null;
       const alreadyRequested = requestedDimensionsRef.current.has(step.id);
 
@@ -87,7 +94,7 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
         image.onerror = null;
       });
     };
-  }, [steps]);
+  }, [stepsKey]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -117,7 +124,7 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
       };
       return acc;
     }, {});
-  }, [steps, dynamicDimensions]);
+  }, [stepsKey, dynamicDimensions]);
 
   const constrainedDimensions = useMemo<Record<string, StepDimensions>>(() => {
     const maxDisplayHeight = viewportHeight > 0 ? viewportHeight * 0.8 : Infinity;
@@ -140,7 +147,20 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
 
       return acc;
     }, {});
-  }, [steps, dimensionMap, viewportHeight, viewportWidth]);
+  }, [stepsKey, dimensionMap, viewportHeight, viewportWidth]);
+
+  const constrainedDimensionsRef = useRef<Record<string, StepDimensions>>({});
+  constrainedDimensionsRef.current = constrainedDimensions;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const rafId = requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+    });
+    return () => {
+      cancelAnimationFrame(rafId);
+    };
+  }, [constrainedDimensions]);
 
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -153,6 +173,9 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
     const description = descriptionRef.current;
 
     if (!container || !stepsWrapper || !line || !textContainer || !title || !description || steps.length === 0) return;
+
+    const getConstrainedStep = (stepId: string) =>
+      constrainedDimensionsRef.current[stepId] ?? DEFAULT_DIMENSIONS;
 
     // Set initial state for the line (starts with 0 width)
     gsap.set(line, { width: '0%' });
@@ -211,13 +234,14 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
       
       if (firstImageWrapper) {
         const firstImage = firstImageWrapper.querySelector('.step-image') as HTMLElement;
-        const { height: firstTargetHeight } = constrainedDimensions[steps[0].id] ?? DEFAULT_DIMENSIONS;
+        const resolveFirstHeight = () => `${getConstrainedStep(steps[0].id).height}px`;
         
         // Image wrapper height and opacity animation
         firstStepTimeline.to(firstImageWrapper, {
-          height: `${firstTargetHeight}px`,
+          height: resolveFirstHeight,
           duration: 0.5,
-          ease: 'power2.out'
+          ease: 'power2.out',
+          invalidateOnRefresh: true
         }, 0.4);
         
         firstStepTimeline.to(firstImageWrapper, {
@@ -267,16 +291,17 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
 
       if (imageWrapper) {
         const image = imageWrapper.querySelector('.step-image') as HTMLElement;
-        const { height: targetHeight } = constrainedDimensions[steps[index].id] ?? DEFAULT_DIMENSIONS;
+        const resolveStepHeight = () => `${getConstrainedStep(steps[index].id).height}px`;
         
         // Align with horizontal scroll progression: each step gets 1 duration unit
         const animationTime = index;
         
         // Image reveals from the bottom by growing height and fading in
         tl.to(imageWrapper, {
-          height: `${targetHeight}px`,
+          height: resolveStepHeight,
           duration: 0.5,
-          ease: 'power2.out'
+          ease: 'power2.out',
+          invalidateOnRefresh: true
         }, animationTime);
         
         // Fade in animation with half the duration of the reveal
@@ -357,21 +382,30 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
       }, changeTime + 0.15);
     }
 
+    ScrollTrigger.refresh();
+
     return () => {
       firstStepTimeline.kill();
       tl.kill();
+      
+      // Clean up any orphaned ScrollTriggers specifically for this container
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.vars.trigger === container) {
+          trigger.kill();
+        }
+      });
     };
-  }, [steps, constrainedDimensions]);
+  }, [stepsKey]);
 
   return (
     <div 
       ref={containerRef}
-      className="w-screen h-screen bg-black relative overflow-hidden"
+      className="w-screen h-screen bg-zinc-950 relative overflow-hidden"
     >
-      {/* Horizontal line at center (50% height) */}
+      {/* Horizontal line at center (50% height) - Hidden */}
       <div 
         ref={lineRef}
-        className="absolute left-0 bg-white"
+        className="absolute left-0 bg-white opacity-0"
         style={{ 
           top: '50%', 
           height: '1px',
@@ -398,23 +432,38 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
             >
               {/* Image container always centered on the line */}
               <div 
-                className="step-image-wrapper absolute overflow-hidden"
+                className="step-image-wrapper absolute overflow-hidden h-px"
                 style={{
                   ...centeredPosition,
                   width: `${resolvedDimensions.width}px`,
-                  height: '1px', // Start with line thickness
                 }}
               >
-                <img
-                  src={step.imageUrl}
-                  alt={step.title}
-                  className="step-image object-cover absolute"
-                  style={{ 
-                    ...centeredPosition,
-                    width: `${resolvedDimensions.width}px`,
-                    height: `${resolvedDimensions.height}px`,
-                  }}
-                />
+                {isVideoUrl(step.imageUrl) ? (
+                  <video
+                    src={step.imageUrl}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="step-image object-cover absolute"
+                    style={{ 
+                      ...centeredPosition,
+                      width: `${resolvedDimensions.width}px`,
+                      height: `${resolvedDimensions.height}px`,
+                    }}
+                  />
+                ) : (
+                  <img
+                    src={step.imageUrl}
+                    alt={step.title}
+                    className="step-image object-cover absolute"
+                    style={{ 
+                      ...centeredPosition,
+                      width: `${resolvedDimensions.width}px`,
+                      height: `${resolvedDimensions.height}px`,
+                    }}
+                  />
+                )}
               </div>
             </div>
           );
