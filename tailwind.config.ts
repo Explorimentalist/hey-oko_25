@@ -48,7 +48,7 @@ export default {
         'h6': [fluidSize(11.6667, 20), { lineHeight: '1.3' }],      // 11.67px → 20px
         // Body
         'body': [fluidSize(15.8333, 20), { lineHeight: '1.5' }],    // 15.83px → 20px
-        'small': [fluidSize(10.3333, 12), { lineHeight: '1.5' }],   // 10.33px → 12px
+        'small': [fluidSize(10.3333, 12), { lineHeight: '1.5', letterSpacing: '0.05rem' }],   // 10.33px → 12px
         'xs': [fluidSize(6.3333, 8), { lineHeight: '1.5' }],        // 6.33px → 8px
       },
       lineHeight: {

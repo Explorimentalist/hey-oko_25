@@ -36,12 +36,12 @@ const projectsData = [
   {
     id: 'project-aa',
     title: 'AA (The Automobile Association)',
-    tagline: 'From ideation to implementation',
-    description: 'Streamlining the AA app from sign up to breakdown reporting',
+    tagline: 'Streamlining the AA app from sign up to breakdown reporting',
+    description: 'The AA mobile app sign up experience was quickly abandoned by people that acquired memberships from third parties such as banks. The perks they offered weren\'t hardly redeemed. The breakdown bookings in the app were low which incurred in high callcenter costs.',
     pillsLabel: '2018',
     year: '2018',
     role: 'Project Lead',
-    impact: '66% booking time reduction and 10% conversion rate increase after usability fixes and onboarding optimizations.',
+    impact: '1. Reduced roadside assistance booking time by 66% (from 3min to <1min)\n2. Increased app adoption significantly after clearer signup paths\n3. Improved visibility of member perks and key information',
     label: ['Heuristic Evaluation', 'Workshop Facilitation', 'UX Design', 'Testing'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763477798/aa_cover_kwdihs.webp',
     images: [
@@ -164,6 +164,43 @@ const projectsData = [
         src: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1741607472/Rebel_play_kx602e.mp4',
         alt: 'amplify',
       },
+    ]
+  },
+  {
+    id: 'project-aet',
+    title: 'AET',
+    tagline: 'Improving the experience of booking online ski transfers for an SME',
+    description: 'Before this project, the website felt fragmented and hard to navigate, so visitors struggled to understand the offer, find key information, or complete key actions. Most sessions ended without enquiries or bookings, mobile users dropped off quickly, and inconsistent visuals reduced trust. Weak SEO brought little qualified traffic, and the lack of clear analytics meant they couldn\'t see where people were abandoning the journey, so decisions were based on guesswork rather than data.',
+    year: '2025',
+    role: 'Web designer',
+    impact: 'Reduced time on review process, Reduced website costs, bookings increase',
+    label: ['UI/UX design', 'Development(AI)', 'API integration', 'Email template design', 'Testing'],
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764176407/aet_cover_dg4vjj.png',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255957/aet_home-full_vap1rm.png',
+        alt: 'AET home page full design',
+        width: 1920,
+        height: 5688
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255848/aet_contact-page_xqhj8h.png',
+        alt: 'AET contact page design',
+        width: 1920,
+        height: 1080
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255849/aet_routes-page_stys5l.png',
+        alt: 'AET routes page design',
+        width: 1920,
+        height: 1080
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255849/aet_review-page_ci9akl.png',
+        alt: 'AET review page design',
+        width: 1920,
+        height: 1080
+      }
     ]
   }
 ]

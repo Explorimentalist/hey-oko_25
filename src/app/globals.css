@@ -59,7 +59,7 @@ body {
   }
 }
 
-/* Reset font size for pill elements to use Tailwind's xs size exactly */
+/* Pill elements use fluid text-small instead of hardcoded font-size */
 .pill-text-xs {
-  font-size: 0.75rem !important;
+  @apply text-small;
 }

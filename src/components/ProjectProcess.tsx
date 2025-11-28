@@ -15,6 +15,8 @@ export type ProjectStep = {
 
 interface ProjectProcessProps {
   steps: ProjectStep[];
+  startTriggerRef?: React.RefObject<HTMLElement>;
+  startPosition?: string;
 }
 
 type StepDimensions = {
@@ -35,19 +37,21 @@ const centeredPosition: React.CSSProperties = {
   transform: 'translate(-50%, -50%)',
 };
 
-export default function ProjectProcess({ steps }: ProjectProcessProps) {
+export default function ProjectProcess({ steps, startTriggerRef, startPosition = 'top top' }: ProjectProcessProps) {
   const stepsKey = useMemo(() => JSON.stringify(steps), [steps]);
+  const scrollSectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const stepsWrapperRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const stepsRefs = useRef<(HTMLDivElement | null)[]>([]);
   const textRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
   const requestedDimensionsRef = useRef<Set<string>>(new Set());
   const [dynamicDimensions, setDynamicDimensions] = useState<Record<string, StepDimensions>>({});
   const [viewportHeight, setViewportHeight] = useState(0);
   const [viewportWidth, setViewportWidth] = useState(0);
+  const slidesCount = Math.max(steps.length, 1);
 
   useEffect(() => {
     let isMounted = true;
@@ -94,7 +98,7 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
         image.onerror = null;
       });
     };
-  }, [stepsKey]);
+  }, [stepsKey, startTriggerRef]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -152,6 +156,11 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
   const constrainedDimensionsRef = useRef<Record<string, StepDimensions>>({});
   constrainedDimensionsRef.current = constrainedDimensions;
 
+  const sectionHeight = useMemo(() => {
+    // Add extra scroll room so the sticky viewport can animate all steps
+    return `${Math.max(slidesCount + 1, 2) * 100}vh`;
+  }, [slidesCount]);
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const rafId = requestAnimationFrame(() => {
@@ -162,6 +171,27 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
     };
   }, [constrainedDimensions]);
 
+  // Helper function to set description with line breaks
+  const setDescriptionContent = (element: HTMLElement, text: string) => {
+    element.innerHTML = '';
+    const lines = text.split('\n');
+    lines.forEach((line, index) => {
+      if (line.trim() === '') {
+        // Empty line - add spacing
+        const br = document.createElement('br');
+        element.appendChild(br);
+      } else {
+        // Non-empty line
+        const p = document.createElement('p');
+        p.textContent = line;
+        if (index < lines.length - 1 && lines[index + 1].trim() !== '') {
+          p.style.marginBottom = '0.25rem'; // Small spacing between lines
+        }
+        element.appendChild(p);
+      }
+    });
+  };
+
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -171,8 +201,11 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
     const textContainer = textRef.current;
     const title = titleRef.current;
     const description = descriptionRef.current;
+    const scrollSection = scrollSectionRef.current;
 
-    if (!container || !stepsWrapper || !line || !textContainer || !title || !description || steps.length === 0) return;
+    const triggerElement = startTriggerRef?.current ?? scrollSection ?? container;
+
+    if (!container || !stepsWrapper || !line || !textContainer || !title || !description || !triggerElement || steps.length === 0) return;
 
     const getConstrainedStep = (stepId: string) =>
       constrainedDimensionsRef.current[stepId] ?? DEFAULT_DIMENSIONS;
@@ -200,14 +233,15 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
 
     // Set initial text content and state
     title.textContent = steps[0].title;
-    description.textContent = steps[0].description;
+    setDescriptionContent(description, steps[0].description);
     gsap.set(textContainer, { y: 50, opacity: 0 });
 
     // Create separate timeline for first step animations (line, text, image) triggered by scroll but running independently
     const firstStepTimeline = gsap.timeline({
       scrollTrigger: {
-        trigger: container,
-        start: 'top top',
+        trigger: triggerElement,
+        start: 'top bottom',
+        end: 'top top',
         toggleActions: 'play none none reverse'
       }
     });
@@ -265,12 +299,13 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
     // Create the main timeline for scroll-controlled animations
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: container,
-        start: 'top top',
-        end: () => `+=${steps.length * window.innerWidth}`,
+        trigger: triggerElement,
+        start: startPosition,
+        end: () => {
+          const vh = viewportHeight || (typeof window !== 'undefined' ? window.innerHeight : 1);
+          return `+=${Math.max(slidesCount, 1) * vh}`;
+        },
         scrub: 1,
-        pin: true,
-        anticipatePin: 1,
       }
     });
 
@@ -367,7 +402,7 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
       tl.call(() => {
         if (title && description) {
           title.textContent = steps[i + 1].title;
-          description.textContent = steps[i + 1].description;
+          setDescriptionContent(description, steps[i + 1].description);
         }
         // Position new text 16px below its final position
         gsap.set(textContainer, { y: 16 });
@@ -390,102 +425,108 @@ export default function ProjectProcess({ steps }: ProjectProcessProps) {
       
       // Clean up any orphaned ScrollTriggers specifically for this container
       ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.vars.trigger === container) {
+        if (trigger.vars.trigger === container || trigger.vars.trigger === triggerElement) {
           trigger.kill();
         }
       });
     };
-  }, [stepsKey]);
+  }, [stepsKey, startPosition, startTriggerRef, viewportHeight, slidesCount]);
 
   return (
     <div 
       ref={containerRef}
-      className="w-screen h-screen bg-zinc-950 relative overflow-hidden"
+      className="relative w-screen"
+      style={{ height: sectionHeight }}
     >
-      {/* Horizontal line at center (50% height) - Hidden */}
       <div 
-        ref={lineRef}
-        className="absolute left-0 bg-white opacity-0"
-        style={{ 
-          top: '50%', 
-          height: '1px',
-          border: 'none',
-          width: '0%'
-        }}
-      />
-
-      {/* Steps wrapper for horizontal scroll */}
-      <div 
-        ref={stepsWrapperRef}
-        className="flex h-full"
-        style={{ width: `${steps.length * 100}vw` }}
+        ref={scrollSectionRef}
+        className="w-screen h-screen bg-zinc-950 relative overflow-hidden sticky top-0"
       >
-        {steps.map((step, index) => {
-          // Fall back to measured (or default) sizes when explicit dimensions aren't provided.
-          const resolvedDimensions = constrainedDimensions[step.id] ?? DEFAULT_DIMENSIONS;
+        {/* Horizontal line at center (50% height) - Hidden */}
+        <div 
+          ref={lineRef}
+          className="absolute left-0 bg-white opacity-0"
+          style={{ 
+            top: '50%', 
+            height: '1px',
+            border: 'none',
+            width: '0%'
+          }}
+        />
 
-          return (
-            <div
-              key={step.id}
-              ref={el => stepsRefs.current[index] = el}
-              className="w-screen h-full flex flex-col items-center justify-center relative"
-            >
-              {/* Image container always centered on the line */}
-              <div 
-                className="step-image-wrapper absolute overflow-hidden h-px"
-                style={{
-                  ...centeredPosition,
-                  width: `${resolvedDimensions.width}px`,
-                }}
+        {/* Steps wrapper for horizontal scroll */}
+        <div 
+          ref={stepsWrapperRef}
+          className="flex h-full"
+          style={{ width: `${steps.length * 100}vw` }}
+        >
+          {steps.map((step, index) => {
+            // Fall back to measured (or default) sizes when explicit dimensions aren't provided.
+            const resolvedDimensions = constrainedDimensions[step.id] ?? DEFAULT_DIMENSIONS;
+
+            return (
+              <div
+                key={step.id}
+                ref={el => { stepsRefs.current[index] = el }}
+                className="w-screen h-full flex flex-col items-center justify-center relative"
               >
-                {isVideoUrl(step.imageUrl) ? (
-                  <video
-                    src={step.imageUrl}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="step-image object-cover absolute"
-                    style={{ 
-                      ...centeredPosition,
-                      width: `${resolvedDimensions.width}px`,
-                      height: `${resolvedDimensions.height}px`,
-                    }}
-                  />
-                ) : (
-                  <img
-                    src={step.imageUrl}
-                    alt={step.title}
-                    className="step-image object-cover absolute"
-                    style={{ 
-                      ...centeredPosition,
-                      width: `${resolvedDimensions.width}px`,
-                      height: `${resolvedDimensions.height}px`,
-                    }}
-                  />
-                )}
+                {/* Image container always centered on the line */}
+                <div 
+                  className="step-image-wrapper absolute overflow-hidden h-px"
+                  style={{
+                    ...centeredPosition,
+                    width: `${resolvedDimensions.width}px`,
+                  }}
+                >
+                  {isVideoUrl(step.imageUrl) ? (
+                    <video
+                      src={step.imageUrl}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="step-image object-cover absolute"
+                      style={{ 
+                        ...centeredPosition,
+                        width: `${resolvedDimensions.width}px`,
+                        height: `${resolvedDimensions.height}px`,
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src={step.imageUrl}
+                      alt={step.title}
+                      className="step-image object-cover absolute"
+                      style={{ 
+                        ...centeredPosition,
+                        width: `${resolvedDimensions.width}px`,
+                        height: `${resolvedDimensions.height}px`,
+                      }}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
 
-      {/* Fixed text positioned at bottom left */}
-      <div 
-        ref={textRef}
-        className="absolute bottom-4 left-4 md:bottom-16 md:left-16 flex flex-col gap-2 px-3 py-3 md:px-5 md:py-4 bg-zinc/90 backdrop-blur-md rounded-2xl max-w-[calc(100vw-2rem)] md:max-w-none"
-        style={{ 
-          width: 'min(298px, calc(100vw - 2rem))'
-        }}
-      >
-        <h3 
-          ref={titleRef}
-          className="text-white font-medium text-h5"
-        />
-        <p 
-          ref={descriptionRef}
-          className="text-white font-light tracking-wider text-small"
-        />
+        {/* Fixed text positioned at bottom left */}
+        <div 
+          ref={textRef}
+          className="absolute bottom-4 left-4 md:bottom-16 md:left-16 flex flex-col gap-2 px-3 py-3 md:px-5 md:py-4 bg-zinc/90 backdrop-blur-md rounded-2xl max-w-[calc(100vw-2rem)] md:max-w-none"
+          style={{ 
+            width: 'min(298px, calc(100vw - 2rem))'
+          }}
+        >
+          <h3 
+            ref={titleRef}
+            className="text-white font-medium text-h5"
+          />
+          <div 
+            ref={descriptionRef}
+            className="text-white font-light tracking-wider text-small"
+          />
+        </div>
       </div>
     </div>
   );
