@@ -17,7 +17,8 @@ const menuItems = [
   { label: 'About', path: '#about' },
   { label: 'Epàlwi-Rebbó', path: '#project-epalwi-rebbo' },
   { label: 'AA (The Automobile Association)', path: '#project-aa' },
-  { label: 'brianoko@gmail.com', path: 'mailto:brianoko@gmail.com' },
+  { label: 'AET', path: '#project-aet' },
+  { label: 'Ngatye@hey-oko.com', path: 'mailto:Ngatye@hey-oko.com' },
 ]
 
 export function Menu() {

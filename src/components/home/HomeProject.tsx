@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import ProjectProcess from '../ProjectProcess'
+import { Button } from '../shared/Button'
+import { Process } from './Process'
+import { processSlidesByProject } from '@/data/processSlides'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -34,15 +36,17 @@ function AETDemoOverlay({
       aria-modal="true"
       aria-label="AET interactive demo"
     >
-      <button
+      <Button
         type="button"
         onClick={onClose}
-        className="absolute right-5 top-5 z-[10000] rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50"
+        variant="primary"
+        size="sm"
+        className="absolute right-5 top-5 z-[10000]"
         aria-label="Close AET demo"
       >
         Close
-      </button>
-      <div className="relative w-full max-w-6xl aspect-[16/10] rounded-xl overflow-hidden border border-white/15 shadow-2xl bg-black">
+      </Button>
+      <div className="relative w-full max-w-6xl h-[calc(100vh-5rem)] md:aspect-[16/10] md:h-auto rounded-xl overflow-hidden border border-white/15 shadow-2xl bg-black">
         <iframe
           src="https://aet-ski.vercel.app/product-demo/embed"
           className="absolute inset-0 h-full w-full"
@@ -141,7 +145,6 @@ export function HomeProject({
   const sectionRef = useRef<HTMLElement>(null)
   const coverRef = useRef<HTMLDivElement>(null)
   const imagesRef = useRef<(HTMLDivElement | null)[]>([])
-  const processSectionRef = useRef<HTMLElement>(null)
   const [isActive, setIsActive] = useState(false)
   const [isDemoOpen, setIsDemoOpen] = useState(false)
   
@@ -268,9 +271,10 @@ export function HomeProject({
     imagesRef.current[index] = el
   }
   const projectYear = year || pillsLabel
+  const processSlides = processSlidesByProject[id] || []
 
   return (
-    <article className="mb-[40vh] md:mb-[50vh] lg:mb-[70vh]">
+    <article className="mb-[15vh] md:mb-[50vh] lg:mb-[70vh]">
       <AETDemoOverlay
         isOpen={id === 'project-aet' && isDemoOpen}
         onClose={() => setIsDemoOpen(false)}
@@ -286,28 +290,25 @@ export function HomeProject({
           className="w-full min-h-screen flex flex-col justify-start relative px-4 sm:px-6 md:px-8 py-8 md:py-12"
         >
           {/* Text content section */}
-          <div className="w-full max-w-7xl mx-auto mb-8 md:mb-12 lg:mb-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 md:items-end">
-              {/* Project title and supporting copy */}
-              <div className="project-title">
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-display text-white max-w-2xl mb-4">
-                  {title}
-                </h2>
-                {tagline && (
-                  <p className="text-white/80 text-base md:text-lg max-w-2xl leading-relaxed">
-                    {tagline}
-                  </p>
-                )}
-              </div>
+          <div className="w-full mb-8 md:mb-12 lg:mb-16">
+            <div className="project-title">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-display text-white mb-4">
+                {title}
+              </h2>
+              {tagline && (
+                <p className="text-white/80 text-base md:text-lg leading-relaxed">
+                  {tagline}
+                </p>
+              )}
             </div>
           </div>
           
           {/* Cover image section */}
           <div className="w-full flex justify-center">
-            <div className={`w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] min-h-[60vh] sm:min-h-[70vh] md:min-h-[65vh] relative overflow-hidden bg-black project-cover-image ${
+            <div className={`w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] sm:min-h-[70vh] md:min-h-[65vh] relative overflow-hidden bg-black project-cover-image ${
               id === 'project-epalwi-rebbo' 
                 ? 'aspect-[1912/932]' 
-                : 'aspect-[4/5] sm:aspect-[4/3] md:aspect-[16/9]'
+                : 'aspect-[16/10] sm:aspect-[4/3] md:aspect-[16/9]'
             }`}>
               {coverVideo ? (
                 coverVideo.endsWith('.mp4') || coverVideo.endsWith('.webm') ? (
@@ -335,7 +336,7 @@ export function HomeProject({
                     alt={`${title} cover`}
                     fill
                     sizes="(max-width: 640px) 95vw, (max-width: 768px) 90vw, (max-width: 1024px) 85vw, 80vw"
-                    className="object-cover object-center"
+                    className="object-contain object-center"
                     priority
                   />
                 )
@@ -345,9 +346,9 @@ export function HomeProject({
 
           {(projectYear || role || label || impact) && (
             <div className="project-label w-full mt-6">
-              <div className="grid grid-cols-1 gap-y-10 md:grid-cols-8 md:gap-x-6 lg:grid-cols-12 lg:gap-y-0 lg:gap-x-4">
+              <div className="grid grid-cols-12 gap-y-10 gap-x-4 md:grid-cols-8 md:gap-x-6 lg:grid-cols-12 lg:gap-y-0 lg:gap-x-4">
                 {(role || projectYear) && (
-                  <div className="col-span-12 md:col-span-4 md:col-start-1 lg:col-span-2 lg:col-start-1 flex flex-col gap-6 text-white">
+                  <div className="col-span-6 md:col-span-4 md:col-start-1 lg:col-span-2 lg:col-start-1 flex flex-col gap-6 text-white">
                     {role && (
                       <div className="space-y-1">
                         <p className="text-small tracking-wide text-white/60">Role</p>
@@ -364,7 +365,7 @@ export function HomeProject({
                 )}
 
                 {label && (
-                  <div className="col-span-12 md:col-span-4 md:col-start-5 lg:col-span-2 lg:col-start-3 text-white">
+                  <div className="col-span-6 md:col-span-4 md:col-start-5 lg:col-span-2 lg:col-start-3 text-white">
                     <p className="text-small tracking-wide text-white/60 mb-3">Contribution</p>
                     <div className="flex flex-col gap-2.5">
                       {Array.isArray(label) ? (
@@ -415,128 +416,11 @@ export function HomeProject({
           )}
         </div>
       </section>
-      
-      {/* Project Process Section */}
-      {id !== 'project-3' && id !== 'project-4' && (
-        <section ref={processSectionRef} className="w-full mt-12 md:mt-16 lg:mt-24">
-          <ProjectProcess 
-            startTriggerRef={processSectionRef}
-            steps={
-              id === 'project-epalwi-rebbo'
-                ? [
-                    {
-                      id: 'step-epalwi-1',
-                      title: 'Dictionary source review',
-                      description: 'Validating the Spanish-Ndowe corpus and scanning the PDF dictionary to set the baseline.',
-                      imageUrl: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763414326/epalwi-rebbo_diccionario-pdf_sup7ld.png',
-                    },
-                    {
-                      id: 'step-epalwi-2',
-                      title: 'Data cleaning criteria',
-                      description: 'Defining extraction rules, cleaning criteria, and schema alignment for structured entries.',
-                      imageUrl: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763392640/epalwi-rebbo_data-cleaning-criteria-gpt_mifn0i.png',
-                    },
-                    {
-                      id: 'step-epalwi-3',
-                      title: 'Component exploration',
-                      description: 'Documenting interface components with motion tests to validate interactions for launch.',
-                      imageUrl: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763466884/epalwi-rebbo_components-video_ehnyhh.mp4',
-                      imageWidth: 1920,
-                      imageHeight: 1080,
-                    },
-                  ]
-                : id === 'project-aa'
-                  ? [
-                      {
-                        id: "step-1",
-                        title: "Heuristic Evaluation & Workshop",
-                        description: "We pointed the UI/UX flaws and Requirements in the sign up, perks and booking flows.",
-                        imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_workshop_results-large_pzl7a6.png"
-                      },
-                      {
-                        id: "step-2",
-                        title: "Ideation", 
-                        description: "Sketching flows for guided sign up, visible AA perks and quicker breakdown booking.",
-                        imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_sketches-large_xsyk2v.png"
-                      },
-                      {
-                        id: "step-3",
-                        title: "Testing",
-                        description: "We selected the concepts winning concepts through A/B testing",
-                        imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1763478892/aa-test-large_hhyhst.png"
-                      },
-                      {
-                        id: "step-5",
-                        title: "Solution",
-                        description: "1. Designed an onboarding and added tooltips\n\n2. Incorporates a list of perks on the map view\n\n3. Transformed a tree selection into a max of 2 selection",
-                        imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_before-after_tt5vzr.gif"
-                      }
-                    ]
-                : id === 'project-1'
-                  ? [
-                      {
-                        id: "step-2",
-                        title: "Ideation & Conceptualization", 
-                        description: "Brainstorming solutions, sketching ideas, and developing the core concept through collaborative workshops.",
-                        imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1763485407/maserati_mapping-process_hfzqnq.png"
-                      },
-                      {
-                        id: "step-3",
-                        title: "Design & Prototyping",
-                        description: "Creating wireframes, high-fidelity designs, and interactive prototypes to validate the user experience.",
-                        imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/ivjmizltxj0umvmg9adm.png"
-                      }
-                    ]
-                : id === 'project-aet'
-                  ? [
-                      {
-                        id: "step-aet-1",
-                        title: "Research & Discovery",
-                        description: "Deep diving into user needs, market research, and competitive analysis to understand the problem space.",
-                        imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1764243373/aet_slide1_lxzdvg.png"
-                      },
-                      {
-                        id: "step-aet-2",
-                        title: "Design & Implementation", 
-                        description: "Creating wireframes, high-fidelity designs, and interactive prototypes to validate the user experience.",
-                        imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1764244100/aet_slide2_twhh3s.png"
-                      }
-                    ]
-                : [
-                    {
-                      id: "step-1",
-                      title: "Research & Discovery",
-                      description: "Deep diving into user needs, market research, and competitive analysis to understand the problem space.",
-                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_workshop_results-large_pzl7a6.png"
-                    },
-                    {
-                      id: "step-2",
-                      title: "Ideation & Conceptualization", 
-                      description: "Brainstorming solutions, sketching ideas, and developing the core concept through collaborative workshops.",
-                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_sketches-large_xsyk2v.png"
-                    },
-                    {
-                      id: "step-3",
-                      title: "Design & Prototyping",
-                      description: "Creating wireframes, high-fidelity designs, and interactive prototypes to validate the user experience.",
-                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710564/hey-oko25/ivjmizltxj0umvmg9adm.png"
-                    },
-                    {
-                      id: "step-4", 
-                      title: "Development & Implementation",
-                      description: "Building the solution with attention to detail, performance optimization, and accessibility standards.",
-                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741607472/Amplify_g1lq1q.png"
-                    },
-                    {
-                      id: "step-5",
-                      title: "Testing & Refinement",
-                      description: "User testing, gathering feedback, and iterating on the design to ensure optimal user experience.",
-                      imageUrl: "https://res.cloudinary.com/da4fs4oyj/image/upload/v1741710686/aa_before-after_tt5vzr.gif"
-                    }
-                  ]
-            }
-          />
-        </section>
+
+      {processSlides.length > 0 && (
+        <div className="container mx-auto px-4 mt-12 md:mt-16 lg:mt-20">
+          <Process slides={processSlides} />
+        </div>
       )}
       
       {/* Project images */}
@@ -582,22 +466,41 @@ export function HomeProject({
         
         {/* AET Project Demo Iframe */}
         {id === 'project-aet' && (
-          <div className="flex flex-col items-center gap-3 text-center">
-            <button
-              type="button"
-              onClick={() => setIsDemoOpen(true)}
-              className="rounded-full bg-white text-black px-6 py-3 text-sm font-semibold tracking-tight hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/60"
-            >
-              Play interactive demo
-            </button>
-            <a
-              href="https://aet-ski.vercel.app/product-demo"
-              target="_blank"
-              rel="noreferrer"
-              className="text-white/70 text-sm hover:text-white"
-            >
-              Open in new tab
-            </a>
+          <div 
+            className="relative flex flex-col items-center gap-3 text-center p-12 min-h-[400px] sm:min-h-[500px] md:min-h-[600px] bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: "url('https://res.cloudinary.com/da4fs4oyj/image/upload/v1764601787/aet_demo-background_rkk3yo.png')",
+              backgroundPosition: 'center bottom'
+            }}
+          >
+            <div className="flex-1 flex items-end pb-12">
+              <div className="relative inline-flex">
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-x-4 -inset-y-3 rounded-2xl bg-zinc/80 backdrop-blur-md"
+                />
+                <Button
+                  type="button"
+                  onClick={() => setIsDemoOpen(true)}
+                  variant="primary-icon-left"
+                  size="sm"
+                  className="relative z-10"
+                  icon={
+                    <svg 
+                      className="w-4 h-4" 
+                      fill="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path 
+                        d="M8 5v14l11-7z" 
+                      />
+                    </svg>
+                  }
+                >
+                  Play interactive demo
+                </Button>
+              </div>
+            </div>
           </div>
         )}
       </div>

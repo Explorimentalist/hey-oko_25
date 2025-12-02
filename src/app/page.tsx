@@ -1,6 +1,7 @@
 import { HomeHero } from '@/components/home/HomeHero'
 import { HomeProject } from '@/components/home/HomeProject'
 import { HomeAbout } from '@/components/home/HomeAbout'
+import { ArchiveTable } from '@/components/home/ArchiveTable'
 import { LogoLoader } from '@/components/shared/LogoLoader'
 import { Menu } from '@/components/shared/Menu'
 import { NavigationProgress } from '@/components/shared/NavigationProgress'
@@ -58,7 +59,7 @@ const projectsData = [
         height: 746
       },
       {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763498154/aa_final-design_tr2f0r.webp',
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764606418/aa_final-design_tr2f0r.webp',
         alt: 'AA final design',
         width: 1920,
         height: 1080
@@ -243,6 +244,10 @@ export default function HomePage() {
               images={project.images}
             />
           ))}
+        </section>
+
+        <section className="mt-16 lg:mt-24">
+          <ArchiveTable />
         </section>
       </div>
 
