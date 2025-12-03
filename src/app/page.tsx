@@ -13,12 +13,12 @@ const projectsData = [
   {
     id: 'project-epalwi-rebbo',
     title: 'Epàlwi-Rebbó',
-    tagline: 'Learning for a resilient tomorrow',
-    description: 'Designing the first digital Spanish-Ndowe diccionary.',
+    tagline: 'Turning a PDF into a language learning tool',
+    description: 'Ndowe is an endangered Bantu language with conflicting language normalisation branches, which is not supported by Google Translate and is not widely digitised. How can more people learn or consolidate their Ndowe with only a few speakers, far fewer writers, and just a dozen learning resources?',
     pillsLabel: '2025',
     year: '2025',
     role: 'Design Lead & Researcher',
-    impact: 'Published the first digital Spanish-Ndowe lexicon prototype and unlocked a clean pipeline for future entries.',
+    impact: 'Publishing the first digital Spanish-Ndowe translation dictionary.',
     label: ['Data extraction', 'Schema Design', 'Data Validation', 'Web App design'],
     coverVideo: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763383184/epalwi-video-homepage_pynpjb.mp4',
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763380529/epalwi-rebbo_cover_w1selc.webp',
@@ -38,7 +38,7 @@ const projectsData = [
     id: 'project-aa',
     title: 'AA (The Automobile Association)',
     tagline: 'Streamlining the AA app from sign up to breakdown reporting',
-    description: 'The AA mobile app sign up experience was quickly abandoned by people that acquired memberships from third parties such as banks. The perks they offered weren\'t hardly redeemed. The breakdown bookings in the app were low which incurred in high callcenter costs.',
+    description: 'The AA mobile app sign up experience was quickly abandoned by people that acquired memberships from third parties such as banks. The perks they offered weren\'t hardly redeemed. The breakdown bookings in the app were low which incurred in high call center costs.',
     pillsLabel: '2018',
     year: '2018',
     role: 'Project Lead',
@@ -170,11 +170,11 @@ const projectsData = [
   {
     id: 'project-aet',
     title: 'AET',
-    tagline: 'Improving the experience of booking online ski transfers for an SME',
+    tagline: 'Clarifying the value proposition and streamlining the booking flow for a solo-run ski transfer website',
     description: 'Before this project, the website felt fragmented and hard to navigate, so visitors struggled to understand the offer, find key information, or complete key actions. Most sessions ended without enquiries or bookings, mobile users dropped off quickly, and inconsistent visuals reduced trust. Weak SEO brought little qualified traffic, and the lack of clear analytics meant they couldn\'t see where people were abandoning the journey, so decisions were based on guesswork rather than data.',
     year: '2025',
     role: 'Web designer',
-    impact: 'Reduced time on review process, Reduced website costs, bookings increase',
+    impact: 'Reduced time on review process, Reduced website costs, Increased booking flow clarity',
     label: ['UI/UX design', 'Development(AI)', 'API integration', 'Email template design', 'Testing'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764176407/aet_cover_dg4vjj.png',
     images: [
@@ -225,7 +225,7 @@ export default function HomePage() {
         </section>
         
         <section>
-          <h5>Projects</h5>
+          <h5>Selected projects</h5>
           {/* Dynamic project components */}
           {projectsData.filter(project => !['project-1', 'project-3', 'project-4'].includes(project.id)).map((project) => (
             <HomeProject
