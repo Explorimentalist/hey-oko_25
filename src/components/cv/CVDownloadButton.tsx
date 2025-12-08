@@ -52,7 +52,7 @@ export function CVDownloadButton({ headingId }: CVDownloadButtonProps) {
         <Button
           ref={buttonRef}
           asLink
-          href="/Ngatye Brian Oko CV.pdf"
+          href="/Ngatye%20Brian%20Oko-Senior%20Product%20Designer-CV%20.pdf"
           target="_blank"
           rel="noopener noreferrer"
           variant="primary-icon-left"

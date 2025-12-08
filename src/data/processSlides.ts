@@ -23,7 +23,7 @@ export const processSlidesByProject: Record<string, ProcessSlide[]> = {
     },
     {
       title: 'Web app development',
-      description: 'I selected the coding frameworks, libraries and APIs with Chat GPT. I vibe coded with Cursor, Codex and Claude Code jmping from paper to prototype. To ensure a good result to my standards, I created functional testing and documented the components.',
+      description: 'I selected the coding frameworks, libraries and APIs with Chat GPT. I vibe coded with Cursor, Codex and Claude Code jumping from paper to prototype. To ensure a good result to my standards, I created functional testing and documented the components.',
       mediaUrl: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763466884/epalwi-rebbo_components-video_ehnyhh.mp4',
       mediaType: 'video',
       width: 1920,
