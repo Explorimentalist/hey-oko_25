@@ -129,6 +129,29 @@ export function ArchiveTable() {
   const [activeIndex, setActiveIndex] = useState(0);
   const hasAnimated = useRef(false);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      // @ts-ignore
+      const sectionsArray = window.__navigationSections || [];
+      const alreadyIncluded = sectionsArray.some(
+        (section: { id: string }) => section.id === 'archive'
+      );
+
+      if (!alreadyIncluded) {
+        sectionsArray.push({ id: 'archive', label: 'Archive' });
+        // @ts-ignore
+        window.__navigationSections = sectionsArray;
+        window.dispatchEvent(
+          new CustomEvent('navigationSectionsUpdated', { detail: { sections: sectionsArray } })
+        );
+      }
+    } catch (error) {
+      console.error('Failed to register archive section with NavigationProgress:', error);
+    }
+  }, []);
+
   const setRowRef = (index: number) => (el: HTMLDivElement | null) => {
     rowRefs.current[index] = el;
   };
@@ -325,6 +348,7 @@ export function ArchiveTable() {
 
   return (
     <section
+      id="archive"
       ref={sectionRef}
       className="w-full mt-16"
     >

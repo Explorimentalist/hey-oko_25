@@ -11,30 +11,6 @@ import { Footer } from '@/components/shared/Footer'
 // Example project data
 const projectsData = [
   {
-    id: 'project-epalwi-rebbo',
-    title: 'Epàlwi-Rebbó',
-    tagline: 'Turning a PDF into a language learning tool',
-    description: 'Ndowe is an endangered Bantu language with conflicting language normalisation branches, which is not supported by Google Translate and is not widely digitised. How can more people learn or consolidate their Ndowe with only a few speakers, far fewer writers, and just a dozen learning resources?',
-    pillsLabel: '2025',
-    year: '2025',
-    role: 'Design Lead & Researcher',
-    impact: 'Publishing the first digital Spanish-Ndowe translation dictionary.',
-    label: ['Data extraction', 'Schema Design', 'Data Validation', 'Web App design'],
-    coverVideo: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763383184/epalwi-video-homepage_pynpjb.mp4',
-    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763380529/epalwi-rebbo_cover_w1selc.webp',
-    images: [
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763380529/epalwi-rebbo_cover_w1selc.webp',
-        alt: 'Epàlwi-Rebbó hero cover',
-      }
-      ,
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763391549/epalwi-rebbo_iPhoneXR1_etagfi.webp',
-        alt: 'Epàlwi-Rebbó mobile view',
-      }
-    ]
-  },
-  {
     id: 'project-aa',
     title: 'AA (The Automobile Association)',
     tagline: 'Streamlining the AA app from sign up to breakdown reporting',
@@ -63,6 +39,67 @@ const projectsData = [
         alt: 'AA final design',
         width: 1920,
         height: 1080
+      }
+    ]
+  },
+  {
+    id: 'project-aet',
+    title: 'AET',
+    tagline: 'Clarifying the value proposition and streamlining the booking flow for a solo-run ski transfer website',
+    description: 'Before this project, the website felt fragmented and hard to navigate, so visitors struggled to understand the offer, find key information, or complete key actions. Most sessions ended without enquiries or bookings, mobile users dropped off quickly, and inconsistent visuals reduced trust. Weak SEO brought little qualified traffic, and the lack of clear analytics meant they couldn\'t see where people were abandoning the journey, so decisions were based on guesswork rather than data.',
+    year: '2025',
+    role: 'Web designer',
+    impact: 'Reduced time on review process, Reduced website costs, Increased booking flow clarity',
+    label: ['UI/UX design', 'Development(AI)', 'API integration', 'Email template design', 'Testing'],
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764176407/aet_cover_dg4vjj.png',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255957/aet_home-full_vap1rm.png',
+        alt: 'AET home page full design',
+        width: 1920,
+        height: 5688
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255848/aet_contact-page_xqhj8h.png',
+        alt: 'AET contact page design',
+        width: 1920,
+        height: 1080
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255849/aet_routes-page_stys5l.png',
+        alt: 'AET routes page design',
+        width: 1920,
+        height: 1080
+      },
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255849/aet_review-page_ci9akl.png',
+        alt: 'AET review page design',
+        width: 1920,
+        height: 1080
+      }
+    ]
+  },
+  {
+    id: 'project-epalwi-rebbo',
+    title: 'Epàlwi-Rebbó',
+    tagline: 'Turning a PDF into a language learning tool',
+    description: 'Ndowe is an endangered Bantu language with conflicting language normalisation branches, which is not supported by Google Translate and is not widely digitised. How can more people learn or consolidate their Ndowe with only a few speakers, far fewer writers, and just a dozen learning resources?',
+    pillsLabel: '2025',
+    year: '2025',
+    role: 'Design Lead & Researcher',
+    impact: 'Publishing the first digital Spanish-Ndowe translation dictionary.',
+    label: ['Data extraction', 'Schema Design', 'Data Validation', 'Web App design'],
+    coverVideo: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763383184/epalwi-video-homepage_pynpjb.mp4',
+    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763380529/epalwi-rebbo_cover_w1selc.webp',
+    images: [
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763380529/epalwi-rebbo_cover_w1selc.webp',
+        alt: 'Epàlwi-Rebbó hero cover',
+      }
+      ,
+      {
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763391549/epalwi-rebbo_iPhoneXR1_etagfi.webp',
+        alt: 'Epàlwi-Rebbó mobile view',
       }
     ]
   },
@@ -166,45 +203,10 @@ const projectsData = [
         alt: 'amplify',
       },
     ]
-  },
-  {
-    id: 'project-aet',
-    title: 'AET',
-    tagline: 'Clarifying the value proposition and streamlining the booking flow for a solo-run ski transfer website',
-    description: 'Before this project, the website felt fragmented and hard to navigate, so visitors struggled to understand the offer, find key information, or complete key actions. Most sessions ended without enquiries or bookings, mobile users dropped off quickly, and inconsistent visuals reduced trust. Weak SEO brought little qualified traffic, and the lack of clear analytics meant they couldn\'t see where people were abandoning the journey, so decisions were based on guesswork rather than data.',
-    year: '2025',
-    role: 'Web designer',
-    impact: 'Reduced time on review process, Reduced website costs, Increased booking flow clarity',
-    label: ['UI/UX design', 'Development(AI)', 'API integration', 'Email template design', 'Testing'],
-    coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764176407/aet_cover_dg4vjj.png',
-    images: [
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255957/aet_home-full_vap1rm.png',
-        alt: 'AET home page full design',
-        width: 1920,
-        height: 5688
-      },
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255848/aet_contact-page_xqhj8h.png',
-        alt: 'AET contact page design',
-        width: 1920,
-        height: 1080
-      },
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255849/aet_routes-page_stys5l.png',
-        alt: 'AET routes page design',
-        width: 1920,
-        height: 1080
-      },
-      {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764255849/aet_review-page_ci9akl.png',
-        alt: 'AET review page design',
-        width: 1920,
-        height: 1080
-      }
-    ]
   }
 ]
+
+const featuredProjectsOrder = ['project-aa', 'project-aet', 'project-epalwi-rebbo']
 
 export default function HomePage() {
   return (
@@ -227,7 +229,12 @@ export default function HomePage() {
         <section>
           <h5>Selected projects</h5>
           {/* Dynamic project components */}
-          {projectsData.filter(project => !['project-1', 'project-3', 'project-4'].includes(project.id)).map((project) => (
+          {projectsData
+            .filter(project => featuredProjectsOrder.includes(project.id))
+            .sort(
+              (a, b) => featuredProjectsOrder.indexOf(a.id) - featuredProjectsOrder.indexOf(b.id)
+            )
+            .map((project) => (
             <HomeProject
               key={project.id}
               id={project.id}

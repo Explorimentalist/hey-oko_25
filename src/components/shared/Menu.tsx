@@ -15,9 +15,10 @@ if (typeof window !== 'undefined') {
 const menuItems = [
   { label: 'Welcome', path: '#hero-sequence-container' },
   { label: 'About', path: '#about' },
-  { label: 'Epàlwi-Rebbó', path: '#project-epalwi-rebbo' },
   { label: 'AA (The Automobile Association)', path: '#project-aa' },
   { label: 'AET', path: '#project-aet' },
+  { label: 'Epàlwi-Rebbó', path: '#project-epalwi-rebbo' },
+  { label: 'Archive', path: '#archive' },
   { label: 'Ngatye@hey-oko.com', path: 'mailto:Ngatye@hey-oko.com' },
 ]
 
