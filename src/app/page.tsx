@@ -13,12 +13,12 @@ const projectsData = [
   {
     id: 'project-aa',
     title: 'AA (The Automobile Association)',
-    tagline: 'Streamlining the AA app from sign up to breakdown reporting',
-    description: 'The AA mobile app sign up experience was quickly abandoned by people that acquired memberships from third parties such as banks. The perks they offered weren\'t hardly redeemed. The breakdown bookings in the app were low which incurred in high call center costs.',
+    tagline: 'Streamlining the AA app from sign up to breakdown reporting.',
+    description: 'People that acquired AA memberships from third parties such as banks, abandoned the mobile app sign up quickly and frustrated. The perks they offered weren\'t hardly redeemed. The breakdown bookings in the app were low which incurred in high call center costs.',
     pillsLabel: '2018',
     year: '2018',
     role: 'Project Lead',
-    impact: '1. Reduced roadside assistance booking time by 66% (from 3min to <1min)\n2. Increased app adoption significantly after clearer signup paths\n3. Improved visibility of member perks and key information',
+    impact: '1. Reduced roadside assistance booking time by 66% (from 3min to <1min)\n2. Increased app adoption after signup rehaul\n3. Improved visibility of member perks and key information',
     label: ['Heuristic Evaluation', 'Workshop Facilitation', 'UX Design', 'Testing'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763477798/aa_cover_kwdihs.webp',
     images: [
@@ -45,7 +45,7 @@ const projectsData = [
   {
     id: 'project-aet',
     title: 'AET',
-    tagline: 'Clarifying the value proposition and streamlining the booking flow for a solo-run ski transfer website',
+    tagline: 'Clarifying the value proposition and streamlining the booking flow for a solo-run ski transfer website.',
     description: 'Before this project, the website felt fragmented and hard to navigate, so visitors struggled to understand the offer, find key information, or complete key actions. Most sessions ended without enquiries or bookings, mobile users dropped off quickly, and inconsistent visuals reduced trust. Weak SEO brought little qualified traffic, and the lack of clear analytics meant they couldn\'t see where people were abandoning the journey, so decisions were based on guesswork rather than data.',
     year: '2025',
     role: 'Web designer',
@@ -82,11 +82,11 @@ const projectsData = [
   {
     id: 'project-epalwi-rebbo',
     title: 'Epàlwi-Rebbó',
-    tagline: 'Turning a PDF into a language learning tool',
+    tagline: 'Turning a PDF into a language learning tool.',
     description: 'Ndowe is an endangered Bantu language with conflicting language normalisation branches, which is not supported by Google Translate and is not widely digitised. How can more people learn or consolidate their Ndowe with only a few speakers, far fewer writers, and just a dozen learning resources?',
     pillsLabel: '2025',
     year: '2025',
-    role: 'Design Lead & Researcher',
+    role: 'Design Engineer',
     impact: 'Publishing the first digital Spanish-Ndowe translation dictionary.',
     label: ['Data extraction', 'Schema Design', 'Data Validation', 'Web App design'],
     coverVideo: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763383184/epalwi-video-homepage_pynpjb.mp4',
@@ -98,7 +98,7 @@ const projectsData = [
       }
       ,
       {
-        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763391549/epalwi-rebbo_iPhoneXR1_etagfi.webp',
+        src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1765796735/epalwi-rebbo_iPhoneXR1_etagfi.webp',
         alt: 'Epàlwi-Rebbó mobile view',
       }
     ]

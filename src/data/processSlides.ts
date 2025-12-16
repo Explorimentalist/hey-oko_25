@@ -13,12 +13,12 @@ export const processSlidesByProject: Record<string, ProcessSlide[]> = {
   'project-epalwi-rebbo': [
     {
       title: 'PDF format review',
-      description: 'I reviewed the translation dictionary in PDF format written by my uncle and normalised by him and my dad, to understand the format and to write a prompt for GPT3 write a prompt to extract the dictionary entries.',
+      description: 'I analyzed the PDF dictionary structure—created by my uncle and refined by him and my dad—to map the formatting patterns. Then I designed a GPT3 extraction prompt to automate converting those entries into JSON.',
       mediaUrl: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763414326/epalwi-rebbo_diccionario-pdf_sup7ld.png'
     },
     {
       title: 'Prompt & Data cleaning criteria',
-      description: 'Through conversations with GPT3, I defined and validated the prompt for data extraction rules, cleaning criteria, and schema alignment for structured entries. I used Cursor Agent to generate the entries in .json format.',
+      description: 'I worked with GPT3 to validate my formatting rules—feeding sample entries and iterating until the output was sound. Once the rules were locked, I used GPT3 to write a system prompt for Cursor, then executed the full extraction to generate the JSON entries at scale.',
       mediaUrl: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763392640/epalwi-rebbo_data-cleaning-criteria-gpt_mifn0i.png'
     },
     {

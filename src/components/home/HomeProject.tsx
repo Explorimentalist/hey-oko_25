@@ -497,7 +497,7 @@ export function HomeProject({
                     </svg>
                   }
                 >
-                  Play interactive demo
+                  Play demo
                 </Button>
               </div>
             </div>
