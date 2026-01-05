@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from '@/components/shared/Button';
@@ -13,6 +13,30 @@ if (typeof window !== 'undefined') {
 export function HomeAbout() {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  
+  // State for hover image
+  const [isHovering, setIsHovering] = useState(false);
+  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
+  
+  // Hover event handlers
+  const handleMouseEnter = useCallback((event: React.MouseEvent<HTMLSpanElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const containerRect = containerRef.current?.getBoundingClientRect();
+    
+    if (containerRect) {
+      setImagePosition({
+        x: rect.left - containerRect.left + rect.width / 2,
+        y: rect.top - containerRect.top - 200 // Position image 200px above the text
+      });
+    }
+    
+    setIsHovering(true);
+  }, []);
+  
+  const handleMouseLeave = useCallback(() => {
+    setIsHovering(false);
+  }, []);
 
   useEffect(() => {
     // For server-side rendering safety
@@ -51,14 +75,90 @@ export function HomeAbout() {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
+  
+  // Handle image animations
+  useEffect(() => {
+    if (typeof window === 'undefined' || !imageRef.current) return;
+    
+    if (isHovering) {
+      gsap.fromTo(imageRef.current, 
+        {
+          opacity: 0,
+          scale: 0.8,
+          y: 20
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.3,
+          ease: 'power2.out'
+        }
+      );
+    } else {
+      gsap.to(imageRef.current, {
+        opacity: 0,
+        scale: 0.8,
+        y: 20,
+        duration: 0.2,
+        ease: 'power2.in'
+      });
+    }
+  }, [isHovering]);
 
   // Split text into words with spans
   const createWordSpans = (text: string) => {
-    return text.split(' ').map((word, index) => (
-      <span key={index} className="word text-zinc-500 inline-block mr-[0.25em] leading-snug">
-        {word}
-      </span>
-    ));
+    const words = text.split(' ');
+    const nameWords = ['Ngatye', 'Brian', 'Oko.'];
+    let nameGroup: JSX.Element[] = [];
+    const spans: JSX.Element[] = [];
+    let currentIndex = 0;
+    
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const isNameWord = nameWords.includes(word);
+      
+      if (isNameWord) {
+        // Collect name words into a group
+        nameGroup.push(
+          <span 
+            key={`name-${i}`} 
+            className="word text-zinc-500 inline-block mr-[0.25em] leading-snug"
+          >
+            {word}
+          </span>
+        );
+        
+        // If this is the last name word, wrap the group
+        if (word === 'Oko.') {
+          spans.push(
+            <span
+              key={`name-group-${currentIndex}`}
+              className="cursor-pointer hover:text-white transition-colors duration-200"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              {nameGroup}
+            </span>
+          );
+          nameGroup = [];
+          currentIndex++;
+        }
+      } else {
+        // Regular word
+        spans.push(
+          <span 
+            key={currentIndex} 
+            className="word text-zinc-500 inline-block mr-[0.25em] leading-snug"
+          >
+            {word}
+          </span>
+        );
+        currentIndex++;
+      }
+    }
+    
+    return spans;
   };
 
   // Combine all paragraphs into a single text block
@@ -70,6 +170,19 @@ export function HomeAbout() {
       id="about" 
       className="py-32 md:py-40 min-h-screen flex items-center relative z-10"
     >
+      {/* Hover Image */}
+      <img
+        ref={imageRef}
+        src="https://res.cloudinary.com/da4fs4oyj/image/upload/v1767618022/about_animation_m3rzwe.png"
+        alt="Ngatye Brian Oko"
+        className="absolute pointer-events-none z-20 w-36 md:w-48 h-auto opacity-0"
+        style={{
+          left: `${imagePosition.x}px`,
+          top: `${imagePosition.y}px`,
+          transform: 'translateX(-50%)', // Center horizontally on the cursor
+        }}
+      />
+      
       <div className="max-w-5xl mx-auto px-4">
         <div 
           ref={textRef}
