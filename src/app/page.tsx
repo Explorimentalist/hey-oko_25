@@ -1,4 +1,3 @@
-import { HomeHero } from '@/components/home/HomeHero'
 import { HomeProject } from '@/components/home/HomeProject'
 import { HomeAbout } from '@/components/home/HomeAbout'
 import { ArchiveTable } from '@/components/home/ArchiveTable'
@@ -49,7 +48,7 @@ const projectsData = [
     description: 'Before this project, the website felt fragmented and hard to navigate, so visitors struggled to understand the offer, find key information, or complete key actions. Most sessions ended without enquiries or bookings, mobile users dropped off quickly, and inconsistent visuals reduced trust. Weak SEO brought little qualified traffic, and the lack of clear analytics meant they couldn\'t see where people were abandoning the journey, so decisions were based on guesswork rather than data.',
     year: '2025',
     role: 'Web designer',
-    impact: 'Reduced time on review process, Reduced website costs, Increased booking flow clarity',
+    impact: '1. Reduced time on review process,\n 2. Reduced website costs \n 3. Increased booking flow clarity',
     label: ['UI/UX design', 'Development(AI)', 'API integration', 'Email template design', 'Testing'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764176407/aet_cover_dg4vjj.png',
     images: [
@@ -217,12 +216,9 @@ export default function HomePage() {
       <CustomCursor />
       
       <div className="container mx-auto px-4">
-        <section id="hero">
-          <HomeHero />
-        </section>
         
         <section className="mt-10">
-          <h5>About</h5>
+          {/* <h5>About</h5> */}
           <HomeAbout />
         </section>
         

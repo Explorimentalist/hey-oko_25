@@ -6,7 +6,6 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 
 // Base sections that are always available
 const baseSections = [
-  { id: 'hero-sequence-container', label: 'Welcome' },
   { id: 'about', label: 'About' }
 ]
 

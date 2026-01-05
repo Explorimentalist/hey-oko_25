@@ -62,7 +62,7 @@ export function HomeAbout() {
   };
 
   // Combine all paragraphs into a single text block
-  const fullText = "I’m Ngatye Brian Oko, a branch of the African tree, born in the land of tapas and living in the city of Big Ben. I have over a dozen years of experience shaping digital products with curiosity and a holistic edge. I work at the intersection of Product Design and Storytelling, turbocharged by AI workflows, helping businesses become more human, more profitable, and harder to ignore.";
+  const fullText = "Ngatye Brian Oko. AI‑designer. Builder. Storyteller. Born in the land of tapas, living in the city of Big Ben. Combining design strategy, UX/UI, and AI to ship products. 12+ years of experience in handing over impact to businesses, creating products that connect with people and deliver profitable results.";
 
   return (
     <div 
