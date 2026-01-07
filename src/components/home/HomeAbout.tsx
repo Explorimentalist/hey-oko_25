@@ -5,6 +5,26 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from '@/components/shared/Button';
 
+// Hover groups configuration
+type HoverGroup = {
+  words: string[];
+  image: string;
+  id: string;
+};
+
+const hoverGroups: HoverGroup[] = [
+  {
+    id: 'name',
+    words: ['Ngatye', 'Brian', 'Oko.'],
+    image: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1767618022/about_animation_m3rzwe.png'
+  },
+  {
+    id: 'results',
+    words: ['profitable', 'results.'],
+    image: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1767785314/fijx96ylpyeba23ybsvl.svg'
+  }
+];
+
 // Make sure ScrollTrigger is available on the client side only
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -13,29 +33,34 @@ if (typeof window !== 'undefined') {
 export function HomeAbout() {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
   
-  // State for hover image
-  const [isHovering, setIsHovering] = useState(false);
-  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
+  // Create refs for each hover group image and background
+  const imageRefs = useRef<{ [key: string]: HTMLElement | null }>({});
+  
+  // State for hover images
+  const [activeHover, setActiveHover] = useState<string | null>(null);
+  const [imagePositions, setImagePositions] = useState<{ [key: string]: { x: number; y: number } }>({});
   
   // Hover event handlers
-  const handleMouseEnter = useCallback((event: React.MouseEvent<HTMLSpanElement>) => {
+  const handleMouseEnter = useCallback((groupId: string) => (event: React.MouseEvent<HTMLSpanElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const containerRect = containerRef.current?.getBoundingClientRect();
     
     if (containerRect) {
-      setImagePosition({
-        x: rect.left - containerRect.left + rect.width / 2,
-        y: rect.top - containerRect.top - 200 // Position image 200px above the text
-      });
+      setImagePositions(prev => ({
+        ...prev,
+        [groupId]: {
+          x: rect.left - containerRect.left + rect.width / 2,
+          y: rect.top - containerRect.top - 80 // Position image 80px above the text
+        }
+      }));
     }
     
-    setIsHovering(true);
+    setActiveHover(groupId);
   }, []);
   
   const handleMouseLeave = useCallback(() => {
-    setIsHovering(false);
+    setActiveHover(null);
   }, []);
 
   useEffect(() => {
@@ -76,72 +101,126 @@ export function HomeAbout() {
     };
   }, []);
   
-  // Handle image animations
+  // Handle image animations for multiple hover targets
   useEffect(() => {
-    if (typeof window === 'undefined' || !imageRef.current) return;
+    if (typeof window === 'undefined') return;
     
-    if (isHovering) {
-      gsap.fromTo(imageRef.current, 
-        {
+    // Animate all images based on activeHover state
+    hoverGroups.forEach(group => {
+      const imageElement = imageRefs.current[group.id];
+      const backgroundElement = imageRefs.current[`${group.id}-bg`];
+      
+      if (!imageElement) return;
+      
+      if (activeHover === group.id) {
+        // Animate main image
+        gsap.fromTo(imageElement, 
+          {
+            opacity: 0,
+            scale: 0.8,
+            y: 20
+          },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.3,
+            ease: 'power2.out'
+          }
+        );
+        
+        // Animate background if it exists (for SVG)
+        if (backgroundElement) {
+          gsap.fromTo(backgroundElement,
+            {
+              opacity: 0,
+              scale: 0.6,
+              y: 30
+            },
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: 0.25,
+              ease: 'power2.out'
+            }
+          );
+        }
+      } else {
+        // Hide main image
+        gsap.to(imageElement, {
           opacity: 0,
           scale: 0.8,
-          y: 20
-        },
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          duration: 0.3,
-          ease: 'power2.out'
+          y: 20,
+          duration: 0.2,
+          ease: 'power2.in'
+        });
+        
+        // Hide background if it exists
+        if (backgroundElement) {
+          gsap.to(backgroundElement, {
+            opacity: 0,
+            scale: 0.6,
+            y: 30,
+            duration: 0.15,
+            ease: 'power2.in'
+          });
         }
-      );
-    } else {
-      gsap.to(imageRef.current, {
-        opacity: 0,
-        scale: 0.8,
-        y: 20,
-        duration: 0.2,
-        ease: 'power2.in'
-      });
-    }
-  }, [isHovering]);
+      }
+    });
+  }, [activeHover]);
 
   // Split text into words with spans
   const createWordSpans = (text: string) => {
     const words = text.split(' ');
-    const nameWords = ['Ngatye', 'Brian', 'Oko.'];
-    let nameGroup: JSX.Element[] = [];
     const spans: JSX.Element[] = [];
     let currentIndex = 0;
     
+    // Create a map of word to hover group for faster lookup
+    const wordToGroup = new Map<string, HoverGroup>();
+    hoverGroups.forEach(group => {
+      group.words.forEach(word => {
+        wordToGroup.set(word, group);
+      });
+    });
+    
+    // Track active groups and their collected words
+    const activeGroups = new Map<string, { words: JSX.Element[], startIndex: number }>();
+    
     for (let i = 0; i < words.length; i++) {
       const word = words[i];
-      const isNameWord = nameWords.includes(word);
+      const hoverGroup = wordToGroup.get(word);
       
-      if (isNameWord) {
-        // Collect name words into a group
-        nameGroup.push(
+      if (hoverGroup) {
+        // Initialize group if not exists
+        if (!activeGroups.has(hoverGroup.id)) {
+          activeGroups.set(hoverGroup.id, { words: [], startIndex: currentIndex });
+        }
+        
+        // Collect hover group words
+        activeGroups.get(hoverGroup.id)!.words.push(
           <span 
-            key={`name-${i}`} 
+            key={`${hoverGroup.id}-${i}`} 
             className="word text-zinc-500 inline-block mr-[0.25em] leading-snug"
           >
             {word}
           </span>
         );
         
-        // If this is the last name word, wrap the group
-        if (word === 'Oko.') {
+        // If this is the last word in the group, wrap and add to spans
+        if (word === hoverGroup.words[hoverGroup.words.length - 1]) {
+          const groupData = activeGroups.get(hoverGroup.id)!;
           spans.push(
             <span
-              key={`name-group-${currentIndex}`}
-              className="cursor-pointer hover:text-white transition-colors duration-200"
-              onMouseEnter={handleMouseEnter}
+              key={`${hoverGroup.id}-group-${groupData.startIndex}`}
+              className="cursor-pointer hover:text-white hover:font-semibold transition-all duration-200"
+              onMouseEnter={handleMouseEnter(hoverGroup.id)}
               onMouseLeave={handleMouseLeave}
             >
-              {nameGroup}
+              {groupData.words}
             </span>
           );
-          nameGroup = [];
+          activeGroups.delete(hoverGroup.id);
           currentIndex++;
         }
       } else {
@@ -162,7 +241,7 @@ export function HomeAbout() {
   };
 
   // Combine all paragraphs into a single text block
-  const fullText = "Ngatye Brian Oko. AI‑designer. Builder. Storyteller. Born in the land of tapas, living in the city of Big Ben. Combining design strategy, UX/UI, and AI to ship products. 12+ years of experience in handing over impact to businesses, creating products that connect with people and deliver profitable results.";
+  const fullText = "Ngatye Brian Oko. AI‑designer. Builder. Storyteller. Born in the land of tapas, living in the city of Big Ben. I combine design strategy, UX/UI, and AI to ship products. 12+ years of experience in handing over impact to businesses, creating products that connect with people and deliver profitable results.";
 
   return (
     <div 
@@ -170,18 +249,45 @@ export function HomeAbout() {
       id="about" 
       className="py-32 md:py-40 min-h-screen flex items-center relative z-10"
     >
-      {/* Hover Image */}
-      <img
-        ref={imageRef}
-        src="https://res.cloudinary.com/da4fs4oyj/image/upload/v1767618022/about_animation_m3rzwe.png"
-        alt="Ngatye Brian Oko"
-        className="absolute pointer-events-none z-20 w-36 md:w-48 h-auto opacity-0"
-        style={{
-          left: `${imagePosition.x}px`,
-          top: `${imagePosition.y}px`,
-          transform: 'translateX(-50%)', // Center horizontally on the cursor
-        }}
-      />
+      {/* Hover Images */}
+      {hoverGroups.map(group => {
+        const position = imagePositions[group.id] || { x: 0, y: 0 };
+        const isResults = group.id === 'results';
+        
+        return (
+          <div key={group.id}>
+            {/* Blurry white background for SVG */}
+            {isResults && (
+              <div
+                ref={el => { imageRefs.current[`${group.id}-bg`] = el; }}
+                className="absolute pointer-events-none bg-white opacity-0"
+                style={{
+                  left: `${position.x}px`,
+                  top: `${position.y}px`,
+                  transform: 'translate(-50%, -50%)',
+                  width: '260px',
+                  height: '180px',
+                  zIndex: 19
+                }}
+              />
+            )}
+            
+            {/* Main hover image */}
+            <img
+              ref={el => { imageRefs.current[group.id] = el; }}
+              src={group.image}
+              alt={`Hover image for ${group.id}`}
+              className={`absolute pointer-events-none w-36 md:w-48 h-auto opacity-0 ${isResults ? 'filter brightness-0' : ''}`}
+              style={{
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+                transform: 'translate(-50%, -50%)',
+                zIndex: 20
+              }}
+            />
+          </div>
+        );
+      })}
       
       <div className="max-w-5xl mx-auto px-4">
         <div 
