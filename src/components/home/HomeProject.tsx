@@ -6,6 +6,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Button } from '../shared/Button'
 import { Process } from './Process'
+import { ImpactList } from '../project/ImpactList'
 import { processSlidesByProject } from '@/data/processSlides'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -100,7 +101,17 @@ interface HomeProjectProps {
    * Impact or outcome statement
    */
   impact?: string;
-  
+
+  /**
+   * Array of impact item indices (0-based) that should use up arrow animation
+   */
+  impactUpArrowIndices?: number[];
+
+  /**
+   * Array of impact item indices (0-based) that should use sparkles animation
+   */
+  impactSparklesIndices?: number[];
+
   /**
    * Cover image URL
    */
@@ -137,6 +148,8 @@ export function HomeProject({
   year,
   role,
   impact,
+  impactUpArrowIndices,
+  impactSparklesIndices,
   coverImage,
   coverVideo,
   label,
@@ -387,15 +400,8 @@ export function HomeProject({
                 )}
 
                 {impact && (
-                  <div className="col-span-12 md:col-span-8 md:col-start-1 lg:col-span-7 lg:col-start-6 text-white">
-                    <p className="text-small tracking-wide text-white/60 mb-3">Impact</p>
-                    <div className="text-small text-white/80 leading-relaxed space-y-2">
-                      {impact.split('\n').map((line, index) => (
-                        <p key={index} className="break-words">
-                          {line}
-                        </p>
-                      ))}
-                    </div>
+                  <div className="col-span-12 md:col-span-8 md:col-start-1 lg:col-span-7 lg:col-start-6">
+                    <ImpactList items={impact} upArrowIndices={impactUpArrowIndices} sparklesIndices={impactSparklesIndices} />
                   </div>
                 )}
               </div>

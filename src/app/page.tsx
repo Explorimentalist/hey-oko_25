@@ -18,6 +18,7 @@ const projectsData = [
     year: '2018',
     role: 'Project Lead',
     impact: '1. Reduced roadside assistance booking time by 66% (from 3min to <1min)\n2. Increased app adoption after signup rehaul\n3. Improved visibility of member perks and key information',
+    impactUpArrowIndices: [1],
     label: ['Heuristic Evaluation', 'Workshop Facilitation', 'UX Design', 'Testing'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763477798/aa_cover_kwdihs.webp',
     images: [
@@ -49,6 +50,7 @@ const projectsData = [
     year: '2025',
     role: 'Web designer',
     impact: '1. Reduced time on review process,\n 2. Reduced website costs \n 3. Increased booking flow clarity',
+    impactUpArrowIndices: [2],
     label: ['UI/UX design', 'Development(AI)', 'API integration', 'Email template design', 'Testing'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1764176407/aet_cover_dg4vjj.png',
     images: [
@@ -87,6 +89,7 @@ const projectsData = [
     year: '2025',
     role: 'Design Engineer',
     impact: 'Publishing the first digital Spanish-Ndowe translation dictionary.',
+    impactSparklesIndices: [0],
     label: ['Data extraction', 'Schema Design', 'Data Validation', 'Web App design'],
     coverVideo: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763383184/epalwi-video-homepage_pynpjb.mp4',
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763380529/epalwi-rebbo_cover_w1selc.webp',
@@ -241,6 +244,8 @@ export default function HomePage() {
               year={project.year}
               role={project.role}
               impact={project.impact}
+              impactUpArrowIndices={project.impactUpArrowIndices}
+              impactSparklesIndices={project.impactSparklesIndices}
               label={project.label}
               coverImage={project.coverImage}
               coverVideo={project.coverVideo}
