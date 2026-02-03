@@ -19,6 +19,7 @@ const projectsData = [
     role: 'Project Lead',
     impact: '1. Reduced roadside assistance booking time by 66% (from 3min to <1min)\n2. Increased app adoption after signup rehaul\n3. Improved visibility of member perks and key information',
     impactUpArrowIndices: [1],
+    impactTargetIndices: [2],
     label: ['Heuristic Evaluation', 'Workshop Facilitation', 'UX Design', 'Testing'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763477798/aa_cover_kwdihs.webp',
     images: [
@@ -246,6 +247,7 @@ export default function HomePage() {
               impact={project.impact}
               impactUpArrowIndices={project.impactUpArrowIndices}
               impactSparklesIndices={project.impactSparklesIndices}
+              impactTargetIndices={project.impactTargetIndices}
               label={project.label}
               coverImage={project.coverImage}
               coverVideo={project.coverVideo}

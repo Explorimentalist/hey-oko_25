@@ -1,20 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ArrowUp } from 'lucide-react'
 
 export function AnimatedArrowBigUp() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [duration, setDuration] = useState(1.5)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDuration(Math.random() * 2 + 0.5)
-    }, duration * 1000)
-
-    return () => clearInterval(interval)
-  }, [duration])
+  const duration = 1.5
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -31,11 +23,11 @@ export function AnimatedArrowBigUp() {
           y: isFirst ? -40 : 0,
           duration,
           repeat: -1,
-          ease: isFirst ? 'power1.in' : 'linear',
+          ease: 'circ.inOut',
         }
       )
     })
-  }, [duration])
+  }, [])
 
   return (
     <div ref={containerRef} className="relative w-8 h-8 overflow-hidden">

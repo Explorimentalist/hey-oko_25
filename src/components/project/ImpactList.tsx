@@ -3,14 +3,16 @@
 import { AnimatedArrowBigDown } from '@/components/shared/icons/AnimatedArrowBigDown'
 import { AnimatedArrowBigUp } from '@/components/shared/icons/AnimatedArrowBigUp'
 import { AnimatedSparkles } from '@/components/shared/icons/AnimatedSparkles'
+import { AnimatedTarget } from '@/components/shared/icons/AnimatedTarget'
 
 interface ImpactListProps {
   items: string
   upArrowIndices?: number[]
   sparklesIndices?: number[]
+  targetIndices?: number[]
 }
 
-export function ImpactList({ items, upArrowIndices = [], sparklesIndices = [] }: ImpactListProps) {
+export function ImpactList({ items, upArrowIndices = [], sparklesIndices = [], targetIndices = [] }: ImpactListProps) {
   const impactItems = items.split('\n').filter(item => item.trim())
 
   return (
@@ -22,6 +24,8 @@ export function ImpactList({ items, upArrowIndices = [], sparklesIndices = [] }:
             <div className="flex-shrink-0 pt-1">
               {sparklesIndices.includes(index) ? (
                 <AnimatedSparkles />
+              ) : targetIndices.includes(index) ? (
+                <AnimatedTarget />
               ) : upArrowIndices.includes(index) ? (
                 <AnimatedArrowBigUp />
               ) : (

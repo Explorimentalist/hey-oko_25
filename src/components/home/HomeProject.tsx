@@ -113,6 +113,11 @@ interface HomeProjectProps {
   impactSparklesIndices?: number[];
 
   /**
+   * Array of impact item indices (0-based) that should use target animation
+   */
+  impactTargetIndices?: number[];
+
+  /**
    * Cover image URL
    */
   coverImage?: string;
@@ -150,6 +155,7 @@ export function HomeProject({
   impact,
   impactUpArrowIndices,
   impactSparklesIndices,
+  impactTargetIndices,
   coverImage,
   coverVideo,
   label,
@@ -401,7 +407,7 @@ export function HomeProject({
 
                 {impact && (
                   <div className="col-span-12 md:col-span-8 md:col-start-1 lg:col-span-7 lg:col-start-6">
-                    <ImpactList items={impact} upArrowIndices={impactUpArrowIndices} sparklesIndices={impactSparklesIndices} />
+                    <ImpactList items={impact} upArrowIndices={impactUpArrowIndices} sparklesIndices={impactSparklesIndices} targetIndices={impactTargetIndices} />
                   </div>
                 )}
               </div>
