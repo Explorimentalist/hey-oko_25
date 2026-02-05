@@ -7,8 +7,40 @@ import { NavigationProgress } from '@/components/shared/NavigationProgress'
 import { CustomCursor } from '@/components/shared/CustomCursor'
 import { Footer } from '@/components/shared/Footer'
 
+// Type for project data
+interface ProjectData {
+  id: string
+  title: string
+  tagline: string
+  description?: string
+  pillsLabel?: string
+  year?: string
+  role?: string
+  impact?: string
+  impactUpArrowIndices?: number[]
+  impactSparklesIndices?: number[]
+  impactTargetIndices?: number[]
+  label: string | string[]
+  coverImage?: string
+  coverVideo?: string
+  images: Array<{
+    src: string
+    alt?: string
+    width?: number
+    height?: number
+  }>
+  teamRoles?: Array<{ id: string; role: string }>
+  collaborationData?: {
+    teamInvolvement?: string[]
+    rituals?: string[]
+    communicationChannels?: string[]
+    keyActivities?: string[]
+    myImpact?: string[]
+  }
+}
+
 // Example project data
-const projectsData = [
+const projectsData: ProjectData[] = [
   {
     id: 'project-aa',
     title: 'AA (The Automobile Association)',
@@ -22,6 +54,42 @@ const projectsData = [
     impactTargetIndices: [2],
     label: ['Heuristic Evaluation', 'Workshop Facilitation', 'UX Design', 'Testing'],
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763477798/aa_cover_kwdihs.webp',
+    teamRoles: [
+      { id: 'pm', role: 'PM' },
+      { id: 'strategist', role: 'Strategist' },
+      { id: 'ui', role: 'UI Designer' },
+      { id: 'me', role: 'Me: UX Designer' },
+      { id: 'client', role: 'Client' }
+    ],
+    collaborationData: {
+      teamInvolvement: [
+        'PM: 1:00 daily',
+        'Strategist: 1/2 hour daily',
+        'UI: 8 hours daily',
+        'Me - UX Designer: 8 1/2 hours daily'
+      ],
+      rituals: [
+        'Daily standups',
+        'Daily end of day status',
+        'Pomodoro brainstorms',
+        'Tridaily client presentations'
+      ],
+      communicationChannels: [
+        'In person',
+        'Email',
+        'Slack',
+        'Whiteboard'
+      ],
+      keyActivities: [
+        'Heuristic evaluation',
+        'Workshop',
+        'Brainstormings',
+        'Iteration based on feedback',
+        'Prototyping',
+        'Presentations',
+        'Handover and Documentation'
+      ]
+    },
     images: [
       {
         src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763482378/aa_final-screens_v2bxqg.png',
@@ -79,7 +147,33 @@ const projectsData = [
         width: 1920,
         height: 1080
       }
-    ]
+    ],
+    teamRoles: [
+      { id: 'me', role: 'Me' },
+      { id: 'client', role: 'Client' }
+    ],
+    collaborationData: {
+      teamInvolvement: [
+        'Client 13% of total time',
+        'Me 87% of total time'
+      ],
+      rituals: [
+        'Weekly progress status updates',
+        'Bi-weekly reviews'
+      ],
+      communicationChannels: [
+        'Email',
+        'Figma Jam',
+        'Whatsapp',
+        'Google meets'
+      ],
+      keyActivities: [
+        'Documentation',
+        'Form requirements',
+        'Email automation',
+        'Email template design'
+      ]
+    }
   },
   {
     id: 'project-epalwi-rebbo',
@@ -94,12 +188,36 @@ const projectsData = [
     label: ['Data extraction', 'Schema Design', 'Data Validation', 'Web App design'],
     coverVideo: 'https://res.cloudinary.com/da4fs4oyj/video/upload/v1763383184/epalwi-video-homepage_pynpjb.mp4',
     coverImage: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763380529/epalwi-rebbo_cover_w1selc.webp',
+    teamRoles: [
+      { id: 'chatgpt', role: 'Chat GPT 3.5-4' },
+      { id: 'claude', role: 'Claude Code' },
+      { id: 'perplexity', role: 'Perplexity' },
+      { id: 'me', role: 'Me' }
+    ],
+    collaborationData: {
+      teamInvolvement: [
+        'Me + AI 2 hours a weekend for 6 months'
+      ],
+      rituals: [
+        'Checking json addition and formatting hourly',
+        'Github version control after feature tested successfully'
+      ],
+      communicationChannels: [
+        'Chat',
+        'Cursor',
+        'Browser'
+      ],
+      keyActivities: [
+        'Prompt formatting',
+        'Project setup research',
+        'API research'
+      ]
+    },
     images: [
       {
         src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1763380529/epalwi-rebbo_cover_w1selc.webp',
         alt: 'Epàlwi-Rebbó hero cover',
-      }
-      ,
+      },
       {
         src: 'https://res.cloudinary.com/da4fs4oyj/image/upload/v1765796735/epalwi-rebbo_iPhoneXR1_etagfi.webp',
         alt: 'Epàlwi-Rebbó mobile view',
@@ -252,6 +370,8 @@ export default function HomePage() {
               coverImage={project.coverImage}
               coverVideo={project.coverVideo}
               images={project.images}
+              teamRoles={project.teamRoles}
+              collaborationData={project.collaborationData}
             />
           ))}
         </section>

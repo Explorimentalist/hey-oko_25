@@ -17,7 +17,7 @@ export function ImpactList({ items, upArrowIndices = [], sparklesIndices = [], t
 
   return (
     <div>
-      <h3 className="text-h4 tracking-wide mb-8 text-white/60">Impact</h3>
+      <h3 className="text-small tracking-wide mb-6 text-white/60">Impact</h3>
       <div className="space-y-6">
         {impactItems.map((item, index) => (
           <div key={index} className="flex gap-6 items-start">

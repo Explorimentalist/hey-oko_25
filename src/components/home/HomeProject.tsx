@@ -7,6 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Button } from '../shared/Button'
 import { Process } from './Process'
 import { ImpactList } from '../project/ImpactList'
+import CollaborationDetails from './CollaborationDetails'
 import { processSlidesByProject } from '@/data/processSlides'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -66,22 +67,22 @@ interface HomeProjectProps {
    * This will be used for navigation and as the section ID
    */
   id: string;
-  
+
   /**
    * Project title displayed in the sticky header
    */
   title: string;
-  
+
   /**
    * Project tagline displayed in the sticky header
    */
   tagline: string;
-  
+
   /**
    * Project description displayed below the title
    */
   description?: string;
-  
+
   /**
    * Label text displayed above the pills
    */
@@ -91,12 +92,12 @@ interface HomeProjectProps {
    * Year or timeframe shown in the metadata section
    */
   year?: string;
-  
+
   /**
    * Role or responsibility summary
    */
   role?: string;
-  
+
   /**
    * Impact or outcome statement
    */
@@ -121,18 +122,18 @@ interface HomeProjectProps {
    * Cover image URL
    */
   coverImage?: string;
-  
+
   /**
    * Cover video embed URL (Loom/YouTube/etc)
    */
   coverVideo?: string;
-  
+
   /**
    * Labels for the project categories/types
    * Can be a single string or an array of strings
    */
   label: string | string[];
-  
+
   /**
    * Array of project images to display
    */
@@ -142,6 +143,22 @@ interface HomeProjectProps {
     width?: number;
     height?: number;
   }[];
+
+  /**
+   * Custom collaboration data for the modal
+   */
+  collaborationData?: {
+    teamInvolvement?: string[];
+    rituals?: string[];
+    communicationChannels?: string[];
+    keyActivities?: string[];
+    myImpact?: string[];
+  };
+
+  /**
+   * Team roles for the collaboration details
+   */
+  teamRoles?: Array<{ id: string; role: string }>;
 }
 
 export function HomeProject({
@@ -159,7 +176,9 @@ export function HomeProject({
   coverImage,
   coverVideo,
   label,
-  images
+  images,
+  collaborationData,
+  teamRoles
 }: HomeProjectProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const coverRef = useRef<HTMLDivElement>(null)
@@ -365,9 +384,9 @@ export function HomeProject({
 
           {(projectYear || role || label || impact) && (
             <div className="project-label w-full mt-6">
-              <div className="grid grid-cols-12 gap-y-10 gap-x-4 md:grid-cols-8 md:gap-x-6 lg:grid-cols-12 lg:gap-y-0 lg:gap-x-4">
-                {(role || projectYear) && (
-                  <div className="col-span-6 md:col-span-4 md:col-start-1 lg:col-span-2 lg:col-start-1 flex flex-col gap-6 text-white">
+              <div className="grid grid-cols-4 gap-y-10 gap-x-4 md:grid-cols-8 md:gap-x-6 lg:grid-cols-12 lg:gap-x-4">
+                {(role || projectYear || label) && (
+                  <div className="col-span-2 md:col-span-4 lg:col-span-3 lg:col-start-1 lg:row-start-1 flex flex-col gap-6 text-white">
                     {role && (
                       <div className="space-y-1">
                         <p className="text-small tracking-wide text-white/60">Role</p>
@@ -380,33 +399,88 @@ export function HomeProject({
                         <p className="text-small leading-relaxed">{projectYear}</p>
                       </div>
                     )}
+                    {label && (
+                      <div className="hidden lg:block">
+                        <CollaborationDetails
+                          teamRoles={
+                            teamRoles || [
+                              { id: 'pm', role: 'PM' },
+                              { id: 'dev', role: 'Dev' },
+                              { id: 'ui', role: 'UI' },
+                              { id: 'client', role: 'Client' },
+                            ]
+                          }
+                          collaborationData={{
+                            teamInvolvement: collaborationData?.teamInvolvement || (Array.isArray(label) ? label : [label]),
+                            rituals: collaborationData?.rituals || [
+                              'Weekly design reviews',
+                              'Daily async updates',
+                              'Bi-weekly planning sessions',
+                            ],
+                            communicationChannels: collaborationData?.communicationChannels || [
+                              'Slack',
+                              'Figma & FigJam',
+                              'Google Drive',
+                            ],
+                            keyActivities: collaborationData?.keyActivities || [
+                              'Design sprints & exploration',
+                              'Prototyping & user testing',
+                              'Iteration based on feedback',
+                              'Final handoff & documentation',
+                            ],
+                            myImpact: collaborationData?.myImpact || [
+                              'Led end-to-end design execution',
+                              'Established design patterns for scalability',
+                              'Improved team collaboration workflow',
+                            ],
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
 
                 {label && (
-                  <div className="col-span-6 md:col-span-4 md:col-start-5 lg:col-span-2 lg:col-start-3 text-white">
-                    <p className="text-small tracking-wide text-white/60 mb-3">Contribution</p>
-                    <div className="flex flex-col gap-2.5">
-                      {Array.isArray(label) ? (
-                        label.map((labelText, index) => (
-                          <div 
-                            key={index} 
-                            className="bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full text-small w-fit"
-                          >
-                            {labelText}
-                          </div>
-                        ))
-                      ) : (
-                        <div className="bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full text-small w-fit">
-                          {label}
-                        </div>
-                      )}
-                    </div>
+                  <div className="col-span-2 md:col-span-4 lg:hidden">
+                    <CollaborationDetails
+                      teamRoles={
+                        teamRoles || [
+                          { id: 'pm', role: 'PM' },
+                          { id: 'dev', role: 'Dev' },
+                          { id: 'ui', role: 'UI' },
+                          { id: 'client', role: 'Client' },
+                        ]
+                      }
+                      collaborationData={{
+                        teamInvolvement: collaborationData?.teamInvolvement || (Array.isArray(label) ? label : [label]),
+                        rituals: collaborationData?.rituals || [
+                          'Weekly design reviews',
+                          'Daily async updates',
+                          'Bi-weekly planning sessions',
+                        ],
+                        communicationChannels: collaborationData?.communicationChannels || [
+                          'Slack',
+                          'Figma & FigJam',
+                          'Google Drive',
+                        ],
+                        keyActivities: collaborationData?.keyActivities || [
+                          'Design sprints & exploration',
+                          'Prototyping & user testing',
+                          'Iteration based on feedback',
+                          'Final handoff & documentation',
+                        ],
+                        myImpact: collaborationData?.myImpact || [
+                          'Led end-to-end design execution',
+                          'Established design patterns for scalability',
+                          'Improved team collaboration workflow',
+                        ],
+                      }}
+                    />
                   </div>
                 )}
 
                 {impact && (
-                  <div className="col-span-12 md:col-span-8 md:col-start-1 lg:col-span-7 lg:col-start-6">
+                  <div className="col-span-4 md:col-span-6 md:col-start-1 lg:col-span-7 lg:col-start-5 lg:row-start-1">
                     <ImpactList items={impact} upArrowIndices={impactUpArrowIndices} sparklesIndices={impactSparklesIndices} targetIndices={impactTargetIndices} />
                   </div>
                 )}
