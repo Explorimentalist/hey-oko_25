@@ -61,6 +61,47 @@ export default {
         // Special class for about section
         'fluid-about': 'calc(1.3 + (1.8 - 1.3) * ((100vw - 320px) / (1920 - 320)))',
       },
+      // Motion Design System
+      // Durations based on component size (physics-based approach)
+      transitionDuration: {
+        // Opening durations
+        'xs': '150ms',   // Micro-interactions (progress bars, toggles)
+        'sm': '200ms',   // Small components (buttons, icons, badges)
+        'md': '300ms',   // Medium components (dropdowns, cards, menus)
+        'lg': '400ms',   // Large components (modals, panels, overlays)
+        'xl': '500ms',   // XL components (full-page transitions, side panels)
+        // Closing durations (0.68x ratio for snappier feel)
+        'xs-close': '100ms',
+        'sm-close': '140ms',
+        'md-close': '200ms',
+        'lg-close': '270ms',
+        'xl-close': '340ms',
+      },
+      // Easing curves based on component size
+      transitionTimingFunction: {
+        'power1-out': 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',   // Gentle, for large components
+        'power1-in': 'cubic-bezier(0.55, 0.085, 0.68, 0.53)',
+        'power2-out': 'cubic-bezier(0.16, 1, 0.3, 1)',          // Balanced, for medium components
+        'power2-in': 'cubic-bezier(0.7, 0, 0.84, 0)',
+        'power3-out': 'cubic-bezier(0.215, 0.61, 0.355, 1)',    // Snappy, for small components
+        'power3-in': 'cubic-bezier(0.55, 0.055, 0.675, 0.19)',
+      },
+      // Transform values for consistent motion
+      translate: {
+        // Y-axis translation based on component size
+        'motion-xs': '4px',
+        'motion-sm': '8px',
+        'motion-md': '16px',
+        'motion-lg': '24px',
+        'motion-xl': '32px',
+      },
+      scale: {
+        // Scale values for appear/disappear animations
+        'motion-sm': '0.90',   // Small components (buttons, icons)
+        'motion-md': '0.95',   // Medium components (cards, menus)
+        'motion-lg': '0.98',   // Large components (modals, panels)
+        'motion-xl': '0.99',   // XL components (page transitions)
+      },
     },
   },
   plugins: [],

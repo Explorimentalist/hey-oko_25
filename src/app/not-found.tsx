@@ -9,7 +9,7 @@ function NotFoundContent() {
   const searchParams = useSearchParams()
   
   // You can use searchParams here if needed
-  const referrer = searchParams.get('from') || ''
+  const _referrer = searchParams?.get('from') || ''
   
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">

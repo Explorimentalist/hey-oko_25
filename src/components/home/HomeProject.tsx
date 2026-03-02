@@ -9,6 +9,7 @@ import { Process } from './Process'
 import { ImpactList } from '../project/ImpactList'
 import CollaborationDetails from './CollaborationDetails'
 import { processSlidesByProject } from '@/data/processSlides'
+import { AAProjectDecisionPoint } from './AAProjectDecisionPoint'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -381,6 +382,12 @@ export function HomeProject({
               )}
             </div>
           </div>
+
+          {id === 'project-aa' && (
+            <div className="mt-6">
+              <AAProjectDecisionPoint />
+            </div>
+          )}
 
           {(projectYear || role || label || impact) && (
             <div className="project-label w-full mt-6">

@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+
+let hasShown = false
 
 // List of logos in display order, hey-oko_logo should be last
 const LOGOS = [
@@ -32,6 +34,12 @@ export function LogoLoader() {
   const overlayRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (hasShown) {
+      if (containerRef.current) containerRef.current.style.display = 'none'
+      return
+    }
+    hasShown = true
+
     if (!containerRef.current || !svgMaskRef.current || !overlayRef.current) return
 
     const tl = gsap.timeline()

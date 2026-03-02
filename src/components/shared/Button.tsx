@@ -3,7 +3,7 @@
 import { forwardRef } from 'react'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'primary-icon' | 'primary-icon-left' | 'secondary' | 'secondary-bordered' | 'tertiary' | 'pill'
+  variant?: 'primary' | 'primary-icon' | 'primary-icon-left' | 'secondary' | 'secondary-icon' | 'secondary-bordered' | 'tertiary' | 'pill'
   size?: 'sm' | 'md' | 'lg'
   children: React.ReactNode
   asLink?: boolean
@@ -34,7 +34,8 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       'primary-icon': 'bg-white text-black hover:bg-zinc-200 rounded-md transition-all duration-300 ease-out group overflow-hidden',
       'primary-icon-left': 'bg-white text-black hover:bg-zinc-200 rounded-md transition-all duration-300 ease-out group overflow-hidden',
       secondary: 'bg-black/80 backdrop-blur-md text-white hover:bg-black/90 rounded-full transition-colors',
-      'secondary-bordered': 'bg-black/50 backdrop-blur-md text-white border border-white/30 hover:bg-black/70 hover:border-white/50 rounded-md transition-all duration-300',
+      'secondary-icon': 'bg-black/80 backdrop-blur-md text-white hover:bg-black/90 rounded-full transition-colors gap-2',
+      'secondary-bordered': 'bg-black/50 backdrop-blur-md text-white border border-white/30 hover:bg-black/70 hover:border-white/50 rounded-md transition-all duration-300 gap-2',
       tertiary: 'text-zinc-300 hover:bg-white/10 hover:text-white rounded-xl transition-colors',
       pill: 'bg-white/10 backdrop-blur-sm text-white rounded-full transition-colors'
     }
@@ -45,6 +46,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
         'primary-icon': 'px-6 py-2 text-sm group-hover:pr-12',
         'primary-icon-left': 'px-6 py-2 text-sm group-hover:pl-12',
         secondary: 'px-4 py-2 text-sm',
+        'secondary-icon': 'px-4 py-2 text-small',
         'secondary-bordered': 'px-4 py-2 text-sm',
         tertiary: 'px-4 py-2 text-sm',
         pill: 'px-3 py-1.5 text-xs'
@@ -54,6 +56,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
         'primary-icon': 'px-8 py-4 text-base group-hover:pr-16',
         'primary-icon-left': 'px-8 py-4 text-base group-hover:pl-16',
         secondary: 'px-6 py-3 text-base',
+        'secondary-icon': 'px-6 py-3 text-small',
         'secondary-bordered': 'px-6 py-3 text-base',
         tertiary: 'px-5 py-3 text-xl',
         pill: 'px-4 py-2 text-sm'
@@ -63,6 +66,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
         'primary-icon': 'px-10 py-5 text-lg group-hover:pr-20',
         'primary-icon-left': 'px-10 py-5 text-lg group-hover:pl-20',
         secondary: 'px-8 py-4 text-lg',
+        'secondary-icon': 'px-8 py-4 text-small',
         'secondary-bordered': 'px-8 py-4 text-lg',
         tertiary: 'px-6 py-4 text-2xl',
         pill: 'px-6 py-3 text-base'
@@ -97,6 +101,22 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
                 {icon}
               </span>
             )}
+            <span>{children}</span>
+          </>
+        )
+      }
+      if (variant === 'secondary-icon') {
+        return (
+          <>
+            {icon}
+            <span>{children}</span>
+          </>
+        )
+      }
+      if (variant === 'secondary-bordered') {
+        return (
+          <>
+            {icon}
             <span>{children}</span>
           </>
         )

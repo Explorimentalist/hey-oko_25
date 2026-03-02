@@ -292,12 +292,14 @@ export function CVList({
 
       {/* Data Rows */}
       <div className="space-y-0">
-        {data.map((row, rowIndex) => (
-          <div
-            key={rowIndex}
-            ref={(el) => (rowRefs.current[rowIndex] = el)}
-            className="relative cursor-pointer"
-          >
+	        {data.map((row, rowIndex) => (
+	          <div
+	            key={rowIndex}
+	            ref={(el) => {
+	              rowRefs.current[rowIndex] = el
+	            }}
+	            className="relative cursor-pointer"
+	          >
             {/* Border element for animation */}
             <div 
               className="row-border border-b border-zinc-800 absolute bottom-0 left-0 right-0 opacity-0"
