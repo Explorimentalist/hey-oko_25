@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Github } from 'lucide-react';
 import { Button } from '@/components/shared/Button';
 
 // Hover groups configuration
@@ -40,6 +41,8 @@ export function HomeAbout() {
   // State for hover images
   const [activeHover, setActiveHover] = useState<string | null>(null);
   const [imagePositions, setImagePositions] = useState<{ [key: string]: { x: number; y: number } }>({});
+  const [isGithubHovered, setIsGithubHovered] = useState(false);
+  const githubPreviewRefs = useRef<(HTMLDivElement | null)[]>([]);
   
   // Hover event handlers
   const handleMouseEnter = useCallback((groupId: string) => (event: React.MouseEvent<HTMLSpanElement>) => {
@@ -170,6 +173,47 @@ export function HomeAbout() {
     });
   }, [activeHover]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const previews = githubPreviewRefs.current.filter(Boolean) as HTMLDivElement[];
+    if (!previews.length) return;
+
+    gsap.set(previews, {
+      opacity: 0,
+      y: 28,
+      scale: 0.86
+    });
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const previews = githubPreviewRefs.current.filter(Boolean) as HTMLDivElement[];
+    if (!previews.length) return;
+
+    if (isGithubHovered) {
+      gsap.to(previews, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.35,
+        ease: 'power2.out',
+        stagger: 0.09,
+        overwrite: 'auto'
+      });
+      return;
+    }
+
+    gsap.to(previews, {
+      opacity: 0,
+      y: 28,
+      scale: 0.86,
+      duration: 0.24,
+      ease: 'power2.in',
+      stagger: 0.07,
+      overwrite: 'auto'
+    });
+  }, [isGithubHovered]);
+
   // Split text into words with spans
   const createWordSpans = (text: string) => {
     const words = text.split(' ');
@@ -297,7 +341,7 @@ export function HomeAbout() {
           {createWordSpans(fullText)}
         </div>
         
-        <div className="mt-16">
+        <div className="mt-16 flex flex-wrap items-center gap-4">
           <Button
             asLink
             href="/cv"
@@ -327,6 +371,56 @@ export function HomeAbout() {
           >
             View my CV
           </Button>
+
+          <div
+            className="relative isolate overflow-visible"
+            onMouseEnter={() => setIsGithubHovered(true)}
+            onMouseLeave={() => setIsGithubHovered(false)}
+          >
+            <div
+              ref={el => { githubPreviewRefs.current[0] = el; }}
+              className="absolute -left-14 -top-20 md:-left-16 md:-top-24 w-24 md:w-28 aspect-[7/5] overflow-hidden shadow-xl rotate-[-8deg] pointer-events-none z-0"
+            >
+              <img
+                src="/images/about/tarendario.png"
+                alt="Code preview one"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div
+              ref={el => { githubPreviewRefs.current[1] = el; }}
+              className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-28 w-24 md:w-28 aspect-[7/5] overflow-hidden shadow-xl pointer-events-none z-0"
+            >
+              <img
+                src="/images/about/bcp.png"
+                alt="Code preview two"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div
+              ref={el => { githubPreviewRefs.current[2] = el; }}
+              className="absolute -right-12 -top-20 md:-right-14 md:-top-24 w-24 md:w-28 aspect-[7/5] overflow-hidden shadow-xl rotate-[8deg] pointer-events-none z-0"
+            >
+              <img
+                src="/images/about/sópu.png"
+                alt="Code preview three"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <Button
+              asLink
+              href="https://github.com/Explorimentalist"
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="primary-icon"
+              size="md"
+              className="relative z-10"
+              icon={<Github className="w-5 h-5" />}
+            >
+              Visit my Github
+            </Button>
+          </div>
         </div>
       </div>
     </div>
