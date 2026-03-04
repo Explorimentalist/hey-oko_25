@@ -383,7 +383,7 @@ export function HomeAbout() {
             >
               <img
                 src="/images/about/tarendario.png"
-                alt="Code preview one"
+                alt="Tarendario scheduling dashboard project preview"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -393,7 +393,7 @@ export function HomeAbout() {
             >
               <img
                 src="/images/about/bcp.png"
-                alt="Code preview two"
+                alt="Burma Court Playgroup website project preview"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -402,8 +402,8 @@ export function HomeAbout() {
               className="absolute -right-12 -top-20 md:-right-14 md:-top-24 w-24 md:w-28 aspect-[7/5] overflow-hidden shadow-xl rotate-[8deg] pointer-events-none z-0"
             >
               <img
-                src="/images/about/sópu.png"
-                alt="Code preview three"
+                src="/images/about/sopu.png"
+                alt="Sopu ecommerce product page project preview"
                 className="w-full h-full object-cover"
               />
             </div>

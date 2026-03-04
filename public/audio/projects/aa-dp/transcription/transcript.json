@@ -976,6 +976,10 @@
     "text": "Speed"
   },
   {
+    "time": 167.55,
+    "text": "+"
+  },
+  {
     "time": 167.92,
     "text": "reduced"
   },
@@ -987,6 +991,11 @@
     "time": 169.75,
     "text": "load"
   },
+  {
+    "time": 167.69,
+    "text": "="
+  },
+
   {
     "time": 171.08,
     "text": "fewer"
